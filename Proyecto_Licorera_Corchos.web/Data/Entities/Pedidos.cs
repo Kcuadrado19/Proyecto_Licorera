@@ -13,7 +13,7 @@ public class Pedido
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
 
         //[Display(Nombre = "Pedido")]
-        public string Nombre { get; set; }
+        public string? Nombre { get; set; }
 
         public int? Contacto { get; set; } // Campo opcional (nullable)
 

@@ -2,14 +2,16 @@
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
-    public class Permisos
+    public class Pedidos_Ventas
     {
+
         [Key] // Clave primaria
-        public int Id_Rol { get; set; }
+        public int Id_PV { get; set; }
 
         [MaxLength(50, ErrorMessage = "El campo '{0}' debe tener máximo '{1}' caracteres")]
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
-        public string? Permiso { get; set; }
-    }
+        public DateTime Fecha { get; set; }
 
+
+    }
 }
