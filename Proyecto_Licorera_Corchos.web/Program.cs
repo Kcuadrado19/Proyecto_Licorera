@@ -9,14 +9,6 @@ builder.Services.AddControllersWithViews();
 
 builder.AddCustomBuilderConfiguration();   //this - parametrización por referencia en clase Customconfiguration
 
-
-//Data Context
-
-//builder.Services.AddDbContext<DataContext>(options =>
-//{
-//   options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection"));
-//});
-
 WebApplication app = builder.Build();
 
 
@@ -36,6 +28,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=test1}/{action=Index}/{id?}");
+    pattern: "{controller=home}/{action=Index}/{id?}");
 
 app.Run();

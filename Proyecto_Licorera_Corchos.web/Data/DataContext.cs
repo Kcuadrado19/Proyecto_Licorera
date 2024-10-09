@@ -11,7 +11,6 @@ namespace Proyecto_Licorera_Corchos.web.Data
             
         }
 
-        public DbSet<test1> test1 { get; set; }
 
         public DbSet<Clientes> Clientes { get; set; }
 
