@@ -12,5 +12,7 @@ namespace Proyecto_Licorera_Corchos.web.Data
         }
 
         public DbSet<test1> test1 { get; set; }
+
+        public DbSet<Pedido> Pedidos { get; set; }
     }
 }

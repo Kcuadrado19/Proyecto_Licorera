@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Proyecto_Licorera_Corchos.web;
 using Proyecto_Licorera_Corchos.web.Data;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -6,12 +7,15 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.AddCustomBuilderConfiguration();   //this - parametrización por referencia en clase Customconfiguration
+
+
 //Data Context
 
-builder.Services.AddDbContext<DataContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection"));
-});
+//builder.Services.AddDbContext<DataContext>(options =>
+//{
+//   options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection"));
+//});
 
 WebApplication app = builder.Build();
 
