@@ -19,5 +19,15 @@ namespace Proyecto_Licorera_Corchos.web.Data
         public DbSet<Ventas> Ventas { get; set; }
         
         public DbSet<Pedido> Pedidos { get; set; }
+
+        public DbSet<Ausuarios> Ausuarios { get; set; }
+
+        public DbSet<Accounting> Accounting { get; set; }
+
+        public DbSet<Modificaciones> Modificaciones { get; set; }
+
+        public DbSet<Permisos> Permisos { get; set; }
+
+        public DbSet<Usuarios> Usuarios { get; set; }
     }
 }
