@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
-    public class ClientesController
+    public class ClientesController:Controller
     {
         private readonly DataContext _context;
 

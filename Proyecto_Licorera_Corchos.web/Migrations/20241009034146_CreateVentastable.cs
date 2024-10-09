@@ -5,10 +5,17 @@
 namespace Proyecto_Licorera_Corchos.web.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateTest1Table : Migration
+    public partial class CreateVentastable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "test1");
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "test1",
@@ -23,13 +30,6 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                 {
                     table.PrimaryKey("PK_test1", x => x.Id);
                 });
-        }
-
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "test1");
         }
     }
 }
