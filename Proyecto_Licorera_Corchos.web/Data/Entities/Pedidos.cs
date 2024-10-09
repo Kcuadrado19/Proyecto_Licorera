@@ -11,6 +11,8 @@ public class Pedido
 
         [MaxLength(50, ErrorMessage = "El campo '{0}' debe tener máximo '{1}' caracteres.")]
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
+
+        //[Display(Nombre = "Pedido")]
         public string Nombre { get; set; }
 
         public int? Contacto { get; set; } // Campo opcional (nullable)
@@ -26,17 +28,6 @@ public class Pedido
 
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
         public int Id_Cliente { get; set; } // Relación con Cliente
-
-        // Relaciones con otras tablas
-        [ForeignKey("Id_Producto")]
-        public virtual Producto Producto { get; set; } // Relación con la tabla Producto
-
-        [ForeignKey("Id_Cliente")]
-        public virtual Cliente Cliente { get; set; } // Relación con la tabla Cliente
-    }
-
-
-
 
 }
 }

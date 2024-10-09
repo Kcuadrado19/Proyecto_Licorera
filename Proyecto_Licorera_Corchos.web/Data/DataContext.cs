@@ -18,5 +18,7 @@ namespace Proyecto_Licorera_Corchos.web.Data
         public DbSet<Productos> Productos { get; set; }
 
         public DbSet<Ventas> Ventas { get; set; }
+        
+        public DbSet<Pedido> Pedidos { get; set; }
     }
 }
