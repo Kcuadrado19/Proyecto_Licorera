@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
-    public class A_Usuarios
+    public class Ausuarios
     {
         [Key] // Clave primaria
         public int Id_AU { get; set; }
@@ -14,7 +14,9 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
 
         // Relación con la tabla Accounting
         public int Id_A { get; set; }
+        
         public virtual Accounting Accounting { get; set; }
     }
+
 }
 
