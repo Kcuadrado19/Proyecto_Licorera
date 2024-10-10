@@ -9,8 +9,7 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
 
         [MaxLength(50, ErrorMessage = "El campo '{0}' debe tener máximo '{1}' caracteres")]
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
-        public required string Permission { get; set; }
-
+        public string Permiso { get; set; }
     }
 
 }
