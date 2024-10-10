@@ -2,7 +2,7 @@
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
-    public class Usuarios
+    public class Users
     {
         [Key] // Clave primaria
         public int Id_Usuarios { get; set; }
@@ -17,7 +17,7 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
 
         // Relación con la tabla Permisos
         public int Id_Rol { get; set; }
-        public virtual Permisos Permisos { get; set; }
+        public virtual Permissions Permisos { get; set; }
     }
 
 }
