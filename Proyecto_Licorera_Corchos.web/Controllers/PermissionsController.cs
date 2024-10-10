@@ -16,8 +16,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            List<Permissions> Permisos1 = await _context.Permisos.ToListAsync();
-            return View(Permisos1);
+            List<Permissions> Permissions1 = await _context.Permissions.ToListAsync();
+            return View(Permissions1);
         }
     }
 }

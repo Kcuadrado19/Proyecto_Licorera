@@ -25,8 +25,8 @@ namespace Proyecto_Licorera_Corchos.web.Data
 
         public DbSet<Modifications> Modifications { get; set; }
 
-        public DbSet<Permissions> Permisos { get; set; }
+        public DbSet<Permissions> Permissions { get; set; }
 
-        public DbSet<Users> Usuarios { get; set; }
+        public DbSet<Users> Users { get; set; }
     }
 }
