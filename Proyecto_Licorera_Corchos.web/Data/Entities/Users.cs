@@ -5,6 +5,7 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
     public class Users
     {
         [Key] // Clave primaria
+
         public int Id_Users { get; set; }
 
         [MaxLength(50, ErrorMessage = "El campo '{0}' debe tener máximo '{1}' caracteres")]

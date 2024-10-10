@@ -17,6 +17,7 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
 
         // Relación con la tabla Modificaciones
         public int Id_HModificaciones_A { get; set; }
+
         public virtual required Modifications Modificaciones { get; set; }
     }
 
