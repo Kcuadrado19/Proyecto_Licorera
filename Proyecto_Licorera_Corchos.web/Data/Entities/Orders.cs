@@ -42,5 +42,6 @@ public class Orders
 
         [ForeignKey("Id_Accounting")]
         public virtual Accounting Accounting { get; set; } // Propiedad de navegación para Accounting
+
     }
 }
