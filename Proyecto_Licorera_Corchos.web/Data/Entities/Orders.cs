@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
-public class Pedido
+public class Orders
     {
         [Key] // Indica que es la clave primaria
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)] // Especifica que es auto-incremental (IDENTITY)
