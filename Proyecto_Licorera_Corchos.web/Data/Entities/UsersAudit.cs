@@ -6,16 +6,16 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
     public class UsersAudit
     {
         [Key] // Clave primaria
-        public int Id_AU { get; set; }
+        public int Id_UsersAudit { get; set; }
 
         [MaxLength(50, ErrorMessage = "El campo '{0}' debe tener máximo '{1}' caracteres")]
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
-        public string Nombre_AU { get; set; }
+        public required string UserAudit_Name { get; set; }
 
         // Relación con la tabla Accounting
         public int Id_A { get; set; }
         
-        public virtual Accounting Accounting { get; set; }
+        public virtual required Accounting Accountin { get; set; }
     }
 
 }
