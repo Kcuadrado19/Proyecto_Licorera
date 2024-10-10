@@ -1,23 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Proyecto_Licorera_Corchos.web.Data.Entities;
-using Proyecto_Licorera_Corchos.web.Data;
 using Microsoft.EntityFrameworkCore;
+using Proyecto_Licorera_Corchos.web.Data;
+using Proyecto_Licorera_Corchos.web.Data.Entities;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
-    public class VentasController : Controller
+    public class UsersController : Controller
     {
         private readonly DataContext _context;
 
-        public VentasController(DataContext context)
+        public UsersController(DataContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            List<Ventas> ventas1 = await _context.Ventas.ToListAsync();
-            return View(ventas1);
+            List<Users> Usuarios1 = await _context.Usuarios.ToListAsync();
+            return View(Usuarios1);
         }
     }
 }
