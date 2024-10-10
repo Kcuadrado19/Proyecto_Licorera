@@ -5,7 +5,7 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
     public class Products
     {
         [Key] // Indica que es clave primaria
-        public int Id_Products { get; set; }
+        public int Id_Product { get; set; }
 
         [MaxLength(100, ErrorMessage = "El campo '{0}' debe tener máximo '{1}' carácteres")] // Valida que el campo no supere 100 caracteres
         public string Product_Name { get; set; }
