@@ -2,7 +2,7 @@
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
-    public class Permisos
+    public class Permissions
     {
         [Key] // Clave primaria
         public int Id_Rol { get; set; }

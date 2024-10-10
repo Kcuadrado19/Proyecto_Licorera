@@ -5,19 +5,19 @@ using Proyecto_Licorera_Corchos.web.Data.Entities;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
-    public class ModificacionesController : Controller
+    public class PermissionsController : Controller
     {
         private readonly DataContext _context;
 
-        public ModificacionesController(DataContext context)
+        public PermissionsController(DataContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            List<Modificaciones> Modificaciones1 = await _context.Modificaciones.ToListAsync();
-            return View(Modificaciones1);
+            List<Permissions> Permisos1 = await _context.Permisos.ToListAsync();
+            return View(Permisos1);
         }
     }
 }

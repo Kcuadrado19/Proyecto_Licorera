@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
-    public class VentasController : Controller
+    public class SalesController : Controller
     {
         private readonly DataContext _context;
 
-        public VentasController(DataContext context)
+        public SalesController(DataContext context)
         {
             _context = context;
         }
 
         public async Task<IActionResult> Index()
         {
-            List<Ventas> ventas1 = await _context.Ventas.ToListAsync();
+            List<Sales> ventas1 = await _context.Ventas.ToListAsync();
             return View(ventas1);
         }
     }

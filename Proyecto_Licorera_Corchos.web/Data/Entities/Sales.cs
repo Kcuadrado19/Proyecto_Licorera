@@ -2,7 +2,7 @@
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
-    public class Ventas
+    public class Sales
     {
         [Key] // Indica que es clave primaria
         public int Id_Ventas { get; set; }
