@@ -15,5 +15,7 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
         [Required(ErrorMessage = "El campo '{0}' es requerido.")] // Indica que es un campo requerido
         public string Phone { get; set; }
 
+        public string Email { get; set; }
+
     }
 }

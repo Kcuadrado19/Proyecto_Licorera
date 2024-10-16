@@ -10,7 +10,6 @@ namespace Proyecto_Licorera_Corchos.web.Data
         {
             
         }
-
         public DbSet<Clients> Clients { get; set; }
 
         public DbSet<Products> Products { get; set; }
