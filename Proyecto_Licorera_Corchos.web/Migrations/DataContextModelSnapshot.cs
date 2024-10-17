@@ -38,7 +38,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     b.Property<int>("Id_Modification")
                         .HasColumnType("int");
 
-                    b.Property<int>("ModificationsId_Modification")
+                    b.Property<int>("Id_User")
                         .HasColumnType("int");
 
                     b.Property<string>("Password")
@@ -48,7 +48,9 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     b.HasKey("Id_Accounting");
 
-                    b.HasIndex("ModificationsId_Modification");
+                    b.HasIndex("Id_Modification");
+
+                    b.HasIndex("Id_User");
 
                     b.ToTable("Accounting");
                 });
@@ -118,6 +120,9 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     b.Property<int>("Id_Product")
                         .HasColumnType("int");
 
+                    b.Property<int>("Id_Sales")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("Orders_Date")
                         .HasColumnType("datetime2");
 
@@ -136,6 +141,8 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     b.HasIndex("Id_Client");
 
                     b.HasIndex("Id_Product");
+
+                    b.HasIndex("Id_Sales");
 
                     b.ToTable("Orders");
                 });
@@ -267,11 +274,19 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                 {
                     b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Modifications", "Modifications")
                         .WithMany()
-                        .HasForeignKey("ModificationsId_Modification")
+                        .HasForeignKey("Id_Modification")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Users", "Users")
+                        .WithMany()
+                        .HasForeignKey("Id_User")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Modifications");
+
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Orders", b =>
@@ -294,11 +309,19 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Sales", "Sales")
+                        .WithMany()
+                        .HasForeignKey("Id_Sales")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Accounting");
 
                     b.Navigation("Clients");
 
                     b.Navigation("Products");
+
+                    b.Navigation("Sales");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Users", b =>

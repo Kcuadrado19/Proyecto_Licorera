@@ -30,9 +30,6 @@ public class Orders
         public virtual Products Products { get; set; } // Propiedad de navegación para Producto
 
 
-
-
-
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
         public int Id_Client { get; set; } // Relación con Cliente
 
@@ -46,8 +43,12 @@ public class Orders
         [ForeignKey("Id_Accounting")]
         public virtual Accounting Accounting { get; set; } // Propiedad de navegación para Accounting
 
+        // Relación con la tabla Sales
+        [Required(ErrorMessage = "El campo '{0}' es requerido.")]
+        public int Id_Sales { get; set; } // Clave foránea a Sales
+
         [ForeignKey("Id_Sales")]
-        public virtual Sales Sales { get; set; } // Propiedad de navegación para Cliente
+        public virtual Sales Sales { get; set; } // Propiedad de navegación para Sales
 
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Proyecto_Licorera_Corchos.web.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateTablesNew : Migration
+    public partial class CreateTableNew : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -83,28 +83,6 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Accounting",
-                columns: table => new
-                {
-                    Id_Accounting = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Accounting_Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Id_Modification = table.Column<int>(type: "int", nullable: false),
-                    ModificationsId_Modification = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Accounting", x => x.Id_Accounting);
-                    table.ForeignKey(
-                        name: "FK_Accounting_Modifications_ModificationsId_Modification",
-                        column: x => x.ModificationsId_Modification,
-                        principalTable: "Modifications",
-                        principalColumn: "Id_Modification",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -127,6 +105,34 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Accounting",
+                columns: table => new
+                {
+                    Id_Accounting = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Accounting_Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Id_Modification = table.Column<int>(type: "int", nullable: false),
+                    Id_User = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Accounting", x => x.Id_Accounting);
+                    table.ForeignKey(
+                        name: "FK_Accounting_Modifications_Id_Modification",
+                        column: x => x.Id_Modification,
+                        principalTable: "Modifications",
+                        principalColumn: "Id_Modification",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Accounting_Users_Id_User",
+                        column: x => x.Id_User,
+                        principalTable: "Users",
+                        principalColumn: "Id_User",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -138,7 +144,8 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     Orders_Date = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Id_Product = table.Column<int>(type: "int", nullable: false),
                     Id_Client = table.Column<int>(type: "int", nullable: false),
-                    Id_Accounting = table.Column<int>(type: "int", nullable: false)
+                    Id_Accounting = table.Column<int>(type: "int", nullable: false),
+                    Id_Sales = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -160,6 +167,12 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                         column: x => x.Id_Product,
                         principalTable: "Products",
                         principalColumn: "Id_Product",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Sales_Id_Sales",
+                        column: x => x.Id_Sales,
+                        principalTable: "Sales",
+                        principalColumn: "Id_Sales",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -185,9 +198,14 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Accounting_ModificationsId_Modification",
+                name: "IX_Accounting_Id_Modification",
                 table: "Accounting",
-                column: "ModificationsId_Modification");
+                column: "Id_Modification");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Accounting_Id_User",
+                table: "Accounting",
+                column: "Id_User");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_Id_Accounting",
@@ -203,6 +221,11 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                 name: "IX_Orders_Id_Product",
                 table: "Orders",
                 column: "Id_Product");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_Id_Sales",
+                table: "Orders",
+                column: "Id_Sales");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_PermissionsId_Rol",
@@ -222,12 +245,6 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Sales");
-
-            migrationBuilder.DropTable(
-                name: "Users");
-
-            migrationBuilder.DropTable(
                 name: "UsersAudit");
 
             migrationBuilder.DropTable(
@@ -237,13 +254,19 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Permissions");
+                name: "Sales");
 
             migrationBuilder.DropTable(
                 name: "Accounting");
 
             migrationBuilder.DropTable(
                 name: "Modifications");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Permissions");
         }
     }
 }
