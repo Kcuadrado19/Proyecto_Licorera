@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
@@ -9,16 +10,26 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
 
         [MaxLength(50, ErrorMessage = "El campo '{0}' debe tener máximo '{1}' caracteres")]
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
-        public required string NombreAc { get; set; }
+        public string Accounting_Name { get; set; }
 
         [MaxLength(100, ErrorMessage = "El campo '{0}' debe tener máximo '{1}' caracteres")]
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
-        public required string Contrasena_A { get; set; }
+        public required string Password { get; set; }
 
-        // Relación con la tabla Modificaciones
-        public int Id_HModificaciones_A { get; set; }
+        // Relación con la tabla Modifications
+        [Required(ErrorMessage = "El campo '{0}' es requerido.")]
+        public int Id_Modification { get; set; } // Clave foránea a Modifications
 
-        public virtual required Modifications Modificaciones { get; set; }
+        [ForeignKey("Id_Modification")]
+        public virtual Modifications Modifications { get; set; } // Propiedad de navegación para Modifications
+
+        // Relación con la tabla Sales
+        [Required(ErrorMessage = "El campo '{0}' es requerido.")]
+        public int Id_User { get; set; } // Clave foránea a Users
+
+        [ForeignKey("Id_User")]
+        public virtual Users Users { get; set; } // Propiedad de navegación para User
+
     }
 
 }

@@ -10,7 +10,6 @@ namespace Proyecto_Licorera_Corchos.web.Data
         {
             
         }
-
         public DbSet<Clients> Clients { get; set; }
 
         public DbSet<Products> Products { get; set; }
@@ -24,7 +23,7 @@ namespace Proyecto_Licorera_Corchos.web.Data
         public DbSet<Accounting> Accounting { get; set; }
 
         public DbSet<Modifications> Modifications { get; set; }
-        
+
         public DbSet<Permissions> Permissions { get; set; }
 
         public DbSet<Users> Users { get; set; }

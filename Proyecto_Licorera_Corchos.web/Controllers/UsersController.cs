@@ -16,9 +16,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
         public async Task<IActionResult> Index()
         {
-
-        List<Users> Users1 = await _context.Users.ToListAsync();
-        return View(Users1);
+            List<Users> Users1 = await _context.Users.ToListAsync();
+            return View(Users1);
         }
     }
 }
