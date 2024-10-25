@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Data;
+using Proyecto_Licorera_Corchos.web.Services;
 
 namespace Proyecto_Licorera_Corchos.web
 {
@@ -23,5 +24,11 @@ namespace Proyecto_Licorera_Corchos.web
 
             return builder;
         }
+
+        public static void AddServices(this WebApplicationBuilder builder)
+        {
+            builder.Services.AddScoped<ISectionService,SectionService > ();
+        }
+
     }
 }

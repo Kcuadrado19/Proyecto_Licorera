@@ -29,5 +29,6 @@ namespace Proyecto_Licorera_Corchos.web.Data
         public DbSet<Users> Users { get; set; }
 
         public DbSet<Section> Section { get; set; }
+        public object Sections { get; internal set; }
     }
 }
