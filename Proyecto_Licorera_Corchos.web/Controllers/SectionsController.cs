@@ -1,41 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
+using Proyecto_Licorera_Corchos.web.Services;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
     public class SectionsController : Controller
     {
-        public IActionResult Index()
+
+        private readonly ISectionService _sectionService;
+
+        public SectionsController(ISectionService sectionService)
         {
-            List<Section> sections = new List<Section>
+            _sectionService = sectionService;
+        }
 
-            {
-                new Section
-                {
-                    Id = 1,
-                    Name = "Base",
-                    Description = "Test 1"
-                },
-
-                new Section
-                {
-                    Id = 1,
-                    Name = "Hacking",
-                    Description = "Test 2"
-                },
-
-                new Section
-                {
-                    Id = 1,
-                    Name = "Telecomunicaciones",
-                    Description = "Test 3"
-                },
-
-
-            };
-
-            return View(sections);
+        public async Task <IActionResult> Index()
+        {
+            return View(await _sectionService.GetlistAsync());
         }
     }
 }
