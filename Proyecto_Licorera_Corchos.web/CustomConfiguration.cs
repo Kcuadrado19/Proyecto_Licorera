@@ -21,11 +21,14 @@ namespace Proyecto_Licorera_Corchos.web
                 configuration.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection"));
             });
 
+            //Services
+
+            AddServices(builder);
 
             return builder;
         }
 
-        public static void AddServices(this WebApplicationBuilder builder)
+        public static void AddServices( WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<ISectionService,SectionService > ();
         }

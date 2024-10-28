@@ -18,13 +18,26 @@
 
     <div class="card">
 
-        <div class="card-header">
-            <h3 class="m-0 font-weight-bold text-primary">Secciones</h3>
+        <div class="card-header py-3">
+
+            <div class="row">
+
+                <h3 class="m-0 font-weight-bold text-primary col-md-11">Secciones</h3>
+
+                <div class="col-md-1">
+
+                    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-circle"></i></a>
+
+
+                </div>
+
+            </div>
+
         </div>
 
         <div class="card-body" mt-2>
 
-         
+
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -36,25 +49,32 @@
                 </thead>
                 <tbody>
 
-                    @foreach(Section item in Model)
+                    @if (Model != null && Model.Any())
                     {
-                        <tr>
-               
-                            <td>@@item.Id</td>
-                            <td>@@item.Name</td>
-                            <td>
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@@item.Id</td>
+                                <td>@@item.Name</td>
+                                <td>
                                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil-fill"></i></a>
                                     <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></a>
-                            </td>
-
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center">No hay secciones disponibles</td>
                         </tr>
-                    }      
+                    }
+
 
                 </tbody>
             </table>
-            <!-- End Bordered Table -->
 
-         </div>
+        </div>
     </div>
 
 </section>
