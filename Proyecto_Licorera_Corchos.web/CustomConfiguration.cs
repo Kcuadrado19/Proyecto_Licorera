@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Data;
 using Proyecto_Licorera_Corchos.web.Services;
@@ -25,12 +27,23 @@ namespace Proyecto_Licorera_Corchos.web
 
             AddServices(builder);
 
+            //toast notification
+            builder.Services.AddNotyf(config => { config.DurationInSeconds = 10;
+                config.IsDismissable = true;
+                config.Position = NotyfPosition.BottomRight; });
+
             return builder;
         }
 
         public static void AddServices( WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<ISectionService,SectionService > ();
+        }
+
+        public static WebApplication AddCustomwebAppConfiguration(this WebApplication app)
+        {
+            app.UseNotyf();
+            return app;
         }
 
     }
