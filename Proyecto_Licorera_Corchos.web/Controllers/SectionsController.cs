@@ -6,36 +6,41 @@ using System.Threading.Tasks;
 using Proyecto_Licorera_Corchos.web.Core;
 using System.Collections.Generic;
 using Proyecto_Licorera_Corchos.web.Helpers;
-
-
-
+using AspNetCoreHero.ToastNotification.Abstractions;
+using AspNetCoreHero.ToastNotification.Notyf;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
     public class SectionsController : Controller
     {
-
         private readonly ISectionService _sectionService;
+        private readonly INotyfService _notifyService;
 
-        public SectionsController(ISectionService sectionService)
+        public SectionsController(ISectionService sectionService, INotyfService notifyService)
         {
             _sectionService = sectionService;
+            _notifyService = notifyService;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            _notifyService.Success("This is a success notification");
             Response<List<Section>> response = await _sectionService.GetlistAsync();
             return View(response.Result);
-
         }
 
-
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Edit([FromRoute] int id)
         {
+            Response<Section> response = await _sectionService.GetOneAsync(id);
+            if (response.IsSuccess)
+            {
+                return View(response.Result);
+            }
 
-            return View();
+            _notifyService.Error(response.Message);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
@@ -45,7 +50,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    //TODO: mensaje error
+                    _notifyService.Error("Debe ajustar los errores de validación");
                     return View(section);
                 }
 
@@ -53,40 +58,59 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
                 if (response.IsSuccess)
                 {
-                    //TODO: mensaje de exito
+                    _notifyService.Success(response.Message);
                     return RedirectToAction(nameof(Index));
                 }
 
-                //TODO: Mostrar mensaje de error
-
-                return View(response);
-            }
-
-            catch (Exception ex)
-            {
-                //TODO: mensaje de error
+                _notifyService.Error(response.Message);
                 return View(section);
             }
-      
-        
+            catch (Exception ex)
+            {
+                _notifyService.Error(ex.Message);
+                return View(section);
+            }
         }
-
 
         [HttpGet]
-        public async Task<IActionResult> Edit([FromRoute] int id)
+        public IActionResult Create()
         {
-            Response<Section> response = await _sectionService.GetOneAsync(id);
-            if (response.IsSuccess) 
-            {
-                return View(response.Result);
-            }
-
-            //TODO: mensaje de error
-            return RedirectToAction(nameof(Index));
+            return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(Section section)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    _notifyService.Error("Debe ajustar los errores de validación");
+                    return View(section);
+                }
 
-}   }
+                Response<Section> response = await _sectionService.CreateAsync(section);
+
+                if (response.IsSuccess)
+                {
+                    _notifyService.Success(response.Message);
+                    return RedirectToAction(nameof(Index));
+                }
+
+                _notifyService.Error(response.Message);
+                return View(section);
+            }
+            catch (Exception ex)
+            {
+                _notifyService.Error("Error al generar la solicitud: " + ex.Message);
+                Console.WriteLine(ex); // Registro detallado de la excepción en la consola
+                return View(section);
+            }
+        }
+    }
+}
+
+
 
 
 
