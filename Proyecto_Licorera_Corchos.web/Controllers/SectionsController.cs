@@ -2,6 +2,7 @@
 using Proyecto_Licorera_Corchos.web.Data.Entities;
 using Proyecto_Licorera_Corchos.web.Services;
 using Microsoft.EntityFrameworkCore;
+using Proyecto_Licorera_Corchos.web.Core;
 
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
@@ -16,9 +17,11 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             _sectionService = sectionService;
         }
 
+        [HttpGet]
         public async Task <IActionResult> Index()
         {
-            return View(await _sectionService.GetlistAsync());
+            Response<List<Section>> response = await _sectionService.GetlistAsync();
+            return View(response.Result);
         }
     }
 }
