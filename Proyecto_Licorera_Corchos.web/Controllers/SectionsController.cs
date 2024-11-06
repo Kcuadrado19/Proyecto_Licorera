@@ -9,6 +9,7 @@ using Proyecto_Licorera_Corchos.web.Helpers;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using AspNetCoreHero.ToastNotification.Notyf;
 
+
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
     public class SectionsController : Controller

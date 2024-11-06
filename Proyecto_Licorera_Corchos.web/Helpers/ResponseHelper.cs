@@ -27,7 +27,9 @@ namespace Proyecto_Licorera_Corchos.web.Helpers
                 IsSuccess = false,
                 Message = message,
             };
+
         }
+
 
         public static Response<T> MakeResposeFail(string message)
         {

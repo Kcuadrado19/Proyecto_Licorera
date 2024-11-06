@@ -1,0 +1,118 @@
+﻿@model List<Sales>
+
+
+@{
+    ViewData["Title"] = "Ventas";
+  
+}
+
+<div class="pagetitle">
+    <h1>Ventas</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+            <li class="breadcrumb-item active">Ventas</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="sales dashboard">
+
+    <div class="card">
+        <div class="card-header">
+
+            <div class="row">
+
+                <h3 class="m-0 font-weight-bold text-primary col-md-11">Ventas</h3>
+
+                <div class="col-md-1">
+                    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-circle-dotted"></i></a>
+                </div>
+
+            </div> 
+           
+
+
+        </div>
+
+
+        <div class="card-body mt-2">
+
+            <!-- Table with stripped rows -->
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Id_Venta</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">fecha venta</th>
+                        <th scope="col">Valor Venta</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach(Sales item in Model)
+                    {
+                        <tr>
+                           
+                            <td>@item.Id_Sales</td>
+                            <td>@item.Name</td>
+                            <td>@item.Sale_Date</td>
+                            <td>@item.Sales_Value</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-Id_Sales="@item.Id_Sales" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+
+                                <form asp-action="Delete" asp-route-Id_Sales="@item.Id_Sales" style="display:contents;">
+                                    <button class="btn btn-danger btn-sm btnDelete"><i class="bi bi-trash"></i></button>
+
+                                </form>
+                  
+                            </td>
+
+                        </tr>
+                    }
+
+  
+                </tbody>
+            </table>
+          
+        </div>
+    </div>
+
+</section>
+
+@section Scripts
+{
+    <script>
+
+        $(document).ready(function () {
+
+            $('.btnDelete').click(function (event) { 
+            
+                event.preventDefault();
+
+                Swal.fire({
+
+                    title: "¿Desea eliminar la sección?",
+                    text:"No podrá revertirlo",
+                    icon:"question",
+                    showCancelButton:true,
+
+                }).then((result) =>
+                {
+
+                    if (result.isConfirmed) {
+
+                        const form = $(this).closest('form');
+                        form.submit();
+                    }
+
+                });
+            
+            });
+        });
+
+    </script>
+
+
+}

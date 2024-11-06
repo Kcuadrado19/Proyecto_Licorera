@@ -7,7 +7,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-builder.AddCustomBuilderConfiguration();   //this - parametrización por referencia en clase Customconfiguration
+builder.AddCustomBuilderConfiguration();   //this - parametrizaciÃ³n por referencia en clase Customconfiguration
 
 WebApplication app = builder.Build();
 
@@ -28,6 +28,8 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    pattern: "{controller=Home}/{action=Index}/{Id_Sales?}");
 app.AddCustomwebAppConfiguration();
+
 app.Run();
