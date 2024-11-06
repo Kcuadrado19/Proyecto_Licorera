@@ -102,14 +102,14 @@ namespace Proyecto_Licorera_Corchos.web.Services
             {
                 Response<Sales> response= await GetOneAsync(Id_Sales);
 
-                if (response.IsSuccess)
+                if (!response.IsSuccess)
                 {
                     return response;
                 }
                 _context.Sales.Remove(response.Result);
                 await _context.SaveChangesAsync();
 
-                return ResponseHelper<Sales>.MakeResponseSuccess(null, "Sección eliminada con éxito");
+                return ResponseHelper<Sales>.MakeResponseSuccess(null, "venta eliminada con éxito");
             }
             catch (Exception ex)
             {
