@@ -42,7 +42,6 @@ namespace Proyecto_Licorera_Corchos.web
         public static void AddServices( WebApplicationBuilder builder)
 
         {
-            builder.Services.AddScoped<ISectionService,SectionService > ();
             builder.Services.AddScoped<ISalesService, SalesService>();
         }
 
