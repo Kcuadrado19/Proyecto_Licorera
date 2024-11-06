@@ -3,6 +3,7 @@ using Proyecto_Licorera_Corchos.web.Core;
 using Proyecto_Licorera_Corchos.web.Data;
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Helpers;
+using Microsoft.AspNetCore.Mvc;
 namespace Proyecto_Licorera_Corchos.web.Services
 {
     public interface ISalesService
@@ -32,8 +33,8 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 Sales sales1 = new Sales
                 {
                     Name = model.Name,
-                    Sale_Date =model.Sale_Date,
-                    Sales_Value = model.Sales_Value,    
+                    Sale_Date = model.Sale_Date,
+                    Sales_Value = model.Sales_Value,
 
                 };
 
@@ -63,7 +64,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
         }
 
-        public  async Task<Response<List<Sales>>> GetlistAsync()
+        public async Task<Response<List<Sales>>> GetlistAsync()
         {
             try
             {
@@ -84,7 +85,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
             {
                 Sales? sales1 = await _context.Sales.FirstOrDefaultAsync(s => s.Id_Sales == Id_Sales);
 
-                if(sales1 is null) 
+                if (sales1 is null)
                 {
                     return ResponseHelper<Sales>.MakeResposeFail("La venta con el id indicado no existe");
                 }
@@ -96,13 +97,15 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
         }
 
+
+       
         public async Task<Response<Sales>>DeleteAsync(int Id_Sales)
         {
             try
             {
                 Response<Sales> response= await GetOneAsync(Id_Sales);
 
-                if (response.IsSuccess)
+                if (!response.IsSuccess)
                 {
                     return response;
                 }
