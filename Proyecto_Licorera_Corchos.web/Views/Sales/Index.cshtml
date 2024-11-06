@@ -60,7 +60,7 @@
                             <td>@item.Sale_Date</td>
                             <td>@item.Sales_Value</td>
                             <td>
-                                <a asp-action="Edit" asp-route-Id_Sales="@item.Id_Sales" class="btn btn-sm btn-warning"></a>
+                                <a asp-action="Edit" asp-route-Id_Sales="@item.Id_Sales" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
 
                                 <form asp-action="Delete" asp-route-Id_Sales="@item.Id_Sales" style="display:contents;">
                                     <button class="btn btn-danger btn-sm btnDelete"><i class="bi bi-trash"></i></button>
@@ -91,7 +91,23 @@
             
                 event.preventDefault();
 
-                Swal.fire();
+                Swal.fire({
+
+                    title: "¿Desea eliminar la sección?",
+                    text:"No podrá revertirlo",
+                    icon:"question",
+                    showCancelButton:true,
+
+                }).then((result) =>
+                {
+
+                    if (result.isConfirmed) {
+
+                        const form = $(this).closest('form');
+                        form.submit();
+                    }
+
+                });
             
             });
         });

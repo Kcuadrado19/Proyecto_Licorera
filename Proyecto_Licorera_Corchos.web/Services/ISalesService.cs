@@ -8,6 +8,8 @@ namespace Proyecto_Licorera_Corchos.web.Services
     public interface ISalesService
     {
         public Task<Response<Sales>> CreateAsync(Sales model);
+
+        public Task<Response<Sales>> DeleteAsync(int Id_Sales);
         public Task<Response<Sales>> EditAsync(Sales model);
         public Task<Response<List<Sales>>> GetlistAsync();
         public Task<Response<Sales>> GetOneAsync(int Id_Sales );
@@ -92,6 +94,28 @@ namespace Proyecto_Licorera_Corchos.web.Services
             {
                 return ResponseHelper<Sales>.MakeResposeFail(ex);
             }
+        }
+
+        public async Task<Response<Sales>>DeleteAsync(int Id_Sales)
+        {
+            try
+            {
+                Response<Sales> response= await GetOneAsync(Id_Sales);
+
+                if (response.IsSuccess)
+                {
+                    return response;
+                }
+                _context.Sales.Remove(response.Result);
+                await _context.SaveChangesAsync();
+
+                return ResponseHelper<Sales>.MakeResponseSuccess(null, "Sección eliminada con éxito");
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper<Sales>.MakeResposeFail(ex);
+            }
+
         }
     }
 

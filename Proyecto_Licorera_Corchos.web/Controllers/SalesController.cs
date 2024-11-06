@@ -109,5 +109,24 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 return View(sales1);
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete([FromRoute] int Id_Sales)
+        {
+            Response<Sales> response = await _salesService.DeleteAsync(Id_Sales);
+
+            if (response.IsSuccess)
+            {
+                _notifyService.Success(response.Message);
+               
+            }
+            else
+            {
+                _notifyService.Error(response.Message);
+            }
+            
+            return RedirectToAction(nameof(Index));
+
+        }
     }
 }
