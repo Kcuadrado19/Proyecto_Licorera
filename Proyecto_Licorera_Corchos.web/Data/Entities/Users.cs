@@ -15,9 +15,7 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
         public string Password { get; set; }
 
-        // Relación con la tabla Permisos
-        public int Id_Rol { get; set; }
-        public virtual Permissions Permissions { get; set; }
+       
     }
 
 }
