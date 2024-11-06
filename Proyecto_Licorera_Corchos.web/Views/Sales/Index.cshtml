@@ -60,8 +60,13 @@
                             <td>@item.Sale_Date</td>
                             <td>@item.Sales_Value</td>
                             <td>
-                                <a asp-action="Edit" asp-route-Id_Sales="@item.Id_Sales" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
-                                <a asp-action="Delete" asp-route-id="@item.Id_Sales" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                                <a asp-action="Edit" asp-route-Id_Sales="@item.Id_Sales" class="btn btn-sm btn-warning"></a>
+
+                                <form asp-action="Delete" asp-route-Id_Sales="@item.Id_Sales" style="display:contents;">
+                                    <button class="btn btn-danger btn-sm btnDelete"><i class="bi bi-trash"></i></button>
+
+                                </form>
+                  
                             </td>
 
                         </tr>
@@ -70,9 +75,28 @@
   
                 </tbody>
             </table>
-            <!-- End Table with stripped rows -->
-
+          
         </div>
     </div>
 
 </section>
+
+@section Scripts
+{
+    <script>
+
+        $(document).ready(function () {
+
+            $('.btnDelete').click(function (event) { 
+            
+                event.preventDefault();
+
+                Swal.fire();
+            
+            });
+        });
+
+    </script>
+
+
+}

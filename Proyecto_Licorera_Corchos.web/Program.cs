@@ -30,4 +30,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{Id_Sales?}");
 
+app.AddCustomWebAppConfiguration();
+
 app.Run();

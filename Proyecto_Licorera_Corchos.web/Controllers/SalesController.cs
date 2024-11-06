@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Services;
 using Proyecto_Licorera_Corchos.web.Core;
 using Proyecto_Licorera_Corchos.web.Helpers;
+using AspNetCoreHero.ToastNotification.Abstractions;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
@@ -13,14 +14,18 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
         private readonly ISalesService _salesService;
 
-        public SalesController(ISalesService salesService) 
+        private readonly INotyfService _notifyService;
+
+        public SalesController(ISalesService salesService, INotyfService notifyService)
         {
             _salesService = salesService;
+            _notifyService = notifyService;
         }
 
         [HttpGet]
         public async Task <IActionResult> Index()
         {
+           
             Response<List<Sales>> response= await _salesService.GetlistAsync();
             return View(response.Result);
         }
@@ -38,6 +43,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    _notifyService.Error("Debe ajustar los errores de validacion");
                     return View(sales1);
                 }
 
@@ -45,10 +51,11 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
                 if (response.IsSuccess) 
                 { 
+                    _notifyService.Success(response.Message);
                     return RedirectToAction(nameof(Index));
                 }
 
-                //TODO:Mostrar mensaje de error
+                _notifyService.Error(response.Message);
                 return View(response);
 
             }
@@ -69,7 +76,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 
                 return View(response.Result);
             }
-            //TODO:MENSAJE DE ERROR
+            _notifyService.Error(response.Message);
             return RedirectToAction(nameof(Index));
 
         }
@@ -81,7 +88,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    //TODO:Mostrar mensaje de error
+                    _notifyService.Error("Debe ajustar los errores de validacion");
                     return View(sales1);
                 }
 
@@ -89,16 +96,16 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
                 if (response.IsSuccess)
                 {
-                    //TODO:Mostrar mensaje de exito
+                    _notifyService.Success(response.Message);
                     return RedirectToAction(nameof(Index));
                 }
 
-                //TODO:Mostrar mensaje de error
+                _notifyService.Error(response.Message);
                 return View(response);
             }
             catch (Exception ex)
             {
-                //TODO:Mostrar mensaje de error
+                _notifyService.Error(ex.Message);
                 return View(sales1);
             }
         }
