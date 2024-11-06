@@ -9,7 +9,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
     {
         private readonly DataContext _context;
 
-        public AccountingController(DataContext context)
+        public AccountingController(DataContext context)           
         {
             _context = context;
         }

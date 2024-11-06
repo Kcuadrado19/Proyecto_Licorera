@@ -1,4 +1,5 @@
 ﻿using Proyecto_Licorera_Corchos.web.Core;
+using Proyecto_Licorera_Corchos.web.Data.Entities;
 
 namespace Proyecto_Licorera_Corchos.web.Helpers
 {
@@ -29,18 +30,19 @@ namespace Proyecto_Licorera_Corchos.web.Helpers
 
         }
 
-            public static Response<T> MakeResposeFail(string message)
+
+        public static Response<T> MakeResposeFail(string message)
+        {
+            return new Response<T>
             {
-                return new Response<T>
+                Errors = new List<string>
                 {
-                    Errors = new List<string>
-                {
-                        message
+                    message
                 },
 
-                    IsSuccess = false,
-                    Message = message,
-                };
-            }
+                IsSuccess = false,
+                Message = message,
+            };
+        }
     }
 }
