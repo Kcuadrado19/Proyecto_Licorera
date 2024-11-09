@@ -28,16 +28,27 @@ namespace Proyecto_Licorera_Corchos.web
             AddServices(builder);
 
             //toast notification
-            builder.Services.AddNotyf(config => { config.DurationInSeconds = 10;
+            builder.Services.AddNotyf(config => 
+             { 
+                config.DurationInSeconds = 10;
                 config.IsDismissable = true;
-                config.Position = NotyfPosition.BottomRight; });
+                config.Position = NotyfPosition.BottomRight; 
+             });
 
             return builder;
         }
 
+
         public static void AddServices( WebApplicationBuilder builder)
+
         {
-            builder.Services.AddScoped<ISectionService,SectionService > ();
+            builder.Services.AddScoped<ISalesService, SalesService>();
+        }
+
+        public static WebApplication AddCustomWebAppConfiguration(this WebApplication app) 
+        {
+            app.UseNotyf();
+            return app;
         }
 
         public static WebApplication AddCustomwebAppConfiguration(this WebApplication app)
