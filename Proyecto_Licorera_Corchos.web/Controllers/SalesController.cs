@@ -6,6 +6,7 @@ using Proyecto_Licorera_Corchos.web.Services;
 using Proyecto_Licorera_Corchos.web.Core;
 using Proyecto_Licorera_Corchos.web.Helpers;
 using AspNetCoreHero.ToastNotification.Abstractions;
+using Proyecto_Licorera_Corchos.web.Core.Pagination;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
@@ -23,10 +24,16 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpGet]
-        public async Task <IActionResult> Index()
+        public async Task <IActionResult> Index([FromQuery] int? RecordsPerPage,
+                                                [FromQuery] int? Page,
+                                                [FromQuery] int? Filter)
         {
            
-            Response<List<Sales>> response= await _salesService.GetlistAsync();
+            PaginationRequest request = new PaginationRequest 
+            {
+                
+            };
+            Response<PaginationResponse<Sales>> response= await _salesService.GetlistAsync(request);
             return View(response.Result);
         }
 
