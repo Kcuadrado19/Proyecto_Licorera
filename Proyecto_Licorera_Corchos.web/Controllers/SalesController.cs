@@ -26,12 +26,14 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         [HttpGet]
         public async Task <IActionResult> Index([FromQuery] int? RecordsPerPage,
                                                 [FromQuery] int? Page,
-                                                [FromQuery] int? Filter)
+                                                [FromQuery] string? Filter)
         {
            
             PaginationRequest request = new PaginationRequest 
             {
-                
+                RecordsPerPage = RecordsPerPage ?? 15,
+                Page = Page ?? 1,
+                Filter=Filter
             };
             Response<PaginationResponse<Sales>> response= await _salesService.GetlistAsync(request);
             return View(response.Result);
