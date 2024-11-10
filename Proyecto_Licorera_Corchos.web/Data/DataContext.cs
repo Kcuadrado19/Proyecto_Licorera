@@ -1,23 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
+using Proyecto_Licorera_Corchos.web.Models;
 
 namespace Proyecto_Licorera_Corchos.web.Data
 {
-    public class DataContext : DbContext
+    public class DataContext : IdentityDbContext<ApplicationUser>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
         }
 
-        // DbSet para Products
+        // DbSet para tus otras entidades
         public DbSet<Products> Products { get; set; }
-
-        // DbSet para Sales
         public DbSet<Sales> Sales { get; set; }
-
-        // DbSet para User
-        public DbSet<User> Users { get; set; } // Cambié 'Users' a 'User'
     }
 }
+
 
 
