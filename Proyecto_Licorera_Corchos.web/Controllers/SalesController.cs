@@ -31,6 +31,13 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         {
             // lady: Creamos una solicitud de paginación
 
+            PaginationRequest request = new PaginationRequest
+            {
+                RecordsPerPage = RecordsPerPage ?? 15,
+                Page = Page ?? 1,
+                Filter = Filter
+            };
+
 
             // lady: Obtenemos la lista paginada de ventas
             Response<PaginationResponse<Sales>> response = await _salesService.GetlistAsync(request);

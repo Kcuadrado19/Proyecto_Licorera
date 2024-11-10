@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Proyecto_Licorera_Corchos.web.Models
+namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
     public class ApplicationUser : IdentityUser
     {
