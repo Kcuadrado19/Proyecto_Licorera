@@ -61,6 +61,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 var result = await _userManager.CreateAsync(user, password);
                 if (result.Succeeded)
                 {
+                    TempData["SuccessMessage"] = "¡Usuario creado exitosamente! Bienvenido a nuestro equipo de la licorería.";
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -69,6 +70,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+            TempData["ErrorMessage"] = "¡Ups! Hubo un problema al crear el usuario. Por favor, verifica los datos.";
             return View(user);
         }
 
@@ -115,6 +117,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 var result = await _userManager.UpdateAsync(existingUser);
                 if (result.Succeeded)
                 {
+                    TempData["SuccessMessage"] = "¡Usuario actualizado con éxito!";
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -123,6 +126,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+            TempData["ErrorMessage"] = "¡Ups! No se pudo actualizar el usuario. Inténtalo de nuevo.";
             return View(user);
         }
 
@@ -152,6 +156,11 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             if (user != null)
             {
                 await _userManager.DeleteAsync(user);
+                TempData["SuccessMessage"] = "¡Usuario eliminado correctamente!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "No se pudo eliminar el usuario. Inténtalo más tarde.";
             }
 
             return RedirectToAction(nameof(Index));
@@ -174,9 +183,10 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
+                    TempData["SuccessMessage"] = "¡Bienvenido de nuevo!";
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                ModelState.AddModelError(string.Empty, "Intento de inicio de sesión no válido.");
             }
             return View(model);
         }
@@ -200,6 +210,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
+                    TempData["SuccessMessage"] = "¡Registro exitoso! Bienvenido a la familia de la licorería.";
                     return RedirectToAction("Index", "Home");
                 }
                 foreach (var error in result.Errors)
@@ -207,6 +218,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+            TempData["ErrorMessage"] = "No se pudo completar el registro. Por favor, verifica los datos.";
             return View(model);
         }
 
@@ -215,7 +227,9 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+            TempData["SuccessMessage"] = "¡Has cerrado sesión exitosamente!";
             return RedirectToAction("Index", "Home");
         }
     }
 }
+
