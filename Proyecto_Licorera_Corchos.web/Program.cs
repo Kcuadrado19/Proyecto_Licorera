@@ -6,31 +6,31 @@ using Proyecto_Licorera_Corchos.web.Data.Entities;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Configurar la cadena de conexión
+// lady: Configurar la cadena de conexión
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configurar Identity
+// lady: Configurar Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<DataContext>()
     .AddDefaultTokenProviders();
 
-// Configurar cookies de autenticación
+// lady: Configurar cookies de autenticación
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Users/Login"; // Ruta para el inicio de sesión
-    options.AccessDeniedPath = "/Users/AccessDenied"; // Ruta para el acceso denegado
+    options.LoginPath = "/Users/Login"; // lady: Ruta para el inicio de sesión
+    options.AccessDeniedPath = "/Users/AccessDenied"; // lady: Ruta para el acceso denegado
 });
 
-// Agregar servicios para controladores y vistas
+// lady: Agregar servicios para controladores y vistas
 builder.Services.AddControllersWithViews();
 
-// Personalizar la configuración
-builder.AddCustomBuilderConfiguration(); // parametrización por referencia en clase Customconfiguration
+// lady: Personalizar la configuración
+builder.AddCustomBuilderConfiguration(); // lady: parametrización por referencia en clase Customconfiguration
 
 WebApplication app = builder.Build();
 
-// Configuración del entorno
+// lady: Configuración del entorno
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -43,7 +43,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Configurar roles y usuario administrador inicial
+// lady: Configurar roles y usuario administrador inicial
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -51,28 +51,28 @@ using (var scope = app.Services.CreateScope())
     {
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-        SeedRolesAndUsersAsync(roleManager, userManager).Wait(); // Ejecutar de forma síncrona
+        SeedRolesAndUsersAsync(roleManager, userManager).Wait(); // lady: Ejecutar de forma síncrona
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Error initializing roles and users: {ex.Message}");
+        Console.WriteLine($"Error initializing roles and users: {ex.Message}"); // lady: Manejar errores
     }
 }
 
-// Configurar rutas
+// lady: Configurar rutas
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{Id_Sales?}");
 
-// Personalizar la configuración de la aplicación
+// lady: Personalizar la configuración de la aplicación
 app.AddCustomwebAppConfiguration();
 
 app.Run();
 
-// Método para crear roles y usuario administrador inicial
+// lady: Método para crear roles y usuario administrador inicial
 async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
 {
-    // Crear roles si no existen
+    // lady: Crear roles si no existen
     if (!await roleManager.RoleExistsAsync("Admin"))
     {
         await roleManager.CreateAsync(new IdentityRole("Admin"));
@@ -82,7 +82,7 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
         await roleManager.CreateAsync(new IdentityRole("Vendedor"));
     }
 
-    // Crear un usuario administrador inicial si no existe
+    // lady: Crear un usuario administrador inicial si no existe
     var adminUser = await userManager.FindByNameAsync("admin");
     if (adminUser == null)
     {
@@ -92,12 +92,13 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
             FullName = "Administrador Principal",
             Position = "Admin"
         };
-        var result = await userManager.CreateAsync(adminUser, "Admin@123"); // Cambia esta contraseña por una segura
+        var result = await userManager.CreateAsync(adminUser, "Admin@123"); // lady: Cambia esta contraseña por una segura
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(adminUser, "Admin");
         }
     }
 }
+
 
 
