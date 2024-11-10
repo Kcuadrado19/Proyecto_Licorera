@@ -9,7 +9,7 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
 
         [Display(Name = "Venta")]
         [Required(ErrorMessage = "El campo '{0}' es requerido.")] // Indica que es un campo requerido
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Display(Name = "Fecha venta")]
         [Required(ErrorMessage = "El campo '{0}' es requerido.")] // Indica que es un campo requerido

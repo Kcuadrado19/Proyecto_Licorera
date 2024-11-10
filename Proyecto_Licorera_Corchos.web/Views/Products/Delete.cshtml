@@ -1,0 +1,11 @@
+﻿@model Proyecto_Licorera_Corchos.web.Data.Entities.Product
+
+<h2>Eliminar Producto ❌</h2>
+<p>¿Estás seguro de que deseas eliminar el producto <strong>@Model.Name</strong>?</p>
+
+@using (Html.BeginForm("DeleteConfirmed", "Products", new { id = Model.Id }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-danger">Eliminar ✅</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Cancelar ❌</a>
+}
