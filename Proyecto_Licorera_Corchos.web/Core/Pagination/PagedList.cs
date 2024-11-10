@@ -16,6 +16,7 @@ namespace Proyecto_Licorera_Corchos.web.Core.Pagination
             RecordsPerPage = recordsPerPage;
             CurrentPage = pageNumber;
             TotalPages = (int)Math.Ceiling(count / (double)recordsPerPage);
+            AddRange(items);
         }
 
         public static async Task<PagedList<T>> ToPagedListAsync(IQueryable<T> query, PaginationRequest request) 
@@ -25,7 +26,7 @@ namespace Proyecto_Licorera_Corchos.web.Core.Pagination
             List<T> items = await query.Paginate<T>(request)
                                         .ToListAsync();
 
-            return new PagedList<T>(items, count, request.Page, request.RecordPerPage);
+            return new PagedList<T>(items, count, request.Page, request.RecordsPerPage);
         }
     }
 }

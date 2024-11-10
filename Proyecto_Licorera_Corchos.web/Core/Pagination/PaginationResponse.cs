@@ -11,9 +11,9 @@
 
         public int TotalCount { get; set; }
 
-        public bool HasPrevious => CurrentPage < TotalPages;
+        public bool HasPrevious => CurrentPage < 1;
 
-        public bool HasNext => CurrentPage > TotalPages;
+        public bool HasNext => CurrentPage < TotalPages;
 
         public int VisiblePages => 5;
 
@@ -26,7 +26,7 @@
                 List<int> pages = new List<int>();
 
                 int half = (VisiblePages / 2);
-                int start = CurrentPage - half + 1 - (VisiblePages%2);
+                int start = CurrentPage - half + 1 - (VisiblePages % 2);
                 int end = CurrentPage + half;
 
                 int vPages = VisiblePages;
