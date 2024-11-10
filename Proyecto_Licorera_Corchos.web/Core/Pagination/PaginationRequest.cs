@@ -12,13 +12,13 @@
         public int Page
         {
             get => _page;
-            set=> _page= value>0 ? value: _page;
+            set => _page= value > 0 ? value : _page;
         }
 
-        public int RecordPerPage 
+        public int RecordsPerPage 
         {
             get => _recordsPerPage;
-            set => _recordsPerPage= value <= _maxRecordsPerPage ? _recordsPerPage: _maxRecordsPerPage;
+            set => _recordsPerPage = value <= _maxRecordsPerPage ? value : _maxRecordsPerPage;
         
         }
 
