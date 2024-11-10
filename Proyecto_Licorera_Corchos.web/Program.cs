@@ -30,7 +30,7 @@ builder.AddCustomBuilderConfiguration(); // parametrización por referencia en c
 
 WebApplication app = builder.Build();
 
-// Configuración del entorno y asi 
+// Configuración del entorno
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -40,12 +40,10 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
-// Agregar autenticación
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Configurar roles y usuarios iniciales
+// Configurar roles y usuario administrador inicial
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -53,11 +51,10 @@ using (var scope = app.Services.CreateScope())
     {
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-        SeedRolesAndUsersAsync(roleManager, userManager).Wait(); // Importante: Usamos .Wait() para ejecutar la tarea de forma síncrona
+        SeedRolesAndUsersAsync(roleManager, userManager).Wait(); // Ejecutar de forma síncrona
     }
     catch (Exception ex)
     {
-        // Maneja los errores de inicialización aquí
         Console.WriteLine($"Error initializing roles and users: {ex.Message}");
     }
 }
@@ -67,12 +64,12 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{Id_Sales?}");
 
-// Personalizar la configuración de la aplicación lo puede hacer kellys tu tesa
+// Personalizar la configuración de la aplicación
 app.AddCustomwebAppConfiguration();
 
 app.Run();
 
-// Método para crear roles y usuarios iniciales
+// Método para crear roles y usuario administrador inicial
 async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
 {
     // Crear roles si no existen
@@ -85,7 +82,7 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
         await roleManager.CreateAsync(new IdentityRole("Vendedor"));
     }
 
-    // Crear un usuario administrador si no existe
+    // Crear un usuario administrador inicial si no existe
     var adminUser = await userManager.FindByNameAsync("admin");
     if (adminUser == null)
     {
@@ -95,11 +92,12 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
             FullName = "Administrador Principal",
             Position = "Admin"
         };
-        var result = await userManager.CreateAsync(adminUser, "Admin@123"); // Cambia la contraseña por una segura
+        var result = await userManager.CreateAsync(adminUser, "Admin@123"); // Cambia esta contraseña por una segura
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(adminUser, "Admin");
         }
     }
 }
+
 

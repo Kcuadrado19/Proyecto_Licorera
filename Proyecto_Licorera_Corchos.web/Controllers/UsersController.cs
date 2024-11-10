@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
+    [Authorize(Roles = "Admin")] // Solo los administradores pueden gestionar usuarios
     public class UsersController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -156,13 +157,15 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Acción para el inicio de sesión
+        // Acción para el inicio de sesión (accesible para todos)
+        [AllowAnonymous]
         public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -178,13 +181,15 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             return View(model);
         }
 
-        // Acción para el registro de usuarios
+        // Acción para el registro de usuarios (accesible para todos)
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -205,7 +210,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             return View(model);
         }
 
-        // Acción para cerrar sesión
+        // Acción para cerrar sesión (accesible para todos)
+        [AllowAnonymous]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
