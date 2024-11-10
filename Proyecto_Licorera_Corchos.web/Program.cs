@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web;
 using Proyecto_Licorera_Corchos.web.Data;
-using Proyecto_Licorera_Corchos.web.Models;
+using Proyecto_Licorera_Corchos.web.Data.Entities;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

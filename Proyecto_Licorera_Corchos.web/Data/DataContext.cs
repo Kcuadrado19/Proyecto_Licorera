@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
-using Proyecto_Licorera_Corchos.web.Models;
 
 namespace Proyecto_Licorera_Corchos.web.Data
 {
@@ -11,9 +10,8 @@ namespace Proyecto_Licorera_Corchos.web.Data
         {
         }
 
-        public DbSet<Product> Products { get; set; }
-
-
+        // DbSet para tus otras entidades
+        public DbSet<Products> Products { get; set; }
         public DbSet<Sales> Sales { get; set; }
     }
 }

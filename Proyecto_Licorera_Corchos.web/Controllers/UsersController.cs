@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Proyecto_Licorera_Corchos.web.Models;
+using Proyecto_Licorera_Corchos.web.Data.Entities;
 using System.Linq;
 using System.Threading.Tasks;
 
