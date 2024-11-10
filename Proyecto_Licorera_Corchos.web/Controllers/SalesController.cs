@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization; // lady: Importamos la librería para la autorización
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
 using Proyecto_Licorera_Corchos.web.Data;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +10,6 @@ using Proyecto_Licorera_Corchos.web.Core.Pagination;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
-    [Authorize(Roles = "Vendedor,Admin")] // lady: Solo los roles de Vendedor y Admin pueden acceder a este controlador
     public class SalesController : Controller
     {
         private readonly ISalesService _salesService; // lady: Inyectamos el servicio de ventas
