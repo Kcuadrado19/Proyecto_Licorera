@@ -24,13 +24,13 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index([FromQuery] int? RecordsPerPage, [FromQuery] int? Page, [FromQuery] int? Filter)
+
+        public async Task <IActionResult> Index([FromQuery] int? RecordsPerPage,
+                                                [FromQuery] int? Page,
+                                                [FromQuery] string? Filter)
         {
             // lady: Creamos una solicitud de paginación
-            PaginationRequest request = new PaginationRequest
-            {
-                // lady: Aquí puedes agregar más detalles de paginación si es necesario
-            };
+
 
             // lady: Obtenemos la lista paginada de ventas
             Response<PaginationResponse<Sales>> response = await _salesService.GetlistAsync(request);
