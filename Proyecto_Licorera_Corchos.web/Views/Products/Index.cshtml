@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Proyecto_Licorera_Corchos.web.Data.Entities.Product>
+
+<h2>Lista de Productos 🍾</h2>
+<p>Aquí puedes ver todos los productos disponibles en la licorería.</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Descripción</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td>@item.Description</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = item.Id })" class="btn btn-warning">Editar 🖊️</a>
+                    <a href="@Url.Action("Details", new { id = item.Id })" class="btn btn-info">Detalles 🔍</a>
+                    <a href="@Url.Action("Delete", new { id = item.Id })" class="btn btn-danger">Eliminar ❌</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Create")" class="btn btn-success">Agregar Nuevo Producto 🍹</a>

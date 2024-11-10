@@ -2,20 +2,21 @@
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
-    public class Products
+    public class Product
     {
-        [Key] // Indica que es clave primaria
-        public int Id_Product { get; set; }
+        [Key]
+        public int Id { get; set; }
 
-        [MaxLength(100, ErrorMessage = "El campo '{0}' debe tener máximo '{1}' carácteres")] // Valida que el campo no supere 100 caracteres
-        public string Product_Name { get; set; }
+        [Required(ErrorMessage = "El nombre del producto es obligatorio.")]
+        [MaxLength(100, ErrorMessage = "El nombre no puede exceder los 100 caracteres.")]
+        public string? Name { get; set; }
 
-        [MaxLength(50, ErrorMessage = "El campo '{0}' debe tener máximo '{1}' carácteres")] // Valida que el campo no supere 50 caracteres
-        [Required(ErrorMessage = "El campo '{0}' es requerido.")] // Indica que es un campo requerido
-        public string Category { get; set; }
+        [Required(ErrorMessage = "La categoría es obligatoria.")]
+        [MaxLength(50, ErrorMessage = "La categoría no puede exceder los 50 caracteres.")]
+        public string? Description { get; set; }
 
-        [Required(ErrorMessage = "El campo '{0}' es requerido.")] // Indica que es un campo requerido
-        public float Price { get; set; } // Se utiliza decimal para el tipo MONEY
-
+        [Required(ErrorMessage = "El precio es obligatorio.")]
+        [Range(0, double.MaxValue, ErrorMessage = "El precio debe ser mayor que cero.")]
+        public decimal Price { get; set; }
     }
 }
