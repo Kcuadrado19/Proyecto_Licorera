@@ -6,6 +6,9 @@ using Proyecto_Licorera_Corchos.web.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Proyecto_Licorera_Corchos.web.Core.Pagination;
+using System.Reflection.Metadata;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Proyecto_Licorera_Corchos.web.Services
 {
@@ -13,11 +16,14 @@ namespace Proyecto_Licorera_Corchos.web.Services
 
     public interface IProductService
     {
+        public Task<Response<PaginationResponse<Product>>> GetlistAsync(PaginationRequest request);
         Task<Response<Product>> CreateAsync(Product product);
         Task<Response<Product>> EditAsync(Product product);
         Task<Response<Product>> DeleteAsync(int id);
         Task<Response<Product>> GetByIdAsync(int id);
         Task<Response<IEnumerable<Product>>> GetAllAsync();
+
+
     }
     public class ProductService : IProductService
     {
@@ -105,6 +111,40 @@ namespace Proyecto_Licorera_Corchos.web.Services
             {
                 return ResponseHelper<IEnumerable<Product>>.MakeResposeFail(ex);
             }
+        }
+
+        public async Task<Response<PaginationResponse<Product>>> GetlistAsync(PaginationRequest request)
+        {
+
+            try
+            {
+                IQueryable<Product> query = _context.Products.AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(request.Filter))
+                {
+                    query = query.Where(s => s.Name.ToLower().Contains(request.Filter.ToLower()));
+                }
+
+                PagedList<Product> List = await PagedList<Product>.ToPagedListAsync(query, request);
+
+                PaginationResponse<Product> result = new PaginationResponse<Product>
+                {
+                    List = List,
+                    TotalCount = List.TotalCount,
+                    RecordsPerPage = List.RecordsPerPage,
+                    CurrentPage = List.CurrentPage,
+                    TotalPages = List.TotalPages,
+                    Filter = request.Filter,
+                };
+
+                return ResponseHelper<PaginationResponse<Product>>.MakeResponseSuccess(result, "Producto obtenido con éxito");
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper<PaginationResponse<Product>>.MakeResposeFail(ex);
+            }
+
+
         }
     }
 }

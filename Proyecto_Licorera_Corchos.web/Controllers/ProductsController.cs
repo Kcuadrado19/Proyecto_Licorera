@@ -1,30 +1,37 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Proyecto_Licorera_Corchos.web.Data;
-using Proyecto_Licorera_Corchos.web.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Proyecto_Licorera_Corchos.web.Core;
+using Proyecto_Licorera_Corchos.web.Core.Pagination;
+using Proyecto_Licorera_Corchos.web.Data.Entities;
+using Proyecto_Licorera_Corchos.web.Services;
+using System.Threading.Tasks;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
-    [Authorize(Roles = "Admin")] // Solo los administradores pueden acceder a este controlador
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
-        private readonly DataContext _context;
+        private readonly IProductService _productService;
 
-        public ProductsController(DataContext context)
+        public ProductsController(IProductService productService)
         {
-            _context = context;
+            _productService = productService;
         }
 
-        // Acción para listar todos los productos
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var products = await _context.Products.ToListAsync();
-            return View(products);
+            var response = await _productService.GetAllAsync();
+            if (response.IsSuccess)
+            {
+                return View(response.Result);
+            }
+
+            return View("Error", response.Message); // Manejo de errores
         }
 
-        // Acción para ver los detalles de un producto
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
@@ -33,37 +40,39 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            var response = await _productService.GetByIdAsync(id.Value);
+            if (response.IsSuccess)
             {
-                return NotFound();
+                return View(response.Result);
             }
 
-            return View(product);
+            return NotFound();
         }
 
-        // Acción para mostrar el formulario de creación
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // Acción para crear un nuevo producto
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var response = await _productService.CreateAsync(product);
+                if (response.IsSuccess)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // Si hubo error, mostramos un mensaje
+                return View("Error", response.Message);
             }
             return View(product);
         }
 
-        // Acción para mostrar el formulario de edición
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -72,16 +81,15 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            var response = await _productService.GetByIdAsync(id.Value);
+            if (response.IsSuccess)
             {
-                return NotFound();
+                return View(response.Result);
             }
 
-            return View(product);
+            return NotFound();
         }
 
-        // Acción para editar un producto
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Product product)
@@ -93,28 +101,17 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                var response = await _productService.EditAsync(product);
+                if (response.IsSuccess)
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProductExists(product.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                return View("Error", response.Message);
             }
+
             return View(product);
         }
 
-        // Acción para mostrar el formulario de eliminación
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -123,33 +120,47 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            var response = await _productService.GetByIdAsync(id.Value);
+            if (response.IsSuccess)
             {
-                return NotFound();
+                return View(response.Result);
             }
 
-            return View(product);
+            return NotFound();
         }
 
-        // Acción para eliminar un producto
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
+            var response = await _productService.DeleteAsync(id);
+            if (response.IsSuccess)
             {
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
-            return RedirectToAction(nameof(Index));
+            return View("Error", response.Message);
         }
 
-        // Método privado para verificar si un producto existe
-        private bool ProductExists(int id)
+
+        [HttpGet]
+
+        public async Task<IActionResult> Index([FromQuery] int? RecordsPerPage,
+                                               [FromQuery] int? Page,
+                                               [FromQuery] string? Filter)
         {
-            return _context.Products.Any(e => e.Id == id);
+
+            PaginationRequest request = new PaginationRequest
+            {
+                RecordsPerPage = RecordsPerPage ?? 15,
+                Page = Page ?? 1,
+                Filter = Filter
+            };
+
+
+            Response<PaginationResponse<Product>> response = await _productService.GetlistAsync(request);
+            return View(response.Result);
         }
+
+        
     }
 }

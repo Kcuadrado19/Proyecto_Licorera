@@ -59,6 +59,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+
 // Configurar rutas
 app.MapControllerRoute(
     name: "default",
