@@ -17,367 +17,266 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Accounting", b =>
-                {
-                    b.Property<int>("Id_Accounting")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Accounting"));
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Accounting_Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<string>("Name")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("Id_Modification")
-                        .HasColumnType("int");
+                b.Property<string>("NormalizedName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("Id_User")
-                        .HasColumnType("int");
+                b.HasKey("Id");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                b.HasIndex("NormalizedName")
+                    .IsUnique()
+                    .HasDatabaseName("RoleNameIndex")
+                    .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.HasKey("Id_Accounting");
+                b.ToTable("AspNetRoles", (string)null);
+            });
 
-                    b.HasIndex("Id_Modification");
+            // Existing Identity Entities...
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    b.HasIndex("Id_User");
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.ToTable("Accounting");
-                });
+                b.Property<string>("ClaimType")
+                    .HasColumnType("nvarchar(max)");
 
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Clients", b =>
-                {
-                    b.Property<int>("Id_Client")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                b.Property<string>("ClaimValue")
+                    .HasColumnType("nvarchar(max)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Client"));
+                b.Property<string>("RoleId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Client_Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.HasKey("Id");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.HasIndex("RoleId");
 
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.ToTable("AspNetRoleClaims", (string)null);
+            });
 
-                    b.HasKey("Id_Client");
+            // Your ApplicationUser configuration...
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser", b =>
+            {
+                b.Property<string>("Id")
+                    .HasColumnType("nvarchar(450)");
 
-                    b.ToTable("Clients");
-                });
+                b.Property<int>("AccessFailedCount")
+                    .HasColumnType("int");
 
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Modifications", b =>
-                {
-                    b.Property<int>("Id_Modification")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                b.Property<string>("ConcurrencyStamp")
+                    .IsConcurrencyToken()
+                    .HasColumnType("nvarchar(max)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Modification"));
+                b.Property<string>("Email")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("Modification_Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                b.Property<bool>("EmailConfirmed")
+                    .HasColumnType("bit");
 
-                    b.HasKey("Id_Modification");
+                b.Property<string>("FullName")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
 
-                    b.ToTable("Modifications");
-                });
+                b.Property<bool>("LockoutEnabled")
+                    .HasColumnType("bit");
 
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Orders", b =>
-                {
-                    b.Property<int>("Id_Order")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                b.Property<DateTimeOffset?>("LockoutEnd")
+                    .HasColumnType("datetimeoffset");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Order"));
+                b.Property<string>("NormalizedEmail")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<int?>("Contact")
-                        .HasColumnType("int");
+                b.Property<string>("NormalizedUserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("Id_Accounting")
-                        .HasColumnType("int");
+                b.Property<string>("PasswordHash")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id_Client")
-                        .HasColumnType("int");
+                b.Property<string>("PhoneNumber")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Id_Product")
-                        .HasColumnType("int");
+                b.Property<bool>("PhoneNumberConfirmed")
+                    .HasColumnType("bit");
 
-                    b.Property<int>("Id_Sales")
-                        .HasColumnType("int");
+                b.Property<string>("Position")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime?>("Orders_Date")
-                        .HasColumnType("datetime2");
+                b.Property<string>("SecurityStamp")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Orders_Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<bool>("TwoFactorEnabled")
+                    .HasColumnType("bit");
 
-                    b.Property<decimal?>("Total_Order")
-                        .HasColumnType("money");
+                b.Property<string>("UserName")
+                    .HasMaxLength(256)
+                    .HasColumnType("nvarchar(256)");
 
-                    b.HasKey("Id_Order");
+                b.HasKey("Id");
 
-                    b.HasIndex("Id_Accounting");
+                b.HasIndex("NormalizedEmail")
+                    .HasDatabaseName("EmailIndex");
 
-                    b.HasIndex("Id_Client");
+                b.HasIndex("NormalizedUserName")
+                    .IsUnique()
+                    .HasDatabaseName("UserNameIndex")
+                    .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.HasIndex("Id_Product");
+                b.ToTable("AspNetUsers", (string)null);
+            });
 
-                    b.HasIndex("Id_Sales");
+            // Existing Product and Sales entities...
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Product", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    b.ToTable("Orders");
-                });
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Permissions", b =>
-                {
-                    b.Property<int>("Id_Rol")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .HasColumnType("nvarchar(50)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Rol"));
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Permissions_Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.Property<float>("Price")
+                    .HasColumnType("real");
 
-                    b.HasKey("Id_Rol");
+                b.HasKey("Id");
 
-                    b.ToTable("Permissions");
-                });
-
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Products", b =>
-                {
-                    b.Property<int>("Id_Product")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Product"));
-
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
-
-                    b.Property<string>("Product_Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id_Product");
-
-                    b.ToTable("Products");
-                });
+                b.ToTable("Products");
+            });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Sales", b =>
-                {
-                    b.Property<int>("Id_Sales")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id_Sales")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Sales"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Sales"));
 
-                    b.Property<int>("Id_Orders")
-                        .HasColumnType("int");
+                b.Property<int>("Id_Orders")
+                    .HasColumnType("int");
 
-                    b.Property<bool>("IsHidden")
-                        .HasColumnType("bit");
+                b.Property<bool>("IsHidden")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Sale_Date")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("Sale_Date")
+                    .HasColumnType("datetime2");
 
-                    b.Property<float>("Sales_Value")
-                        .HasColumnType("real");
+                b.Property<float>("Sales_Value")
+                    .HasColumnType("real");
 
-                    b.Property<float>("Total_Sales")
-                        .HasColumnType("real");
+                b.Property<float>("Total_Sales")
+                    .HasColumnType("real");
 
-                    b.HasKey("Id_Sales");
+                b.HasKey("Id_Sales");
 
-                    b.ToTable("Sales");
-                });
+                b.ToTable("Sales");
+            });
 
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Section", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            // Add Permission and RolePermission entities
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Permission", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("IsHidden")
-                        .HasColumnType("bit");
+                b.Property<string>("Description")
+                    .HasMaxLength(250)
+                    .HasColumnType("nvarchar(250)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.HasKey("Id");
 
-                    b.HasKey("Id");
+                b.ToTable("Permissions");
+            });
 
-                    b.ToTable("Section");
-                });
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.RolePermission", b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Users", b =>
-                {
-                    b.Property<int>("Id_User")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_User"));
+                b.Property<string>("RoleId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Id_Rol")
-                        .HasColumnType("int");
+                b.Property<int>("PermissionId")
+                    .HasColumnType("int");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                b.HasKey("Id");
 
-                    b.Property<int>("PermissionsId_Rol")
-                        .HasColumnType("int");
+                b.HasIndex("RoleId");
 
-                    b.Property<string>("Rol")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                b.HasIndex("PermissionId");
 
-                    b.HasKey("Id_User");
+                b.ToTable("RolePermissions");
+            });
 
-                    b.HasIndex("PermissionsId_Rol");
+            // Configure relationships for RolePermission
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.RolePermission", b =>
+            {
+                b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
+                    .WithMany()
+                    .HasForeignKey("RoleId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-                    b.ToTable("Users");
-                });
+                b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Permission", "Permission")
+                    .WithMany()
+                    .HasForeignKey("PermissionId")
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .IsRequired();
 
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.UsersAudit", b =>
-                {
-                    b.Property<int>("Id_UserAudit")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                b.Navigation("Role");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_UserAudit"));
+                b.Navigation("Permission");
+            });
 
-                    b.Property<int>("AccountingId_Accounting")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Id_Accounting")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserAudit_Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id_UserAudit");
-
-                    b.HasIndex("AccountingId_Accounting");
-
-                    b.ToTable("UsersAudit");
-                });
-
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Accounting", b =>
-                {
-                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Modifications", "Modifications")
-                        .WithMany()
-                        .HasForeignKey("Id_Modification")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Users", "Users")
-                        .WithMany()
-                        .HasForeignKey("Id_User")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Modifications");
-
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Orders", b =>
-                {
-                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Accounting", "Accounting")
-                        .WithMany()
-                        .HasForeignKey("Id_Accounting")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Clients", "Clients")
-                        .WithMany()
-                        .HasForeignKey("Id_Client")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Products", "Products")
-                        .WithMany()
-                        .HasForeignKey("Id_Product")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Sales", "Sales")
-                        .WithMany()
-                        .HasForeignKey("Id_Sales")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Accounting");
-
-                    b.Navigation("Clients");
-
-                    b.Navigation("Products");
-
-                    b.Navigation("Sales");
-                });
-
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Users", b =>
-                {
-                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Permissions", "Permissions")
-                        .WithMany()
-                        .HasForeignKey("PermissionsId_Rol")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Permissions");
-                });
-
-            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.UsersAudit", b =>
-                {
-                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Accounting", "Accounting")
-                        .WithMany()
-                        .HasForeignKey("AccountingId_Accounting")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Accounting");
-                });
 #pragma warning restore 612, 618
         }
     }
