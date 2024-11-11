@@ -6,9 +6,9 @@ using Proyecto_Licorera_Corchos.web.Data.Entities;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// lady: Configurar la cadena de conexión
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//builder.Services.AddDbContext<DataContext>(options =>
+//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // lady: Configurar Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -59,7 +59,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// lady: Configurar rutas
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{Id?}");
