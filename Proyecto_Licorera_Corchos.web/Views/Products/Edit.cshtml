@@ -20,10 +20,9 @@
         <div class="card-body">
             <h5 class="card-title text-primary">Editar Producto 🖊️</h5>
 
-            @using (Html.BeginForm("Edit", "Product", FormMethod.Post))
+            @using (Html.BeginForm("Edit", "Products", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
-
                 @Html.HiddenFor(model => model.Id)
 
                 <div class="form-group">

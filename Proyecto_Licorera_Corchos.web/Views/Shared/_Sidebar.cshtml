@@ -26,7 +26,7 @@
             <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Products" ? "" : "collapsed")"
                asp-controller="Products"
                asp-action="Index">
-                <i class="bi bi-box-seam"></i> <!-- Icono representativo de productos -->
+                <i class="bi bi-box-seam"></i> 
                 <span>Productos</span>
             </a>
         </li>
@@ -40,16 +40,6 @@
                 <span>Login</span>
             </a>
         </li>
-
-        <li class="nav-item">
-            <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString()== "Products"?"":"collapsed")"
-               asp-controller="Product"
-               asp-action="Index">
-                <i class="bx bxs-cart-alt"></i>
-                <span>Productos</span>
-            </a>
-        </li>
-
 
 
     </ul>
