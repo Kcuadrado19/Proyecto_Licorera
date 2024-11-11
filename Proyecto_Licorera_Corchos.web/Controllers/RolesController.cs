@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Proyecto_Licorera_Corchos.web.DTOs;
 using Proyecto_Licorera_Corchos.web.Services;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
@@ -9,26 +9,24 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
     {
         private readonly IRoleService _roleService;
 
-        // lady: Inyectamos el servicio IRoleService en el controlador
         public RolesController(IRoleService roleService)
         {
             _roleService = roleService;
         }
 
-        // lady: Acción para listar todos los roles
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var roles = await _roleService.GetAllRolesAsync();
             return View(roles);
         }
 
-        // lady: Acción para mostrar el formulario de creación de roles
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // lady: Acción para procesar la creación de un nuevo rol
         [HttpPost]
         public async Task<IActionResult> Create(string roleName)
         {
@@ -43,14 +41,12 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            else
-            {
-                ModelState.AddModelError("", "Error al crear el rol.");
-                return View();
-            }
+
+            ModelState.AddModelError("", "Error al crear el rol.");
+            return View();
         }
 
-        // lady: Acción para mostrar el formulario de edición de roles
+        [HttpGet]
         public async Task<IActionResult> Edit(string roleId)
         {
             var role = await _roleService.GetRoleByIdAsync(roleId);
@@ -58,10 +54,10 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             {
                 return NotFound();
             }
+
             return View(role);
         }
 
-        // lady: Acción para procesar la edición de un rol
         [HttpPost]
         public async Task<IActionResult> Edit(string roleId, string newRoleName)
         {
@@ -76,14 +72,11 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            else
-            {
-                ModelState.AddModelError("", "Error al actualizar el rol.");
-                return View();
-            }
+
+            ModelState.AddModelError("", "Error al actualizar el rol.");
+            return View();
         }
 
-        // lady: Acción para eliminar un rol
         public async Task<IActionResult> Delete(string roleId)
         {
             var result = await _roleService.DeleteRoleAsync(roleId);
@@ -91,11 +84,10 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             {
                 return RedirectToAction("Index");
             }
-            else
-            {
-                ModelState.AddModelError("", "Error al eliminar el rol.");
-                return RedirectToAction("Index");
-            }
+
+            ModelState.AddModelError("", "Error al eliminar el rol.");
+            return RedirectToAction("Index");
         }
     }
 }
+

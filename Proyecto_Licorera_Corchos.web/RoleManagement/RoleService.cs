@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Proyecto_Licorera_Corchos.web.Helpers;
 using Proyecto_Licorera_Corchos.web.Services;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-
 
 namespace Proyecto_Licorera_Corchos.web.RoleManagement
 {
@@ -18,13 +17,18 @@ namespace Proyecto_Licorera_Corchos.web.RoleManagement
 
         public async Task<List<IdentityRole>> GetAllRolesAsync()
         {
-            // lady: Obtenemos todos los roles
-            return await Task.FromResult(new List<IdentityRole>(_roleManager.Roles));
+            // lady: Obtenemos todos los roles directamente como IdentityRole
+            return await Task.FromResult(_roleManager.Roles.ToList());
+        }
+
+        public async Task<IdentityRole> GetRoleByIdAsync(string roleId)
+        {
+            // lady: Obtenemos el rol directamente como IdentityRole
+            return await _roleManager.FindByIdAsync(roleId);
         }
 
         public async Task<bool> CreateRoleAsync(string roleName)
         {
-            // lady: Verificamos si el rol ya existe
             if (await _roleManager.RoleExistsAsync(roleName))
             {
                 return false;
@@ -46,12 +50,6 @@ namespace Proyecto_Licorera_Corchos.web.RoleManagement
 
             var result = await _roleManager.DeleteAsync(role);
             return result.Succeeded;
-        }
-
-        public async Task<IdentityRole> GetRoleByIdAsync(string roleId)
-        {
-            // lady: Obtenemos el rol por su Id
-            return await _roleManager.FindByIdAsync(roleId);
         }
 
         public async Task<bool> UpdateRoleAsync(string roleId, string newRoleName)
