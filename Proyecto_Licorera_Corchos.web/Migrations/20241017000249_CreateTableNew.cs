@@ -71,7 +71,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                 name: "Sales",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id_Sales = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Sale_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Total_Sales = table.Column<float>(type: "real", nullable: false),
@@ -79,7 +79,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sales", x => x.Id);
+                    table.PrimaryKey("PK_Sales", x => x.Id_Sales);
                 });
 
             migrationBuilder.CreateTable(
@@ -145,7 +145,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     Id_Product = table.Column<int>(type: "int", nullable: false),
                     Id_Client = table.Column<int>(type: "int", nullable: false),
                     Id_Accounting = table.Column<int>(type: "int", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id_Sales = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -169,10 +169,10 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                         principalColumn: "Id_Product",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Orders_Sales_Id",
-                        column: x => x.Id,
+                        name: "FK_Orders_Sales_Id_Sales",
+                        column: x => x.Id_Sales,
                         principalTable: "Sales",
-                        principalColumn: "Id",
+                        principalColumn: "Id_Sales",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -223,9 +223,9 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                 column: "Id_Product");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_Id",
+                name: "IX_Orders_Id_Sales",
                 table: "Orders",
-                column: "Id");
+                column: "Id_Sales");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_PermissionsId_Rol",

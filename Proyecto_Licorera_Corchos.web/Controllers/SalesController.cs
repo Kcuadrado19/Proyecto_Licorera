@@ -76,9 +76,9 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit([FromRoute] int Id)
+        public async Task<IActionResult> Edit([FromRoute] int Id_Sales)
         {
-            Response<Sales> response = await _salesService.GetOneAsync(Id);
+            Response<Sales> response = await _salesService.GetOneAsync(Id_Sales);
 
             if (response.IsSuccess)
             {
@@ -120,9 +120,9 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete([FromRoute] int Id)
+        public async Task<IActionResult> Delete([FromRoute] int Id_Sales)
         {
-            Response<Sales> response = await _salesService.DeleteAsync(Id);
+            Response<Sales> response = await _salesService.DeleteAsync(Id_Sales);
 
             if (response.IsSuccess)
             {

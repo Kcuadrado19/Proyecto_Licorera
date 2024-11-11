@@ -120,7 +120,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     b.Property<int>("Id_Product")
                         .HasColumnType("int");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("Id_Sales")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("Orders_Date")
@@ -142,7 +142,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     b.HasIndex("Id_Product");
 
-                    b.HasIndex("Id");
+                    b.HasIndex("Id_Sales");
 
                     b.ToTable("Orders");
                 });
@@ -193,11 +193,11 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Sales", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("Id_Sales")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Sales"));
 
                     b.Property<int>("Id_Orders")
                         .HasColumnType("int");
@@ -218,7 +218,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     b.Property<float>("Total_Sales")
                         .HasColumnType("real");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id_Sales");
 
                     b.ToTable("Sales");
                 });
@@ -344,7 +344,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Sales", "Sales")
                         .WithMany()
-                        .HasForeignKey("Id")
+                        .HasForeignKey("Id_Sales")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
