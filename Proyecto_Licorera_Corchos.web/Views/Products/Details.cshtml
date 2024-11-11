@@ -1,0 +1,33 @@
+﻿@model Proyecto_Licorera_Corchos.web.Data.Entities.Product
+
+@{
+    ViewData["Title"] = "Detalles del Producto";
+}
+
+<div class="pagetitle">
+    <h1>Productos</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Productos</a></li>
+            <li class="breadcrumb-item active">Detalles del Producto</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="product dashboard">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title text-primary">Detalles del Producto 🍷</h5>
+
+            <p><strong>Nombre:</strong> @Model.Name</p>
+            <p><strong>Precio:</strong> $@Model.Price</p>
+            <p><strong>Descripción:</strong> @Model.Description</p>
+
+            <div class="mt-4">
+                <a href="@Url.Action("Index")" class="btn btn-primary">Volver a la Lista 📋</a>
+                <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-warning">Editar 🖊️</a>
+            </div>
+        </div>
+    </div>
+</section>
