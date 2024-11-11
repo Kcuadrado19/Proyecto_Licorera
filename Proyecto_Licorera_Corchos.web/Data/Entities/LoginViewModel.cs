@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Proyecto_Licorera_Corchos.web.Models
+namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
     public class LoginViewModel
     {
