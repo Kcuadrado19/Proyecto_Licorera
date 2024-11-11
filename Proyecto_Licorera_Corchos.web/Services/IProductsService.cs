@@ -21,8 +21,8 @@ namespace Proyecto_Licorera_Corchos.web.Services
         public Task<Response<PaginationResponse<Product>>> GetlistAsync(PaginationRequest request);
         public Task<Response<Product>> CreateAsync(Product model);
         public Task<Response<Product>> EditAsync(Product model);
-        public Task<Response<Product>> DeleteAsync(int id);
-        public Task<Response<Product>> GetOneAsync(int id);
+        public Task<Response<Product>> DeleteAsync(int Id);
+        public Task<Response<Product>> GetOneAsync(int Id);
         
 
 
@@ -55,7 +55,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
             catch (Exception ex)
             {
-                
+
                 return ResponseHelper<Product>.MakeResposeFail(ex);
             }
         }
@@ -75,25 +75,6 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
         }
 
-        public async Task<Response<Product>> DeleteAsync(int Id)
-        {
-            try
-            {
-                var product = await _context.Product.FindAsync(Id);
-                if (product == null)
-                {
-                    return ResponseHelper<Product>.MakeResposeFail("Producto no encontrado.");
-                }
-
-                _context.Product.Remove(product);
-                await _context.SaveChangesAsync();
-                return ResponseHelper<Product>.MakeResponseSuccess(null, "Producto eliminado con éxito.");
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelper<Product>.MakeResposeFail(ex);
-            }
-        }
 
         public async Task<Response<PaginationResponse<Product>>> GetlistAsync(PaginationRequest request)
         {
@@ -146,6 +127,27 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 return ResponseHelper<Product>.MakeResposeFail(ex);
             }
         }
+
+        public async Task<Response<Product>> DeleteAsync(int Id)
+        {
+            try
+            {
+                var product = await _context.Product.FindAsync(Id);
+                if (product == null)
+                {
+                    return ResponseHelper<Product>.MakeResposeFail("Producto no encontrado.");
+                }
+
+                _context.Product.Remove(product);
+                await _context.SaveChangesAsync();
+                return ResponseHelper<Product>.MakeResponseSuccess(null,"Producto eliminado con éxito.");
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper<Product>.MakeResposeFail(ex);
+            }
+        }
+
     }
 }
 

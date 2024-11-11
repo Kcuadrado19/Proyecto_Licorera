@@ -21,7 +21,7 @@
             <h5 class="card-title text-danger">Eliminar Producto ❌</h5>
             <p>¿Estás seguro de que deseas eliminar el producto <strong>@Model.Name</strong>?</p>
 
-            @using (Html.BeginForm("DeleteConfirmed", "Products", new { Id = Model.Id }, FormMethod.Post))
+            @using (Html.BeginForm("Delete", "Products", new { Id = Model.Id }, FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(model => model.Id)

@@ -145,13 +145,13 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete([FromRoute] int Id)
+        public async Task<IActionResult> Delete( int Id)
         {
             Response<Product> response = await _productService.DeleteAsync(Id);
 
             if (response.IsSuccess)
             {
-                _notifyService.Success("El producto ha sido eliminado con é");
+                _notifyService.Success("El producto ha sido eliminado con éxito");
 
             }
             else
@@ -176,7 +176,5 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
 
-     
-        
     }
 }
