@@ -130,7 +130,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
                 if (response.IsSuccess)
                 {
-                    _notifyService.Success(response.Message);
+                    _notifyService.Success("Producto editado con éxito");
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -151,12 +151,12 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
             if (response.IsSuccess)
             {
-                _notifyService.Success(response.Message);
+                _notifyService.Success("El producto ha sido eliminado con é");
 
             }
             else
             {
-                _notifyService.Error(response.Message);
+                _notifyService.Error("Error al intentar eliminar el producto");
             }
 
             return RedirectToAction(nameof(Index));

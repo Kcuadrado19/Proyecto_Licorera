@@ -23,7 +23,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
         public Task<Response<Product>> EditAsync(Product model);
         public Task<Response<Product>> DeleteAsync(int id);
         public Task<Response<Product>> GetOneAsync(int id);
-        //public Task<Response<IEnumerable<Product>>> GetAllAsync();
+        
 
 
     }
@@ -55,6 +55,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
             catch (Exception ex)
             {
+                
                 return ResponseHelper<Product>.MakeResposeFail(ex);
             }
         }
@@ -93,37 +94,6 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 return ResponseHelper<Product>.MakeResposeFail(ex);
             }
         }
-
-        //public async Task<Response<Product>> GetByIdAsync(int id)
-        //{
-        //    try
-        //    {
-        //        var product = await _context.Products.FindAsync(id);
-        //        if (product == null)
-        //        {
-        //            return ResponseHelper<Product>.MakeResposeFail("Producto no encontrado.");
-        //        }
-
-        //        return ResponseHelper<Product>.MakeResponseSuccess(product);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return ResponseHelper<Product>.MakeResposeFail(ex);
-        //    }
-        //}
-
-        //public async Task<Response<IEnumerable<Product>>> GetAllAsync()
-        //{
-        //    try
-        //    {
-        //        var products = await _context.Products.ToListAsync();
-        //        return ResponseHelper<IEnumerable<Product>>.MakeResponseSuccess(products);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return ResponseHelper<IEnumerable<Product>>.MakeResposeFail(ex);
-        //    }
-        //}
 
         public async Task<Response<PaginationResponse<Product>>> GetlistAsync(PaginationRequest request)
         {
