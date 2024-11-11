@@ -31,11 +31,23 @@ builder.AddCustomBuilderConfiguration(); // lady: parametrización por referenci
 WebApplication app = builder.Build();
 
 // lady: Configuración del entorno
-if (!app.Environment.IsDevelopment())
+
+//if (!app.Environment.IsDevelopment())
+//{
+//    app.UseExceptionHandler("/Home/Error");
+//    app.UseHsts();
+//}
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -59,13 +71,13 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// lady: Configurar rutas
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{Id_Sales?}");
 
-// lady: Personalizar la configuración de la aplicación
-app.AddCustomwebAppConfiguration();
+
+app.AddCustomWebAppConfiguration();
 
 app.Run();
 
@@ -99,6 +111,7 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
         }
     }
 }
+
 
 
 

@@ -1,9 +1,0 @@
-﻿@model Proyecto_Licorera_Corchos.web.Data.Entities.Product
-
-<h2>Detalles del Producto 🍷</h2>
-<p><strong>Nombre:</strong> @Model.Name</p>
-<p><strong>Precio:</strong> @Model.Price</p>
-<p><strong>Descripción:</strong> @Model.Description</p>
-
-<a href="@Url.Action("Index")" class="btn btn-primary">Volver a la Lista 📋</a>
-<a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-warning">Editar 🖊️</a>
