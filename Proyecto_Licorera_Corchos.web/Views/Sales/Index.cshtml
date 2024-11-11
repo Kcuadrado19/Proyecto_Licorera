@@ -75,14 +75,14 @@
                     {
                         <tr>
                            
-                            <td>@item.Id_Sales</td>
+                            <td>@item.Id</td>
                             <td>@item.Name</td>
                             <td>@item.Sale_Date</td>
                             <td>@item.Sales_Value</td>
                             <td>
-                                <a asp-action="Edit" asp-route-Id_Sales="@item.Id_Sales" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+                                <a asp-action="Edit" asp-route-Id="@item.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
 
-                                <form asp-action="Delete" asp-route-Id_Sales="@item.Id_Sales" style="display:contents;">
+                                <form asp-action="Delete" asp-route-Id="@item.Id" style="display:contents;">
                                     <button class="btn btn-danger btn-sm btnDelete"><i class="bi bi-trash"></i></button>
 
                                 </form>

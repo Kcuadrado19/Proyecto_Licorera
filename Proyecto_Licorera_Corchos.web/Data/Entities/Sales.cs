@@ -5,7 +5,7 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
     public class Sales
     {
         [Key] // Indica que es clave primaria
-        public int Id_Sales { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "Venta")]
         [Required(ErrorMessage = "El campo '{0}' es requerido.")] // Indica que es un campo requerido

@@ -12,35 +12,38 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 {
     public class SalesController : Controller
     {
-        private readonly ISalesService _salesService; // lady: Inyectamos el servicio de ventas
-        private readonly INotyfService _notifyService; // lady: Inyectamos el servicio de notificaciones
+        private readonly ISalesService _salesService; 
+
+        private readonly INotyfService _notifyService; 
 
         public SalesController(ISalesService salesService, INotyfService notifyService)
         {
-            _salesService = salesService; // lady: Asignamos el servicio de ventas
-            _notifyService = notifyService; // lady: Asignamos el servicio de notificaciones
+            _salesService = salesService; 
+            _notifyService = notifyService; 
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index([FromQuery] int? RecordsPerPage, [FromQuery] int? Page, [FromQuery] string? Filter)
+        public async Task<IActionResult> Index([FromQuery] int? RecordsPerPage, 
+                                               [FromQuery] int? Page, 
+                                               [FromQuery] string? Filter)
         {
-            // lady: Creamos una solicitud de paginación
+           
             PaginationRequest request = new PaginationRequest
             {
-                RecordsPerPage = RecordsPerPage ?? 15, // lady: Aplicamos el valor de RecordsPerPage o usamos 15 por defecto
-                Page = Page ?? 1, // lady: Aplicamos el valor de Page o usamos 1 por defecto
-                Filter = Filter // lady: Aplicamos el filtro, si existe
+                RecordsPerPage = RecordsPerPage ?? 15, 
+                Page = Page ?? 1, 
+                Filter = Filter 
             };
 
-            // lady: Obtenemos la lista paginada de ventas
+            
             Response<PaginationResponse<Sales>> response = await _salesService.GetlistAsync(request);
-            return View(response.Result); // lady: Devolvemos la vista con la lista de ventas
+            return View(response.Result); 
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            return View(); // lady: Devolvemos la vista para crear una venta
+            return View(); 
         }
 
         [HttpPost]
@@ -51,25 +54,25 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    _notifyService.Error("Debe ajustar los errores de validación"); // lady: Notificación de error de validación
-                    return View(sales1); // lady: Devolvemos la vista con los datos ingresados
+                    _notifyService.Error("Debe ajustar los errores de validación"); 
+                    return View(sales1); 
                 }
 
-                // lady: Intentamos crear la venta
+                
                 Response<Sales> response = await _salesService.CreateAsync(sales1);
 
                 if (response.IsSuccess)
                 {
-                    _notifyService.Success(response.Message); // lady: Notificación de éxito
-                    return RedirectToAction(nameof(Index)); // lady: Redirigimos a la lista de ventas
+                    _notifyService.Success(response.Message);
+                    return RedirectToAction(nameof(Index)); 
                 }
 
-                _notifyService.Error(response.Message); // lady: Notificación de error
+                _notifyService.Error(response.Message); 
                 return View(response);
             }
             catch (Exception ex)
             {
-                _notifyService.Error(ex.Message); // lady: Manejamos cualquier excepción
+                //_notifyService.Error(ex.Message);
                 return View(sales1);
             }
         }
@@ -77,20 +80,20 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit([FromRoute] int Id_Sales)
         {
-            // lady: Obtenemos la venta a editar
+            
             Response<Sales> response = await _salesService.GetOneAsync(Id_Sales);
 
             if (response.IsSuccess)
             {
-                return View(response.Result); // lady: Devolvemos la vista con la venta encontrada
+                return View(response.Result); 
             }
 
-            _notifyService.Error(response.Message); // lady: Notificación de error si no se encuentra la venta
-            return RedirectToAction(nameof(Index)); // lady: Redirigimos a la lista de ventas
+            _notifyService.Error(response.Message); 
+            return RedirectToAction(nameof(Index)); 
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken] // lady: Protección contra ataques CSRF
+        [ValidateAntiForgeryToken] 
         public async Task<IActionResult> Edit(Sales sales1)
         {
             try

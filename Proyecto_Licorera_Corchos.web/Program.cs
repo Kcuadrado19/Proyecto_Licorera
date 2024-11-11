@@ -62,7 +62,7 @@ using (var scope = app.Services.CreateScope())
 // lady: Configurar rutas
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{Id_Sales?}");
+    pattern: "{controller=Home}/{action=Index}/{Id?}");
 
 // lady: Personalizar la configuración de la aplicación
 app.AddCustomwebAppConfiguration();
