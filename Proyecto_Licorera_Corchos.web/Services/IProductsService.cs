@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Proyecto_Licorera_Corchos.web.Core.Pagination;
 using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace Proyecto_Licorera_Corchos.web.Services
 {
@@ -17,11 +19,11 @@ namespace Proyecto_Licorera_Corchos.web.Services
     public interface IProductService
     {
         public Task<Response<PaginationResponse<Product>>> GetlistAsync(PaginationRequest request);
-        Task<Response<Product>> CreateAsync(Product product);
-        Task<Response<Product>> EditAsync(Product product);
-        Task<Response<Product>> DeleteAsync(int id);
-        Task<Response<Product>> GetByIdAsync(int id);
-        Task<Response<IEnumerable<Product>>> GetAllAsync();
+        public Task<Response<Product>> CreateAsync(Product model);
+        public Task<Response<Product>> EditAsync(Product model);
+        public Task<Response<Product>> DeleteAsync(int id);
+        public Task<Response<Product>> GetOneAsync(int id);
+        //public Task<Response<IEnumerable<Product>>> GetAllAsync();
 
 
     }
@@ -34,13 +36,22 @@ namespace Proyecto_Licorera_Corchos.web.Services
             _context = context;
         }
 
-        public async Task<Response<Product>> CreateAsync(Product product)
+        public async Task<Response<Product>> CreateAsync(Product model)
         {
             try
             {
-                await _context.Products.AddAsync(product);
+                Product product = new Product
+                {
+                    Name = model.Name,
+                    Description = model.Description,
+                    Price = model.Price,
+
+                };
+
+                await _context.Product.AddAsync(product);
                 await _context.SaveChangesAsync();
-                return ResponseHelper<Product>.MakeResponseSuccess(product, "Producto creado con éxito.");
+
+                return ResponseHelper<Product>.MakeResponseSuccess(product, "Nuevo producto registrado con éxito");
             }
             catch (Exception ex)
             {
@@ -48,13 +59,14 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
         }
 
-        public async Task<Response<Product>> EditAsync(Product product)
+        public async Task<Response<Product>> EditAsync(Product model)
         {
             try
             {
-                _context.Products.Update(product);
+                _context.Product.Update(model);
                 await _context.SaveChangesAsync();
-                return ResponseHelper<Product>.MakeResponseSuccess(product, "Producto actualizado con éxito.");
+
+                return ResponseHelper<Product>.MakeResponseSuccess(model, "Nueva venta actualizada con éxito");
             }
             catch (Exception ex)
             {
@@ -62,17 +74,17 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
         }
 
-        public async Task<Response<Product>> DeleteAsync(int id)
+        public async Task<Response<Product>> DeleteAsync(int Id)
         {
             try
             {
-                var product = await _context.Products.FindAsync(id);
+                var product = await _context.Product.FindAsync(Id);
                 if (product == null)
                 {
                     return ResponseHelper<Product>.MakeResposeFail("Producto no encontrado.");
                 }
 
-                _context.Products.Remove(product);
+                _context.Product.Remove(product);
                 await _context.SaveChangesAsync();
                 return ResponseHelper<Product>.MakeResponseSuccess(null, "Producto eliminado con éxito.");
             }
@@ -82,43 +94,43 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
         }
 
-        public async Task<Response<Product>> GetByIdAsync(int id)
-        {
-            try
-            {
-                var product = await _context.Products.FindAsync(id);
-                if (product == null)
-                {
-                    return ResponseHelper<Product>.MakeResposeFail("Producto no encontrado.");
-                }
+        //public async Task<Response<Product>> GetByIdAsync(int id)
+        //{
+        //    try
+        //    {
+        //        var product = await _context.Products.FindAsync(id);
+        //        if (product == null)
+        //        {
+        //            return ResponseHelper<Product>.MakeResposeFail("Producto no encontrado.");
+        //        }
 
-                return ResponseHelper<Product>.MakeResponseSuccess(product);
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelper<Product>.MakeResposeFail(ex);
-            }
-        }
+        //        return ResponseHelper<Product>.MakeResponseSuccess(product);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ResponseHelper<Product>.MakeResposeFail(ex);
+        //    }
+        //}
 
-        public async Task<Response<IEnumerable<Product>>> GetAllAsync()
-        {
-            try
-            {
-                var products = await _context.Products.ToListAsync();
-                return ResponseHelper<IEnumerable<Product>>.MakeResponseSuccess(products);
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelper<IEnumerable<Product>>.MakeResposeFail(ex);
-            }
-        }
+        //public async Task<Response<IEnumerable<Product>>> GetAllAsync()
+        //{
+        //    try
+        //    {
+        //        var products = await _context.Products.ToListAsync();
+        //        return ResponseHelper<IEnumerable<Product>>.MakeResponseSuccess(products);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return ResponseHelper<IEnumerable<Product>>.MakeResposeFail(ex);
+        //    }
+        //}
 
         public async Task<Response<PaginationResponse<Product>>> GetlistAsync(PaginationRequest request)
         {
 
             try
             {
-                IQueryable<Product> query = _context.Products.AsQueryable();
+                IQueryable<Product> query = _context.Product.AsQueryable();
 
                 if (!string.IsNullOrWhiteSpace(request.Filter))
                 {
@@ -145,6 +157,24 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
 
 
+        }
+
+        public async Task<Response<Product>> GetOneAsync(int Id)
+        {
+            try
+            {
+                Product? product = await _context.Product.FirstOrDefaultAsync(s => s.Id == Id);
+
+                if (product is null)
+                {
+                    return ResponseHelper<Product>.MakeResposeFail("El producto con el id indicado no existe");
+                }
+                return ResponseHelper<Product>.MakeResponseSuccess(product);
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper<Product>.MakeResposeFail(ex);
+            }
         }
     }
 }

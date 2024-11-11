@@ -11,7 +11,7 @@ namespace Proyecto_Licorera_Corchos.web.Data
         }
 
         // DbSet para tus otras entidades
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Product> Product { get; set; }
         public DbSet<Sales> Sales { get; set; }
     }
 }

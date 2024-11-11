@@ -1,4 +1,6 @@
 ﻿
+using AspNetCoreHero.ToastNotification.Abstractions;
+using AspNetCoreHero.ToastNotification.Notyf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +9,8 @@ using Proyecto_Licorera_Corchos.web.Core.Pagination;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
 using Proyecto_Licorera_Corchos.web.Services;
 using System.Threading.Tasks;
+using Proyecto_Licorera_Corchos.web.Data;
+using Proyecto_Licorera_Corchos.web.Helpers;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
@@ -15,32 +19,40 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
     {
         private readonly IProductService _productService;
 
-        public ProductsController(IProductService productService)
+        private readonly INotyfService _notifyService;
+
+        public ProductsController(IProductService productService, INotyfService notifyService)
         {
             _productService = productService;
+            _notifyService = notifyService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] int? RecordsPerPage,
+                                                [FromQuery] int? Page,
+                                                [FromQuery] string? Filter)
         {
-            var response = await _productService.GetAllAsync();
-            if (response.IsSuccess)
+
+            PaginationRequest request = new PaginationRequest
             {
-                return View(response.Result);
-            }
-
-            return View("Error", response.Message); // Manejo de errores
+                RecordsPerPage = RecordsPerPage ?? 15,
+                Page = Page ?? 1,
+                Filter = Filter
+            };
+            Response<PaginationResponse<Product>> response = await _productService.GetlistAsync(request);
+            return View(response.Result);
         }
 
+
         [HttpGet]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? Id)
         {
-            if (id == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var response = await _productService.GetByIdAsync(id.Value);
+            var response = await _productService.GetOneAsync(Id.Value);
             if (response.IsSuccess)
             {
                 return View(response.Result);
@@ -59,81 +71,102 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var response = await _productService.CreateAsync(product);
+                if (!ModelState.IsValid)
+                {
+                    _notifyService.Error("Debe ajustar los errores de validacion");
+                    return View(product);
+                }
+
+                Response<Product> response = await _productService.CreateAsync(product);
+
                 if (response.IsSuccess)
                 {
+                    _notifyService.Success(response.Message);
                     return RedirectToAction(nameof(Index));
                 }
 
-                // Si hubo error, mostramos un mensaje
-                return View("Error", response.Message);
+                _notifyService.Error(response.Message);
+                return View(response);
+
             }
-            return View(product);
+            catch (Exception ex)
+            {
+                return View(product);
+            }
+
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int Id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            Response<Product> response = await _productService.GetOneAsync(Id);
 
-            var response = await _productService.GetByIdAsync(id.Value);
             if (response.IsSuccess)
             {
+
                 return View(response.Result);
             }
+            _notifyService.Error(response.Message);
+            return RedirectToAction(nameof(Index));
 
-            return NotFound();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product)
+        public async Task<IActionResult> Edit(int Id, Product product)
         {
-            if (id != product.Id)
+            try
             {
-                return NotFound();
-            }
+                if (!ModelState.IsValid)
+                {
+                    _notifyService.Error("Debe ajustar los errores de validacion");
+                    return View(product);
+                }
 
-            if (ModelState.IsValid)
-            {
-                var response = await _productService.EditAsync(product);
+                Response<Product> response = await _productService.EditAsync(product);
+
                 if (response.IsSuccess)
                 {
+                    _notifyService.Success(response.Message);
                     return RedirectToAction(nameof(Index));
                 }
-                return View("Error", response.Message);
-            }
 
-            return View(product);
+                _notifyService.Error(response.Message);
+                return View(response);
+            }
+            catch (Exception ex)
+            {
+                _notifyService.Error(ex.Message);
+                return View(product);
+            }
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete([FromRoute] int Id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            Response<Product> response = await _productService.DeleteAsync(Id);
 
-            var response = await _productService.GetByIdAsync(id.Value);
             if (response.IsSuccess)
             {
-                return View(response.Result);
+                _notifyService.Success(response.Message);
+
+            }
+            else
+            {
+                _notifyService.Error(response.Message);
             }
 
-            return NotFound();
+            return RedirectToAction(nameof(Index));
+
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int Id)
         {
-            var response = await _productService.DeleteAsync(id);
+            var response = await _productService.DeleteAsync(Id);
             if (response.IsSuccess)
             {
                 return RedirectToAction(nameof(Index));
@@ -142,25 +175,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
 
-        [HttpGet]
-
-        public async Task<IActionResult> Index([FromQuery] int? RecordsPerPage,
-                                               [FromQuery] int? Page,
-                                               [FromQuery] string? Filter)
-        {
-
-            PaginationRequest request = new PaginationRequest
-            {
-                RecordsPerPage = RecordsPerPage ?? 15,
-                Page = Page ?? 1,
-                Filter = Filter
-            };
-
-
-            Response<PaginationResponse<Product>> response = await _productService.GetlistAsync(request);
-            return View(response.Result);
-        }
-
+     
         
     }
 }
