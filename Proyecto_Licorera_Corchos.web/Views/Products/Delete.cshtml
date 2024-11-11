@@ -1,11 +1,35 @@
 ﻿@model Proyecto_Licorera_Corchos.web.Data.Entities.Product
 
-<h2>Eliminar Producto ❌</h2>
-<p>¿Estás seguro de que deseas eliminar el producto <strong>@Model.Name</strong>?</p>
-
-@using (Html.BeginForm("DeleteConfirmed", "Products", new { id = Model.Id }, FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <button type="submit" class="btn btn-danger">Eliminar ✅</button>
-    <a href="@Url.Action("Index")" class="btn btn-secondary">Cancelar ❌</a>
+@{
+    ViewData["Title"] = "Eliminar Producto";
 }
+
+<div class="pagetitle">
+    <h1>Productos</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Productos</a></li>
+            <li class="breadcrumb-item active">Eliminar Producto</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="product dashboard">
+    <div class="card">
+        <div class="card-body text-center">
+            <h5 class="card-title text-danger">Eliminar Producto ❌</h5>
+            <p>¿Estás seguro de que deseas eliminar el producto <strong>@Model.Name</strong>?</p>
+
+            @using (Html.BeginForm("DeleteConfirmed", "Products", new { id = Model.Id }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-danger">Eliminar Producto ✅</button>
+                    <a href="@Url.Action("Index")" class="btn btn-secondary">Cancelar ❌</a>
+                </div>
+            }
+        </div>
+    </div>
+</section>

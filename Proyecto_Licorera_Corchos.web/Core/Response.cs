@@ -1,4 +1,7 @@
-﻿namespace Proyecto_Licorera_Corchos.web.Core
+﻿using Proyecto_Licorera_Corchos.web.Core.Pagination;
+using Proyecto_Licorera_Corchos.web.Data.Entities;
+
+namespace Proyecto_Licorera_Corchos.web.Core
 {
     public class Response<T>
     {

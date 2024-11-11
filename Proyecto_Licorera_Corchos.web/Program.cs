@@ -59,7 +59,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// lady: Configurar rutas
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{Id_Sales?}");
