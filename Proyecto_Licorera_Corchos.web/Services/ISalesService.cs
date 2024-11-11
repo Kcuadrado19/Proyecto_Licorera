@@ -11,10 +11,10 @@ namespace Proyecto_Licorera_Corchos.web.Services
     {
         public Task<Response<Sales>> CreateAsync(Sales model);
 
-        public Task<Response<Sales>> DeleteAsync(int Id_Sales);
+        public Task<Response<Sales>> DeleteAsync(int Id);
         public Task<Response<Sales>> EditAsync(Sales model);
         public Task<Response<PaginationResponse<Sales>>> GetlistAsync(PaginationRequest request);
-        public Task<Response<Sales>> GetOneAsync(int Id_Sales );
+        public Task<Response<Sales>> GetOneAsync(int Id );
         
     }
 
@@ -97,11 +97,11 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
         }
 
-        public async Task<Response<Sales>> GetOneAsync(int Id_Sales)
+        public async Task<Response<Sales>> GetOneAsync(int Id)
         {
             try
             {
-                Sales? sales1 = await _context.Sales.FirstOrDefaultAsync(s => s.Id_Sales == Id_Sales);
+                Sales? sales1 = await _context.Sales.FirstOrDefaultAsync(s => s.Id == Id);
 
                 if (sales1 is null)
                 {
@@ -117,11 +117,11 @@ namespace Proyecto_Licorera_Corchos.web.Services
 
 
        
-        public async Task<Response<Sales>>DeleteAsync(int Id_Sales)
+        public async Task<Response<Sales>>DeleteAsync(int Id)
         {
             try
             {
-                Response<Sales> response= await GetOneAsync(Id_Sales);
+                Response<Sales> response= await GetOneAsync(Id);
 
                 if (!response.IsSuccess)
                 {
