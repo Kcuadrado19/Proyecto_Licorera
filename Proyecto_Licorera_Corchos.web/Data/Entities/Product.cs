@@ -20,5 +20,6 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
 
         public float Price { get; set; }
 
+
     }
 }

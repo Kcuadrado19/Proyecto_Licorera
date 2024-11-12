@@ -3,31 +3,34 @@ using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web;
 using Proyecto_Licorera_Corchos.web.Data;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
+using Proyecto_Licorera_Corchos.web.RoleManagement;
+using Proyecto_Licorera_Corchos.web.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 
-// lady: Configurar Identity
+// Configurar Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<DataContext>()
     .AddDefaultTokenProviders();
 
-// lady: Configurar cookies de autenticación
+// Configurar cookies de autenticación
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Users/Login"; // lady: Ruta para el inicio de sesión
-    options.AccessDeniedPath = "/Users/AccessDenied"; // lady: Ruta para el acceso denegado
+    options.LoginPath = "/Users/Login";
+    options.AccessDeniedPath = "/Users/AccessDenied";
 });
 
-// lady: Agregar servicios para controladores y vistas
+// Agregar RoleService
+builder.Services.AddScoped<IRoleService, RoleService>();
+
+// Agregar servicios para controladores y vistas
 builder.Services.AddControllersWithViews();
 
-// lady: Personalizar la configuración
-builder.AddCustomBuilderConfiguration(); // lady: parametrización por referencia en clase Customconfiguration
+// Personalizar la configuración
+builder.AddCustomBuilderConfiguration();
 
 WebApplication app = builder.Build();
-
-// lady: Configuración del entorno
 
 
 if (app.Environment.IsDevelopment())
@@ -35,6 +38,7 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 else
+
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
@@ -47,7 +51,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// lady: Configurar roles y usuario administrador inicial
+// Configurar roles, permisos y usuarios iniciales
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -55,11 +59,13 @@ using (var scope = app.Services.CreateScope())
     {
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-        SeedRolesAndUsersAsync(roleManager, userManager).Wait(); // lady: Ejecutar de forma síncrona
+        var context = services.GetRequiredService<DataContext>();
+
+        SeedRolesAndUsersAsync(roleManager, userManager, context).Wait();
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Error initializing roles and users: {ex.Message}"); // lady: Manejar errores
+        Console.WriteLine($"Error initializing roles, permissions, and users: {ex.Message}");
     }
 }
 
@@ -71,12 +77,13 @@ app.MapControllerRoute(
 
 app.AddCustomWebAppConfiguration();
 
+
 app.Run();
 
-// lady: Método para crear roles y usuario administrador inicial
-async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+// Método para crear roles, permisos y usuarios iniciales
+async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, DataContext context)
 {
-    // lady: Crear roles si no existen
+    // Crear roles si no existen
     if (!await roleManager.RoleExistsAsync("Admin"))
     {
         await roleManager.CreateAsync(new IdentityRole("Admin"));
@@ -86,20 +93,69 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
         await roleManager.CreateAsync(new IdentityRole("Vendedor"));
     }
 
-    // lady: Crear un usuario administrador inicial si no existe
-    var adminUser = await userManager.FindByNameAsync("admin");
-    if (adminUser == null)
+    // Crear usuarios administradores
+    var admin1 = await userManager.FindByNameAsync("lucia.admin");
+    if (admin1 == null)
     {
-        adminUser = new ApplicationUser
+        admin1 = new ApplicationUser
         {
-            UserName = "admin",
-            FullName = "Administrador Principal",
+            UserName = "lucia.admin",
+            FullName = "Lucía Fernández",
             Position = "Admin"
         };
-        var result = await userManager.CreateAsync(adminUser, "Admin@123"); // lady: Cambia esta contraseña por una segura
+        var result = await userManager.CreateAsync(admin1, "LuciaAdmin@123");
         if (result.Succeeded)
         {
-            await userManager.AddToRoleAsync(adminUser, "Admin");
+            await userManager.AddToRoleAsync(admin1, "Admin");
+        }
+    }
+
+    var admin2 = await userManager.FindByNameAsync("carlos.admin");
+    if (admin2 == null)
+    {
+        admin2 = new ApplicationUser
+        {
+            UserName = "carlos.admin",
+            FullName = "Carlos Ramírez",
+            Position = "Admin"
+        };
+        var result = await userManager.CreateAsync(admin2, "CarlosAdmin@123");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(admin2, "Admin");
+        }
+    }
+
+    // Crear usuarios vendedores
+    var vendedor1 = await userManager.FindByNameAsync("maria.vendedor");
+    if (vendedor1 == null)
+    {
+        vendedor1 = new ApplicationUser
+        {
+            UserName = "maria.vendedor",
+            FullName = "María López",
+            Position = "Vendedor"
+        };
+        var result = await userManager.CreateAsync(vendedor1, "MariaVendedor@123");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(vendedor1, "Vendedor");
+        }
+    }
+
+    var vendedor2 = await userManager.FindByNameAsync("pedro.vendedor");
+    if (vendedor2 == null)
+    {
+        vendedor2 = new ApplicationUser
+        {
+            UserName = "pedro.vendedor",
+            FullName = "Pedro Martínez",
+            Position = "Vendedor"
+        };
+        var result = await userManager.CreateAsync(vendedor2, "PedroVendedor@123");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(vendedor2, "Vendedor");
         }
     }
 }
