@@ -5,7 +5,7 @@
 namespace Proyecto_Licorera_Corchos.web.Migrations
 {
     /// <inheritdoc />
-    public partial class _3 : Migration
+    public partial class Userchanges : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

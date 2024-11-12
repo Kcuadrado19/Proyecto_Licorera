@@ -12,8 +12,8 @@ using Proyecto_Licorera_Corchos.web.Data;
 namespace Proyecto_Licorera_Corchos.web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241111012424_1")]
-    partial class _1
+    [Migration("20241112025245_Userchanges")]
+    partial class Userchanges
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -233,6 +233,27 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions");
+                });
+
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -256,7 +277,22 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.RolePermission", b =>
+                {
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId", "PermissionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Sales", b =>
@@ -340,6 +376,25 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.RolePermission", b =>
+                {
+                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Permission", "Permission")
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
                 });
 #pragma warning restore 612, 618
         }

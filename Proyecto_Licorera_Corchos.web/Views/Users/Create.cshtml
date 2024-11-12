@@ -1,4 +1,4 @@
-﻿@model Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser
+﻿@* @model Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser
 
 <form asp-action="Create" method="post">
     <div class="form-group">
@@ -18,6 +18,49 @@
     <div class="form-group">
         <input type="submit" value="Crear" class="btn btn-primary" />
     </div>
+</form> *@
+
+@model Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser
+
+<h2>Crear Usuario</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div> <!-- Mostrar errores de validación -->
+
+    <div class="form-group">
+        <label asp-for="FullName" class="control-label">Nombre Completo</label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email" class="control-label">Correo Electrónico</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Position" class="control-label">Puesto</label>
+        <input asp-for="Position" class="form-control" />
+        <span asp-validation-for="Position" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label for="Password" class="control-label">Contraseña</label>
+        <input type="password" name="password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Crear" class="btn btn-primary" />
+    </div>
 </form>
 
 @section Scripts {
@@ -25,3 +68,7 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+
+
+
