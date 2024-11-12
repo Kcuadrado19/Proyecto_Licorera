@@ -11,17 +11,16 @@
         <label for="roleName">Nombre del Rol</label>
         <input type="text" class="form-control" id="roleName" name="roleName" required />
     </div>
+
     <h4>Permisos</h4>
-    <div class="form-group">
-        <label>Selecciona los permisos:</label>
-        <div class="row">
-            <div class="col">
-                <label><input type="checkbox" name="permissions" value="Crear Ventas" /> Crear Ventas</label><br />
-                <label><input type="checkbox" name="permissions" value="Eliminar Usuarios" /> Eliminar Usuarios</label>
-            </div>
-            <!-- Agrega más permisos según sea necesario -->
-        </div>
+    <div class="form-check">
+        @foreach (var permission in (List<string>)ViewBag.Permissions)
+        {
+            <input type="checkbox" class="form-check-input" name="permissions" value="@permission" id="@permission" />
+            <label class="form-check-label" for="@permission">@permission</label>
+        }
     </div>
+
     <button type="submit" class="btn btn-success mt-3">Crear</button>
     <a asp-action="Index" class="btn btn-secondary mt-3">Cancelar</a>
 </form>

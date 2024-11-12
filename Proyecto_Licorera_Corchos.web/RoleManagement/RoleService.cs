@@ -17,14 +17,8 @@ namespace Proyecto_Licorera_Corchos.web.RoleManagement
 
         public async Task<List<IdentityRole>> GetAllRolesAsync()
         {
-            // lady: Obtenemos todos los roles directamente como IdentityRole
-            return await Task.FromResult(_roleManager.Roles.ToList());
-        }
-
-        public async Task<IdentityRole> GetRoleByIdAsync(string roleId)
-        {
-            // lady: Obtenemos el rol directamente como IdentityRole
-            return await _roleManager.FindByIdAsync(roleId);
+            // lady: Obtenemos todos los roles
+            return await Task.FromResult(new List<IdentityRole>(_roleManager.Roles));
         }
 
         public async Task<bool> CreateRoleAsync(string roleName)
@@ -52,6 +46,12 @@ namespace Proyecto_Licorera_Corchos.web.RoleManagement
             return result.Succeeded;
         }
 
+        public async Task<IdentityRole> GetRoleByIdAsync(string roleId)
+        {
+            // lady: Obtenemos el rol por su Id
+            return await _roleManager.FindByIdAsync(roleId);
+        }
+
         public async Task<bool> UpdateRoleAsync(string roleId, string newRoleName)
         {
             var role = await _roleManager.FindByIdAsync(roleId);
@@ -65,5 +65,23 @@ namespace Proyecto_Licorera_Corchos.web.RoleManagement
 
             return result.Succeeded;
         }
+
+        // lady: Método adicional para obtener los permisos
+        public async Task<List<string>> GetPermissionsAsync()
+        {
+            // lady: Lista de permisos simulados (puedes cambiar esto con los permisos reales de tu sistema)
+            var permissions = new List<string>
+            {
+                "Crear Ventas",
+                "Eliminar Usuarios",
+                "Ver Secciones",
+                "Editar Secciones",
+                "Crear Roles",
+                "Editar Roles"
+            };
+
+            return await Task.FromResult(permissions);
+        }
     }
 }
+
