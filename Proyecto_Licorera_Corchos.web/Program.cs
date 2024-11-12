@@ -3,39 +3,39 @@ using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web;
 using Proyecto_Licorera_Corchos.web.Data;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
-using Proyecto_Licorera_Corchos.web.RoleManagement; // Importa RoleManagement para usar RoleService
-using Proyecto_Licorera_Corchos.web.Services; // Importa el espacio de nombres para IRoleService
+using Proyecto_Licorera_Corchos.web.RoleManagement;
+using Proyecto_Licorera_Corchos.web.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// lady: Configurar la cadena de conexión
+// Configurar la cadena de conexión
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// lady: Configurar Identity
+// Configurar Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<DataContext>()
     .AddDefaultTokenProviders();
 
-// lady: Configurar cookies de autenticación
+// Configurar cookies de autenticación
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/Users/Login"; // lady: Ruta para el inicio de sesión
-    options.AccessDeniedPath = "/Users/AccessDenied"; // lady: Ruta para el acceso denegado
+    options.LoginPath = "/Users/Login";
+    options.AccessDeniedPath = "/Users/AccessDenied";
 });
 
-// lady: Agregar RoleService
-builder.Services.AddScoped<IRoleService, RoleService>(); // Registro de RoleService corregido
+// Agregar RoleService
+builder.Services.AddScoped<IRoleService, RoleService>();
 
-// lady: Agregar servicios para controladores y vistas
+// Agregar servicios para controladores y vistas
 builder.Services.AddControllersWithViews();
 
-// lady: Personalizar la configuración
-builder.AddCustomBuilderConfiguration(); // lady: parametrización por referencia en clase Customconfiguration
+// Personalizar la configuración
+builder.AddCustomBuilderConfiguration();
 
 WebApplication app = builder.Build();
 
-// lady: Configuración del entorno
+// Configuración del entorno
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -48,7 +48,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// lady: Configurar roles, permisos y usuario administrador inicial
+// Configurar roles, permisos y usuarios iniciales
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -58,28 +58,28 @@ using (var scope = app.Services.CreateScope())
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
         var context = services.GetRequiredService<DataContext>();
 
-        SeedRolesAndUsersAsync(roleManager, userManager, context).Wait(); // lady: Ejecutar de forma síncrona
+        SeedRolesAndUsersAsync(roleManager, userManager, context).Wait();
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Error initializing roles, permissions, and users: {ex.Message}"); // lady: Manejar errores
+        Console.WriteLine($"Error initializing roles, permissions, and users: {ex.Message}");
     }
 }
 
-// lady: Configurar rutas
+// Configurar rutas
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{Id_Sales?}");
 
-// lady: Personalizar la configuración de la aplicación
+// Personalizar la configuración de la aplicación
 app.AddCustomwebAppConfiguration();
 
 app.Run();
 
-// lady: Método para crear roles, permisos y usuario administrador inicial
+// Método para crear roles, permisos y usuarios iniciales
 async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, DataContext context)
 {
-    // lady: Crear roles si no existen
+    // Crear roles si no existen
     if (!await roleManager.RoleExistsAsync("Admin"))
     {
         await roleManager.CreateAsync(new IdentityRole("Admin"));
@@ -89,66 +89,73 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
         await roleManager.CreateAsync(new IdentityRole("Vendedor"));
     }
 
-    // lady: Definir permisos de ejemplo
-    var permissions = new List<Permission>
+    // Crear usuarios administradores
+    var admin1 = await userManager.FindByNameAsync("lucia.admin");
+    if (admin1 == null)
     {
-        new Permission { Name = "Crear Ventas", Description = "Permite crear nuevas ventas" },
-        new Permission { Name = "Eliminar Ventas", Description = "Permite eliminar ventas existentes" },
-        new Permission { Name = "Ver Productos", Description = "Permite ver el listado de productos" },
-        new Permission { Name = "Gestionar Usuarios", Description = "Permite gestionar los usuarios de la aplicación" }
-    };
-
-    // lady: Agregar los permisos a la base de datos si no existen
-    foreach (var permission in permissions)
-    {
-        if (!context.Permissions.Any(p => p.Name == permission.Name))
+        admin1 = new ApplicationUser
         {
-            context.Permissions.Add(permission);
-        }
-    }
-    await context.SaveChangesAsync();
-
-    // lady: Asignar permisos a los roles
-    var adminRole = await roleManager.FindByNameAsync("Admin");
-    var vendedorRole = await roleManager.FindByNameAsync("Vendedor");
-
-    // lady: Asignar todos los permisos al rol Admin
-    foreach (var permission in permissions)
-    {
-        if (!context.RolePermissions.Any(rp => rp.RoleId == adminRole.Id && rp.PermissionId == permission.Id))
-        {
-            context.RolePermissions.Add(new RolePermission { RoleId = adminRole.Id, PermissionId = permission.Id });
-        }
-    }
-
-    // lady: Asignar permisos específicos al rol Vendedor
-    var vendedorPermissions = permissions.Where(p => p.Name == "Crear Ventas" || p.Name == "Ver Productos");
-    foreach (var permission in vendedorPermissions)
-    {
-        if (!context.RolePermissions.Any(rp => rp.RoleId == vendedorRole.Id && rp.PermissionId == permission.Id))
-        {
-            context.RolePermissions.Add(new RolePermission { RoleId = vendedorRole.Id, PermissionId = permission.Id });
-        }
-    }
-    await context.SaveChangesAsync();
-
-    // lady: Crear un usuario administrador inicial si no existe
-    var adminUser = await userManager.FindByNameAsync("admin");
-    if (adminUser == null)
-    {
-        adminUser = new ApplicationUser
-        {
-            UserName = "admin",
-            FullName = "Administrador Principal",
+            UserName = "lucia.admin",
+            FullName = "Lucía Fernández",
             Position = "Admin"
         };
-        var result = await userManager.CreateAsync(adminUser, "Admin@123"); // lady: Cambia esta contraseña por una segura
+        var result = await userManager.CreateAsync(admin1, "LuciaAdmin@123");
         if (result.Succeeded)
         {
-            await userManager.AddToRoleAsync(adminUser, "Admin");
+            await userManager.AddToRoleAsync(admin1, "Admin");
+        }
+    }
+
+    var admin2 = await userManager.FindByNameAsync("carlos.admin");
+    if (admin2 == null)
+    {
+        admin2 = new ApplicationUser
+        {
+            UserName = "carlos.admin",
+            FullName = "Carlos Ramírez",
+            Position = "Admin"
+        };
+        var result = await userManager.CreateAsync(admin2, "CarlosAdmin@123");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(admin2, "Admin");
+        }
+    }
+
+    // Crear usuarios vendedores
+    var vendedor1 = await userManager.FindByNameAsync("maria.vendedor");
+    if (vendedor1 == null)
+    {
+        vendedor1 = new ApplicationUser
+        {
+            UserName = "maria.vendedor",
+            FullName = "María López",
+            Position = "Vendedor"
+        };
+        var result = await userManager.CreateAsync(vendedor1, "MariaVendedor@123");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(vendedor1, "Vendedor");
+        }
+    }
+
+    var vendedor2 = await userManager.FindByNameAsync("pedro.vendedor");
+    if (vendedor2 == null)
+    {
+        vendedor2 = new ApplicationUser
+        {
+            UserName = "pedro.vendedor",
+            FullName = "Pedro Martínez",
+            Position = "Vendedor"
+        };
+        var result = await userManager.CreateAsync(vendedor2, "PedroVendedor@123");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(vendedor2, "Vendedor");
         }
     }
 }
+
 
 
 
