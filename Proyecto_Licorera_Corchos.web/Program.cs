@@ -7,9 +7,6 @@ using Proyecto_Licorera_Corchos.web.Data.Entities;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 
-//builder.Services.AddDbContext<DataContext>(options =>
-//    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
 // lady: Configurar Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<DataContext>()
@@ -32,11 +29,6 @@ WebApplication app = builder.Build();
 
 // lady: Configuración del entorno
 
-//if (!app.Environment.IsDevelopment())
-//{
-//    app.UseExceptionHandler("/Home/Error");
-//    app.UseHsts();
-//}
 
 if (app.Environment.IsDevelopment())
 {
