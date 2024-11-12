@@ -75,7 +75,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 }
 
                 // Aquí se corrige el uso de PaginatedList en lugar de PagedList
-                PaginatedList<Sales> List = await PaginatedList<Sales>.CreateAsync(query, request.Page, request.RecordsPerPage);
+                PagedList<Sales> List = await PagedList<Sales>.ToPagedListAsync(query, request);
 
                 PaginationResponse<Sales> result = new PaginationResponse<Sales>
                 {

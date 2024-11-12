@@ -15,7 +15,8 @@ namespace Proyecto_Licorera_Corchos.web.Core.Pagination
         public string? Filter { get; set; }
 
         // Cambia PagedList a PaginatedList
-        public PaginatedList<T> List { get; set; } = new PaginatedList<T>(new List<T>(), 0, 1, 1);
+        public PagedList<T> List { get; set; } = new PagedList<T>(new List<T>(), 0, 1, 1);
+
 
         public List<int> Pages
         {
