@@ -19,9 +19,9 @@ namespace Proyecto_Licorera_Corchos.web.Core.Pagination
             AddRange(items);
         }
 
-        public static async Task<PagedList<T>> ToPagedListAsync(IQueryable<T> query, PaginationRequest request) 
+        public static async Task<PagedList<T>> ToPagedListAsync(IQueryable<T> query, PaginationRequest request)
         {
-            int count = await query. CountAsync();
+            int count = await query.CountAsync();
 
             List<T> items = await query.Paginate<T>(request)
                                         .ToListAsync();
