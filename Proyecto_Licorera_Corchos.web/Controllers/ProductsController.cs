@@ -1,155 +1,180 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using AspNetCoreHero.ToastNotification.Abstractions;
+using AspNetCoreHero.ToastNotification.Notyf;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Proyecto_Licorera_Corchos.web.Data;
-using Proyecto_Licorera_Corchos.web.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Proyecto_Licorera_Corchos.web.Core;
+using Proyecto_Licorera_Corchos.web.Core.Pagination;
+using Proyecto_Licorera_Corchos.web.Data.Entities;
+using Proyecto_Licorera_Corchos.web.Services;
+using System.Threading.Tasks;
+using Proyecto_Licorera_Corchos.web.Data;
+using Proyecto_Licorera_Corchos.web.Helpers;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
-    [Authorize(Roles = "Admin")] // Solo los administradores pueden acceder a este controlador
+    //[Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
-        private readonly DataContext _context;
+        private readonly IProductService _productService;
 
-        public ProductsController(DataContext context)
+        private readonly INotyfService _notifyService;
+
+        public ProductsController(IProductService productService, INotyfService notifyService)
         {
-            _context = context;
+            _productService = productService;
+            _notifyService = notifyService;
         }
 
-        // Acción para listar todos los productos
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] int? RecordsPerPage,
+                                                [FromQuery] int? Page,
+                                                [FromQuery] string? Filter)
         {
-            var products = await _context.Products.ToListAsync();
-            return View(products);
+
+            PaginationRequest request = new PaginationRequest
+            {
+                RecordsPerPage = RecordsPerPage ?? 15,
+                Page = Page ?? 1,
+                Filter = Filter
+            };
+            Response<PaginationResponse<Product>> response = await _productService.GetlistAsync(request);
+            return View(response.Result);
         }
 
-        // Acción para ver los detalles de un producto
+
         [HttpGet]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? Id)
         {
-            if (id == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            var response = await _productService.GetOneAsync(Id.Value);
+            if (response.IsSuccess)
             {
-                return NotFound();
+                return View(response.Result);
             }
 
-            return View(product);
+            return NotFound();
         }
 
-        // Acción para mostrar el formulario de creación
         [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
-        // Acción para crear un nuevo producto
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(product);
-        }
-
-        // Acción para mostrar el formulario de edición
-        [HttpGet]
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
-        }
-
-        // Acción para editar un producto
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product)
-        {
-            if (id != product.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (!ModelState.IsValid)
                 {
-                    _context.Update(product);
-                    await _context.SaveChangesAsync();
+                    _notifyService.Error("Debe ajustar los errores de validacion");
+                    return View(product);
                 }
-                catch (DbUpdateConcurrencyException)
+
+                Response<Product> response = await _productService.CreateAsync(product);
+
+                if (response.IsSuccess)
                 {
-                    if (!ProductExists(product.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    _notifyService.Success(response.Message);
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+
+                _notifyService.Error(response.Message);
+                return View(product);
+
             }
-            return View(product);
+            catch (Exception ex)
+            {
+                _notifyService.Error("Ocurrió un error inesperado al crear el producto.");
+                return View(product);
+            }
+
         }
 
-        // Acción para mostrar el formulario de eliminación
         [HttpGet]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Edit(int Id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            Response<Product> response = await _productService.GetOneAsync(Id);
 
-            var product = await _context.Products.FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            if (response.IsSuccess)
             {
-                return NotFound();
-            }
 
-            return View(product);
-        }
-
-        // Acción para eliminar un producto
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var product = await _context.Products.FindAsync(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
+                return View(response.Result);
             }
+            _notifyService.Error(response.Message);
             return RedirectToAction(nameof(Index));
+
         }
 
-        // Método privado para verificar si un producto existe
-        private bool ProductExists(int id)
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int Id, Product product)
         {
-            return _context.Products.Any(e => e.Id == id);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    _notifyService.Error("Debe ajustar los errores de validacion");
+                    return View(product);
+                }
+
+                Response<Product> response = await _productService.EditAsync(product);
+
+                if (response.IsSuccess)
+                {
+                    _notifyService.Success("Producto editado con éxito");
+                    return RedirectToAction(nameof(Index));
+                }
+
+                _notifyService.Error(response.Message);
+                return View(product);
+            }
+            catch (Exception ex)
+            {
+                _notifyService.Error("Ocurrió un error al editar el producto.");
+                return View(product);
+            }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete( int Id)
+        {
+            Response<Product> response = await _productService.DeleteAsync(Id);
+
+            if (response.IsSuccess)
+            {
+                _notifyService.Success("El producto ha sido eliminado con éxito");
+
+            }
+            else
+            {
+                _notifyService.Error("Error al intentar eliminar el producto");
+            }
+
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        [HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int Id)
+        {
+            var response = await _productService.DeleteAsync(Id);
+            if (response.IsSuccess)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View("Error", response.Message);
+        }
+
+
     }
 }

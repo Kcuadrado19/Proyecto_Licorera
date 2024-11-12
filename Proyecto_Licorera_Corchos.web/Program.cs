@@ -8,9 +8,6 @@ using Proyecto_Licorera_Corchos.web.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-// Configurar la cadena de conexión
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Configurar Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
@@ -35,12 +32,18 @@ builder.AddCustomBuilderConfiguration();
 
 WebApplication app = builder.Build();
 
-// Configuración del entorno
-if (!app.Environment.IsDevelopment())
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -66,13 +69,14 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-// Configurar rutas
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{Id_Sales?}");
 
-// Personalizar la configuración de la aplicación
-app.AddCustomwebAppConfiguration();
+
+app.AddCustomWebAppConfiguration();
+
 
 app.Run();
 
@@ -155,8 +159,6 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
         }
     }
 }
-
-
 
 
 

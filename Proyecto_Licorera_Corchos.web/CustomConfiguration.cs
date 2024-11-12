@@ -43,19 +43,15 @@ namespace Proyecto_Licorera_Corchos.web
 
         {
             builder.Services.AddScoped<ISalesService, SalesService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
         }
 
-        public static WebApplication AddCustomWebAppConfiguration(this WebApplication app) 
+        public static WebApplication AddCustomWebAppConfiguration(this WebApplication app)
         {
             app.UseNotyf();
             return app;
         }
 
-        public static WebApplication AddCustomwebAppConfiguration(this WebApplication app)
-        {
-            app.UseNotyf();
-            return app;
-        }
 
     }
 }
