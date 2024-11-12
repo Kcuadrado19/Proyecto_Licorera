@@ -3,9 +3,11 @@ using Proyecto_Licorera_Corchos.web.Services;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
         private readonly IRoleService _roleService;

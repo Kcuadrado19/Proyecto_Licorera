@@ -15,7 +15,7 @@ namespace Proyecto_Licorera_Corchos.web
         public static WebApplicationBuilder AddCustomBuilderConfiguration(this WebApplicationBuilder builder)
         {
             //aca se hacen las modificaciones al builder
-
+ 
             //data context
 
             builder.Services.AddDbContext<DataContext>(configuration =>
