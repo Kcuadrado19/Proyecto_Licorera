@@ -1,0 +1,26 @@
+﻿@model string
+
+@{
+    ViewData["Title"] = "Crear Rol - Licorería";
+}
+
+<h2>Crear Nuevo Rol</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="roleName">Nombre del Rol</label>
+        <input type="text" class="form-control" id="roleName" name="roleName" required />
+    </div>
+
+    <h4>Permisos</h4>
+    <div class="form-check">
+        @foreach (var permission in (List<string>)ViewBag.Permissions)
+        {
+            <input type="checkbox" class="form-check-input" name="permissions" value="@permission" id="@permission" />
+            <label class="form-check-label" for="@permission">@permission</label>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Crear</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Cancelar</a>
+</form>

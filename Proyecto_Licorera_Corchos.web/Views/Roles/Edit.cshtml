@@ -1,0 +1,27 @@
+﻿@model Microsoft.AspNetCore.Identity.IdentityRole
+
+@{
+    ViewData["Title"] = "Editar Rol - Licorería";
+}
+
+<h2>Editar Rol</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label for="roleName">Nombre del Rol</label>
+        <input type="text" class="form-control" asp-for="Name" id="roleName" required />
+    </div>
+
+    <h4>Permisos</h4>
+    <div class="form-check">
+        @foreach (var permission in (List<string>)ViewBag.Permissions)
+        {
+            <input type="checkbox" class="form-check-input" name="selectedPermissions" value="@permission" id="@permission" />
+            <label class="form-check-label" for="@permission">@permission</label>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-success mt-3">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary mt-3">Volver</a>
+</form>

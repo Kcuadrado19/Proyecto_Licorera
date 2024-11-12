@@ -26,8 +26,30 @@
             <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Products" ? "" : "collapsed")"
                asp-controller="Products"
                asp-action="Index">
+
                 <i class="bi bi-box-seam"></i> 
+
                 <span>Productos</span>
+            </a>
+        </li>
+
+        <!-- Botón para Usuarios -->
+        <li class="nav-item">
+            <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Users" ? "" : "collapsed")"
+               asp-controller="Users"
+               asp-action="Index">
+                <i class="bi bi-people"></i> <!-- Icono representativo de usuarios -->
+                <span>Usuarios</span>
+            </a>
+        </li>
+
+        <!-- Botón para Roles -->
+        <li class="nav-item">
+            <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Roles" ? "" : "collapsed")"
+               asp-controller="Roles"
+               asp-action="Index">
+                <i class="bi bi-shield-lock"></i> <!-- Icono representativo de roles -->
+                <span>Roles</span>
             </a>
         </li>
 
@@ -44,4 +66,4 @@
 
     </ul>
 
-</aside><!-- End Sidebar-->
+</aside><!-- End Sidebar -->
