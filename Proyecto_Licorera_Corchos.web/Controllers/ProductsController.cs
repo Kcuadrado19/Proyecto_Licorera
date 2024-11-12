@@ -14,7 +14,7 @@ using Proyecto_Licorera_Corchos.web.Helpers;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
@@ -68,7 +68,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
             try
@@ -115,7 +115,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int Id, Product product)
         {
             try
@@ -164,7 +164,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int Id)
         {
             var response = await _productService.DeleteAsync(Id);

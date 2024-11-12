@@ -1,4 +1,6 @@
-﻿namespace Proyecto_Licorera_Corchos.web.Core.Pagination
+﻿using Proyecto_Licorera_Corchos.web.Helpers;
+
+namespace Proyecto_Licorera_Corchos.web.Core.Pagination
 {
     public class PaginationResponse<T> where T : class
     {
@@ -12,8 +14,9 @@
         public int VisiblePages => 5;
         public string? Filter { get; set; }
 
-        // Inicializamos PagedList con una lista vacía y argumentos requeridos
+        // Cambia PagedList a PaginatedList
         public PagedList<T> List { get; set; } = new PagedList<T>(new List<T>(), 0, 1, 1);
+
 
         public List<int> Pages
         {
@@ -53,5 +56,3 @@
         }
     }
 }
-
-

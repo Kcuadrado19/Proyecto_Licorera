@@ -5,17 +5,16 @@ using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Proyecto_Licorera_Corchos.web.Core.Pagination;
+
 namespace Proyecto_Licorera_Corchos.web.Services
 {
     public interface ISalesService
     {
-        public Task<Response<Sales>> CreateAsync(Sales model);
-
-        public Task<Response<Sales>> DeleteAsync(int Id_Sales);
-        public Task<Response<Sales>> EditAsync(Sales model);
-        public Task<Response<PaginationResponse<Sales>>> GetlistAsync(PaginationRequest request);
-        public Task<Response<Sales>> GetOneAsync(int Id_Sales );
-        
+        Task<Response<Sales>> CreateAsync(Sales model);
+        Task<Response<Sales>> DeleteAsync(int Id_Sales);
+        Task<Response<Sales>> EditAsync(Sales model);
+        Task<Response<PaginationResponse<Sales>>> GetlistAsync(PaginationRequest request);
+        Task<Response<Sales>> GetOneAsync(int Id_Sales);
     }
 
     public class SalesService : ISalesService
@@ -36,7 +35,6 @@ namespace Proyecto_Licorera_Corchos.web.Services
                     Name = model.Name,
                     Sale_Date = model.Sale_Date,
                     Sales_Value = model.Sales_Value,
-
                 };
 
                 await _context.Sales.AddAsync(sales1);
@@ -57,7 +55,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 _context.Sales.Update(model);
                 await _context.SaveChangesAsync();
 
-                return ResponseHelper<Sales>.MakeResponseSuccess(model, "Nueva venta actualizada con éxito");
+                return ResponseHelper<Sales>.MakeResponseSuccess(model, "Venta actualizada con éxito");
             }
             catch (Exception ex)
             {
@@ -69,13 +67,14 @@ namespace Proyecto_Licorera_Corchos.web.Services
         {
             try
             {
-              IQueryable<Sales> query = _context.Sales.AsQueryable();
+                IQueryable<Sales> query = _context.Sales.AsQueryable();
 
-                if (!string.IsNullOrWhiteSpace(request.Filter)) 
+                if (!string.IsNullOrWhiteSpace(request.Filter))
                 {
                     query = query.Where(s => s.Name.ToLower().Contains(request.Filter.ToLower()));
                 }
 
+                // Aquí se corrige el uso de PaginatedList en lugar de PagedList
                 PagedList<Sales> List = await PagedList<Sales>.ToPagedListAsync(query, request);
 
                 PaginationResponse<Sales> result = new PaginationResponse<Sales>
@@ -89,7 +88,6 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 };
 
                 return ResponseHelper<PaginationResponse<Sales>>.MakeResponseSuccess(result, "Ventas obtenidas con éxito");
-
             }
             catch (Exception ex)
             {
@@ -115,13 +113,11 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
         }
 
-
-       
-        public async Task<Response<Sales>>DeleteAsync(int Id_Sales)
+        public async Task<Response<Sales>> DeleteAsync(int Id_Sales)
         {
             try
             {
-                Response<Sales> response= await GetOneAsync(Id_Sales);
+                Response<Sales> response = await GetOneAsync(Id_Sales);
 
                 if (!response.IsSuccess)
                 {
@@ -130,16 +126,13 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 _context.Sales.Remove(response.Result);
                 await _context.SaveChangesAsync();
 
-                return ResponseHelper<Sales>.MakeResponseSuccess(null, "venta eliminada con éxito");
+                return ResponseHelper<Sales>.MakeResponseSuccess(null, "Venta eliminada con éxito");
             }
             catch (Exception ex)
             {
                 return ResponseHelper<Sales>.MakeResposeFail(ex);
             }
-
         }
     }
-
-
-
 }
+
