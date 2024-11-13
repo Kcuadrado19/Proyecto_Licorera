@@ -1,11 +1,14 @@
-﻿@model ApplicationUser
+﻿@model Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser
 
-<h2>Delete User</h2>
+<div class="container">
+    <h2 class="text-center mt-4 mb-5" style="color: #e74c3c; font-weight: bold;">Eliminar Usuario</h2>
+    <div class="alert alert-danger" role="alert">
+        ¿Estás seguro de que deseas eliminar el usuario <strong>@Model.FullName</strong>?
+    </div>
 
-<h3>Are you sure you want to delete @Model.FullName?</h3>
-
-<form asp-action="DeleteConfirmed" method="post">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a href="@Url.Action("Index")" class="btn btn-secondary">Cancel</a>
-</form>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

@@ -7,6 +7,8 @@ using Proyecto_Licorera_Corchos.web.Core;
 using Proyecto_Licorera_Corchos.web.Helpers;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Proyecto_Licorera_Corchos.web.Core.Pagination;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
@@ -40,14 +42,20 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpGet]
+      
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
+
+
+        [HttpPost]
         public async Task<IActionResult> Create(Sales sales1)
         {
+            ModelState.Remove("UserId");
+            ModelState.Remove("User");
             try
             {
                 if (!ModelState.IsValid)
@@ -75,6 +83,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
         }
 
+
         [HttpGet]
         public async Task<IActionResult> Edit([FromRoute] int Id_Sales)
         {
@@ -93,6 +102,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Sales sales1)
         {
+            ModelState.Remove("UserId");
+            ModelState.Remove("User");
             try
             {
                 if (!ModelState.IsValid)
@@ -119,9 +130,14 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             }
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> Delete([FromRoute] int Id_Sales)
         {
+            ModelState.Remove("UserId");
+            ModelState.Remove("User");
+
             Response<Sales> response = await _salesService.DeleteAsync(Id_Sales);
 
             if (response.IsSuccess)

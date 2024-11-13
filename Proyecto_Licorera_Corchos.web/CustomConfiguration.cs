@@ -3,6 +3,7 @@ using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Data;
+using Proyecto_Licorera_Corchos.web.RoleManagement;
 using Proyecto_Licorera_Corchos.web.Services;
 
 namespace Proyecto_Licorera_Corchos.web
@@ -44,6 +45,8 @@ namespace Proyecto_Licorera_Corchos.web
         {
             builder.Services.AddScoped<ISalesService, SalesService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
+            builder.Services.AddScoped<IUserService, UserService>();
         }
 
         public static WebApplication AddCustomWebAppConfiguration(this WebApplication app)
