@@ -97,14 +97,14 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
 
         // GET: Users/Edit/5
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string Id)
         {
-            if (id == null)
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var user = await _userService.GetUserByIdAsync(id);
+            var user = await _userService.GetUserByIdAsync(Id);
             if (user == null)
             {
                 return NotFound();
@@ -113,15 +113,20 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             return View(user);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, ApplicationUser user)
         {
+            ModelState.Remove("Sales");
             if (id != user.Id)
             {
+                Console.WriteLine("Error: el ID del usuario no coincide.");
                 return NotFound();
             }
+
+            Console.WriteLine("Intentando actualizar el usuario con ID: " + user.Id);
+            Console.WriteLine("Email: " + user.Email);
+            Console.WriteLine("Nombre completo: " + user.FullName);
 
             if (ModelState.IsValid)
             {
@@ -131,11 +136,28 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                     TempData["SuccessMessage"] = "¡Usuario actualizado con éxito!";
                     return RedirectToAction(nameof(Index));
                 }
-                ModelState.AddModelError(string.Empty, "No se pudo actualizar el usuario.");
+                else
+                {
+                    Console.WriteLine("Error al intentar actualizar el usuario.");
+                    ModelState.AddModelError(string.Empty, "Hubo un problema al actualizar el usuario. Verifica los datos ingresados.");
+                }
             }
+            else
+            {
+                Console.WriteLine("Modelo inválido.");
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine($"Error de validación: {error.ErrorMessage}");
+                }
+            }
+
             TempData["ErrorMessage"] = "¡Ups! No se pudo actualizar el usuario. Inténtalo de nuevo.";
             return View(user);
         }
+
+
+
+
 
 
 

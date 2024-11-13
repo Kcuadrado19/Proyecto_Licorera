@@ -17,6 +17,8 @@ namespace Proyecto_Licorera_Corchos.web.Services
         Task<ApplicationUser> GetUserByIdAsync(string userId);
 
 
+        //Task<bool> UpdateUserAsync(ApplicationUser user);
+
         Task<bool> UpdateUserAsync(ApplicationUser user);
 
 
@@ -88,18 +90,33 @@ namespace Proyecto_Licorera_Corchos.web.Services
             var existingUser = await _userManager.FindByIdAsync(user.Id);
             if (existingUser == null)
             {
+                Console.WriteLine("Usuario no encontrado para actualización.");
                 return false;
             }
 
-            // lady: Actualizar las propiedades del usuario
+            // Actualiza solo las propiedades generales del usuario, excluyendo la contraseña
             existingUser.FullName = user.FullName;
             existingUser.Position = user.Position;
             existingUser.Email = user.Email;
-            existingUser.UserName = user.UserName;
+            existingUser.UserName = user.Email; // Mantenemos UserName igual al email
 
-            var result = await _userManager.UpdateAsync(existingUser);
-            return result.Succeeded;
+            // Realiza la actualización del usuario en la base de datos
+            var updateResult = await _userManager.UpdateAsync(existingUser);
+            if (!updateResult.Succeeded)
+            {
+                foreach (var error in updateResult.Errors)
+                {
+                    Console.WriteLine($"Error al actualizar el usuario: {error.Description}");
+                }
+                return false;
+            }
+
+            Console.WriteLine("Usuario actualizado exitosamente en la base de datos.");
+            return true;
         }
+
+
+
 
         public async Task<bool> DeleteUserAsync(string userId)
         {
