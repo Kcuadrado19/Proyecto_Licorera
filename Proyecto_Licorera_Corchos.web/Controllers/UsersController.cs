@@ -90,7 +90,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
                 if (result)
                 {
-                    TempData["SuccessMessage"] = "¡Usuario creado exitosamente! Bienvenido a nuestro equipo de la licorería.";
+                    //TempData["SuccessMessage"] = "¡Usuario creado exitosamente! Bienvenido a nuestro equipo de la licorería.";
+                    _notifyService.Success("¡Usuario creado exitosamente! Bienvenido a nuestro equipo de la licorería.");
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -109,7 +110,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 }
             }
 
-            TempData["ErrorMessage"] = "¡Ups! Hubo un problema al crear el usuario. Por favor, verifica los datos.";
+            //TempData["ErrorMessage"] = "¡Ups! Hubo un problema al crear el usuario. Por favor, verifica los datos.";
+            _notifyService.Error("¡Ups! Hubo un problema al crear el usuario. Por favor, verifica los datos.");
             return View(user);
         }
 
