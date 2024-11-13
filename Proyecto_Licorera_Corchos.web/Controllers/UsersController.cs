@@ -185,6 +185,13 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
+            ModelState.Remove("Sales");
+            if (id == null)
+            {
+                TempData["ErrorMessage"] = "ID de usuario no proporcionado.";
+                return RedirectToAction(nameof(Index));
+            }
+
             var result = await _userService.DeleteUserAsync(id);
             if (result)
             {
