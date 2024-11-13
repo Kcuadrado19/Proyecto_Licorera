@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 @model Sales
 
 @{
@@ -19,9 +19,9 @@
 
 <section class="sales dashboard">
 
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title text-primary">Nueva venta</h5>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title text-primary">Nueva venta</h5>
 
             <form class="row g-3" asp-action="Create" method="post">
                 <div class="col-md-12">
@@ -45,8 +45,8 @@
                 </div>
             </form>
 
-                </div>
-            </div>
+        </div>
+    </div>
 
 </section>
 
@@ -54,7 +54,6 @@
 {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-     }
+    }
 
 }
-

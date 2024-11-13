@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Proyecto_Licorera_Corchos.web.Core;
+using Proyecto_Licorera_Corchos.web.Core.Pagination;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
+using Proyecto_Licorera_Corchos.web.Helpers;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,8 +20,8 @@ namespace Proyecto_Licorera_Corchos.web.Services
 
         Task<ApplicationUser> GetUserByIdAsync(string userId);
 
+        Task<Response<PaginationResponse<ApplicationUser>>> GetlistAsync(PaginationRequest request);
 
-        //Task<bool> UpdateUserAsync(ApplicationUser user);
 
         Task<bool> UpdateUserAsync(ApplicationUser user);
 
@@ -152,6 +156,44 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
             return result.Succeeded;
         }
+
+        public async Task<Response<PaginationResponse<ApplicationUser>>> GetlistAsync(PaginationRequest request)
+        {
+
+            try
+            {
+                IQueryable<ApplicationUser> query = _userManager.Users.AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(request.Filter))
+                {
+                    query = query.Where(s => s.FullName.ToLower().Contains(request.Filter.ToLower()) || s.Email.ToLower().Contains(request.Filter.ToLower()));
+                }
+
+
+                PagedList<ApplicationUser> List = await PagedList<ApplicationUser>.ToPagedListAsync(query, request);
+
+                PaginationResponse<ApplicationUser> result = new PaginationResponse<ApplicationUser>
+                {
+                    List = List,
+                    TotalCount = List.TotalCount,
+                    RecordsPerPage = List.RecordsPerPage,
+                    CurrentPage = List.CurrentPage,
+                    TotalPages = List.TotalPages,
+                    Filter = request.Filter,
+                };
+
+                return ResponseHelper<PaginationResponse<ApplicationUser>>.MakeResponseSuccess(result, "Producto obtenido con éxito");
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper<PaginationResponse<ApplicationUser>>.MakeResposeFail(ex);
+            }
+
+
+        }
+
+
+
 
 
 
