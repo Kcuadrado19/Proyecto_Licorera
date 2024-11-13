@@ -12,8 +12,8 @@ using Proyecto_Licorera_Corchos.web.Data;
 namespace Proyecto_Licorera_Corchos.web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20241111011502_user")]
-    partial class user
+    [Migration("20241112034609_SimplifyApplicationUser")]
+    partial class SimplifyApplicationUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -171,6 +171,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -195,6 +196,11 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -233,6 +239,27 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Permission", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions");
+                });
+
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -251,12 +278,27 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Product");
+                });
+
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.RolePermission", b =>
+                {
+                    b.Property<string>("RoleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PermissionId")
+                        .HasColumnType("int");
+
+                    b.HasKey("RoleId", "PermissionId");
+
+                    b.HasIndex("PermissionId");
+
+                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Sales", b =>
@@ -266,12 +308,6 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Sales"));
-
-                    b.Property<int>("Id_Orders")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsHidden")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -286,7 +322,13 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     b.Property<float>("Total_Sales")
                         .HasColumnType("real");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id_Sales");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Sales");
                 });
@@ -340,6 +382,41 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.RolePermission", b =>
+                {
+                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.Permission", "Permission")
+                        .WithMany()
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Sales", b =>
+                {
+                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser", "User")
+                        .WithMany("Sales")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("Sales");
                 });
 #pragma warning restore 612, 618
         }

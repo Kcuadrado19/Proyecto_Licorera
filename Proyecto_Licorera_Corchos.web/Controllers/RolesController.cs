@@ -22,7 +22,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         {
             var roles = await _roleService.GetAllRolesAsync();
             ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = (int)System.Math.Ceiling(roles.Count / 10.0); // lady: Paginación simple
+            ViewBag.TotalPages = (int)System.Math.Ceiling(roles.Count / 10.0);
             return View(roles);
         }
 
@@ -45,7 +45,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             var result = await _roleService.CreateRoleAsync(roleName);
             if (result)
             {
-                // lady: Aquí puedes guardar los permisos asignados si tienes una estructura para eso
+                TempData["SuccessMessage"] = "Rol creado con éxito.";
                 return RedirectToAction("Index");
             }
 
@@ -59,7 +59,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             var role = await _roleService.GetRoleByIdAsync(roleId);
             if (role == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "El ID del rol no es válido.";
+                return RedirectToAction("Index");
             }
 
             ViewBag.Permissions = await _roleService.GetPermissionsAsync();
@@ -78,11 +79,11 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             var result = await _roleService.UpdateRoleAsync(roleId, newRoleName);
             if (result)
             {
-                // lady: Aquí puedes actualizar los permisos asignados si es necesario
+                TempData["SuccessMessage"] = "Rol actualizado con éxito.";
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", "Error al actualizar el rol.");
+            TempData["ErrorMessage"] = "Error al actualizar el rol.";
             return View();
         }
 
@@ -91,12 +92,12 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             var result = await _roleService.DeleteRoleAsync(roleId);
             if (result)
             {
+                TempData["SuccessMessage"] = "Rol eliminado con éxito.";
                 return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", "Error al eliminar el rol.");
+            TempData["ErrorMessage"] = "Error al eliminar el rol.";
             return RedirectToAction("Index");
         }
     }
 }
-
