@@ -26,26 +26,6 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
 
-        //public async Task<IActionResult> Index([FromQuery] int? RecordsPerPage, [FromQuery] int? Page, [FromQuery] string? Filter)
-        //{
-        //    PaginationRequest request = new PaginationRequest
-        //    {
-        //        RecordsPerPage = RecordsPerPage ?? 15,
-        //        Page = Page ?? 1,
-        //        Filter = Filter
-        //    };
-
-        //    Response<PaginationResponse<ApplicationUser>> response = await _userService.GetlistAsync(request);
-
-        //    if (response.IsSuccess)
-        //    {
-        //        // Pasar solo la lista de ApplicationUser al modelo de la vista
-        //        return View(response.Result.List);
-        //    }
-
-        //    TempData["ErrorMessage"] = "Hubo un problema al obtener la lista de usuarios.";
-        //    return RedirectToAction("Index");
-        //}
 
 
         public async Task<IActionResult> Index(int? RecordsPerPage, int? Page, string? Filter)
