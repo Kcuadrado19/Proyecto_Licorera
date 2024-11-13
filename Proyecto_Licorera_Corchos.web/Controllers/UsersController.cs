@@ -83,7 +83,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
             if (ModelState.IsValid)
             {
-                user.UserName = user.Email; // Establecer el nombre de usuario al correo electrónico
+                user.UserName = user.Email; 
 
                 // Crear el usuario utilizando IUserService
                 var result = await _userService.CreateUserAsync(user, password);
