@@ -47,13 +47,6 @@ namespace Proyecto_Licorera_Corchos.web.Services
             return _userManager.Users.ToList();
         }
 
-        //public async Task<bool> CreateUserAsync(ApplicationUser user, string password)
-        //{
-        //    user.UserName = user.Email; // lady: Asigna el nombre de usuario al correo electrónico
-        //    var result = await _userManager.CreateAsync(user, password);
-        //    return result.Succeeded;
-        //}
-
 
         public async Task<bool> CreateUserAsync(ApplicationUser user, string password)
         {
@@ -83,8 +76,6 @@ namespace Proyecto_Licorera_Corchos.web.Services
 
             return result.Succeeded;
         }
-
-
 
 
         public async Task<ApplicationUser> GetUserByIdAsync(string userId)
@@ -150,3 +141,5 @@ namespace Proyecto_Licorera_Corchos.web.Services
 
     }
 }
+
+

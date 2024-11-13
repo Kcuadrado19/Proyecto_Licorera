@@ -15,10 +15,6 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
         [StringLength(50, ErrorMessage = "El puesto no debe superar los 50 caracteres.")]
         public string Position { get; set; }
 
-        [Required(ErrorMessage = "La contraseña es obligatoria.")]
-        [StringLength(100, ErrorMessage = "La contraseña debe tener al menos {2} caracteres.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
 
         [Required(ErrorMessage = "El correo electrónico es obligatorio.")]
         [EmailAddress(ErrorMessage = "Introduce un correo electrónico válido.")]

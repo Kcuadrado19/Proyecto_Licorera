@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
@@ -13,14 +14,13 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
     {
 
         private readonly IUserService _userService;
+        private readonly INotyfService _notifyService;
 
-        //private readonly UserManager<ApplicationUser> _userManager;
-        //private readonly SignInManager<ApplicationUser> _signInManager;
-        //private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, INotyfService notifyService)
         {
             _userService = userService;
+            _notifyService = notifyService;
         }
 
         // GET: Users
@@ -53,6 +53,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             return View();
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ApplicationUser user, string password)
@@ -65,6 +67,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
                 // Crear el usuario utilizando IUserService
                 var result = await _userService.CreateUserAsync(user, password);
+
                 if (result)
                 {
                     TempData["SuccessMessage"] = "¡Usuario creado exitosamente! Bienvenido a nuestro equipo de la licorería.";
@@ -81,6 +84,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                     foreach (var error in state.Errors)
                     {
                         ModelState.AddModelError(string.Empty, error.ErrorMessage);
+                        Console.WriteLine($"Error: {error.ErrorMessage}");
                     }
                 }
             }
@@ -109,44 +113,6 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             return View(user);
         }
 
-        //// POST: Users/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(string id, ApplicationUser user)
-        //{
-        //    if (id != user.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        var existingUser = await _userManager.FindByIdAsync(id);
-        //        if (existingUser == null)
-        //        {
-        //            return NotFound();
-        //        }
-
-        //        existingUser.FullName = user.FullName;
-        //        existingUser.Position = user.Position;
-        //        existingUser.UserName = user.UserName;
-        //        existingUser.Email = user.Email;
-
-        //        var result = await _userManager.UpdateAsync(existingUser);
-        //        if (result.Succeeded)
-        //        {
-        //            TempData["SuccessMessage"] = "¡Usuario actualizado con éxito!";
-        //            return RedirectToAction(nameof(Index));
-        //        }
-
-        //        foreach (var error in result.Errors)
-        //        {
-        //            ModelState.AddModelError(string.Empty, error.Description);
-        //        }
-        //    }
-        //    TempData["ErrorMessage"] = "¡Ups! No se pudo actualizar el usuario. Inténtalo de nuevo.";
-        //    return View(user);
-        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -239,30 +205,6 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //[AllowAnonymous]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Register(RegisterViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var user = new ApplicationUser { UserName = model.Username, FullName = model.Username, Position = "Vendedor" };
-        //        var result = await _userManager.CreateAsync(user, model.Password);
-        //        if (result.Succeeded)
-        //        {
-        //            await _signInManager.SignInAsync(user, isPersistent: false);
-        //            TempData["SuccessMessage"] = "¡Registro exitoso! Bienvenido a la familia de la licorería.";
-        //            return RedirectToAction("Index", "Home");
-        //        }
-        //        foreach (var error in result.Errors)
-        //        {
-        //            ModelState.AddModelError(string.Empty, error.Description);
-        //        }
-        //    }
-        //    TempData["ErrorMessage"] = "No se pudo completar el registro. Por favor, verifica los datos.";
-        //    return View(model);
-        //}
-
 
         // Acción para el registro de usuarios (accesible para todos)
         [AllowAnonymous]
@@ -313,4 +255,5 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
     }
 }
+
 
