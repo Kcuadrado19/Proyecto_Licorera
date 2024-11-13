@@ -20,12 +20,9 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
         public float Sales_Value { get; set; }
 
         [Display(Name = "Total ventas")]
-        [Required(ErrorMessage = "El campo '{0}' es requerido.")] 
         public float Total_Sales { get; set; }
 
-        [Required]
-        public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+     
 
 
 
