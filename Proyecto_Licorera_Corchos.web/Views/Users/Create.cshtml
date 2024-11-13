@@ -22,43 +22,58 @@
 
 @model Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser
 
-<h2>Crear Usuario</h2>
+<div class="container">
+    <h2 class="text-center mt-4 mb-5" style="color: #2c3e50; font-weight: bold;">Crear Nuevo Usuario 🧑 </h2>
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="FullName" class="control-label">Nombre Completo</label>
-        <input asp-for="FullName" class="form-control" />
-        <span asp-validation-for="FullName" class="text-danger"></span>
-    </div>
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="FullName" class="control-label"></label>
+            <input asp-for="FullName" class="form-control" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Email" class="control-label">Correo Electrónico</label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Position" class="control-label">Rol</label>
-        <input asp-for="Position" class="form-control" />
-        <span asp-validation-for="Position" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Position" class="control-label"></label>
+            <input asp-for="Position" class="form-control" />
+            <span asp-validation-for="Position" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label for="Password" class="control-label">Contraseña</label>
-        <input type="password" name="password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label for="Password" class="control-label">Contraseña</label>
+            <input type="password" id="Password" name="password" class="form-control" onfocus="showPasswordRequirements()" onblur="hidePasswordRequirements()" />
+            <span class="text-danger"></span>
+            <small id="passwordRequirements" class="form-text text-muted" style="display: none;">
+                La contraseña debe tener al menos 6 caracteres, incluir un dígito, una letra minúscula, y una letra mayúscula.
+            </small>
+        </div>
 
-    <div class="form-group">
-        <input type="submit" value="Crear" class="btn btn-primary" />
-    </div>
-</form>
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary">Crear</button>
+            <a asp-action="Index" class="btn btn-secondary ml-2">Volver</a> <!-- Botón para regresar -->
+        </div>
+    </form>
+</div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        function showPasswordRequirements() {
+            document.getElementById("passwordRequirements").style.display = "block";
+        }
+
+        function hidePasswordRequirements() {
+            document.getElementById("passwordRequirements").style.display = "none";
+        }
+    </script>
 }
+
+
+
 
 
 
