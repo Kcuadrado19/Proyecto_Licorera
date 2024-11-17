@@ -9,10 +9,12 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
     {
         [Required(ErrorMessage = "El nombre completo es obligatorio.")]
         [StringLength(100, ErrorMessage = "El nombre completo no debe superar los 100 caracteres.")]
+        [Display(Name = "Nombre Completo")]
         public string FullName { get; set; }
 
         [Required(ErrorMessage = "El puesto es obligatorio.")]
         [StringLength(50, ErrorMessage = "El puesto no debe superar los 50 caracteres.")]
+        [Display(Name = "Rol (Admin o Vendedor")]
         public string Position { get; set; }
 
 
