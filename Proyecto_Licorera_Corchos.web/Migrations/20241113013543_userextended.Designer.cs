@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Proyecto_Licorera_Corchos.web.Data;
 
@@ -11,9 +12,11 @@ using Proyecto_Licorera_Corchos.web.Data;
 namespace Proyecto_Licorera_Corchos.web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241113013543_userextended")]
+    partial class userextended
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -301,9 +304,6 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id_Sales"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -317,9 +317,13 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
                     b.Property<float>("Total_Sales")
                         .HasColumnType("real");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id_Sales");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Sales");
                 });
@@ -396,9 +400,13 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Sales", b =>
                 {
-                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser", null)
+                    b.HasOne("Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser", "User")
                         .WithMany("Sales")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser", b =>

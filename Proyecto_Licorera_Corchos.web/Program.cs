@@ -21,14 +21,25 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Users/AccessDenied";
 });
 
-// Agregar RoleService
-builder.Services.AddScoped<IRoleService, RoleService>();
 
 // Agregar servicios para controladores y vistas
 builder.Services.AddControllersWithViews();
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+});
+
+
+
+
 // Personalizar la configuración
 builder.AddCustomBuilderConfiguration();
+
 
 WebApplication app = builder.Build();
 
