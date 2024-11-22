@@ -8,7 +8,7 @@
 
 <div class="pagetitle">
     <h1>Ventas</h1>
-    <nav>
+     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
             <li class="breadcrumb-item"><a asp-action="Index">Ventas</a></li>
@@ -18,24 +18,28 @@
 </div>
 
 <section class="sales dashboard">
-
     <div class="card">
         <div class="card-body">
             <h5 class="card-title text-primary">Nueva venta</h5>
 
             <form class="row g-3" asp-action="Create" method="post">
                 <div class="col-md-12">
-                    <input asp-for="Name" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Name)">
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <label asp-for="ProductId" class="form-label"></label>
+                    <select asp-for="ProductId" class="form-control" asp-items="ViewBag.Products">
+                     <option value="">Seleccione un producto</option>
+                    </select>
+                    <span asp-validation-for="ProductId" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-12">
-                    <input asp-for="Sale_Date" type="datetime-local" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Sale_Date)">
+                    <label asp-for="Sale_Date" class="form-label"></label>
+                    <input asp-for="Sale_Date" type="datetime-local" class="form-control">
                     <span asp-validation-for="Sale_Date" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-12">
-                    <input asp-for="Sales_Value" class="form-control" placeholder="@Html.DisplayNameFor(model => model.Sales_Value)">
+                    <label asp-for="Sales_Value" class="form-label"></label>
+                    <input asp-for="Sales_Value" class="form-control">
                     <span asp-validation-for="Sales_Value" class="text-danger"></span>
                 </div>
 
@@ -44,10 +48,8 @@
                     <a asp-action="Index" class="btn btn-secondary">Volver</a>
                 </div>
             </form>
-
         </div>
     </div>
-
 </section>
 
 @section Scripts
@@ -55,5 +57,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
 }

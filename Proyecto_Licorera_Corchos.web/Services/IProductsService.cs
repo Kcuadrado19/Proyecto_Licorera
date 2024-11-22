@@ -10,6 +10,7 @@ using Proyecto_Licorera_Corchos.web.Core.Pagination;
 using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
 
 namespace Proyecto_Licorera_Corchos.web.Services
@@ -23,8 +24,8 @@ namespace Proyecto_Licorera_Corchos.web.Services
         public Task<Response<Product>> EditAsync(Product model);
         public Task<Response<Product>> DeleteAsync(int Id);
         public Task<Response<Product>> GetOneAsync(int Id);
-        
 
+        public Task<List<Product>> GetAllAsync();
 
     }
     public class ProductService : IProductService
@@ -147,6 +148,13 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 return ResponseHelper<Product>.MakeResposeFail(ex);
             }
         }
+
+        public async Task<List<Product>> GetAllAsync()
+        {
+            return await _context.Product.ToListAsync();
+        }
+     
+
 
     }
 }

@@ -4,6 +4,7 @@ using Proyecto_Licorera_Corchos.web.Data;
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using Proyecto_Licorera_Corchos.web.Core.Pagination;
 
 namespace Proyecto_Licorera_Corchos.web.Services
@@ -32,7 +33,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
             {
                 Sales sales1 = new Sales
                 {
-                    Name = model.Name,
+                    ProductId = model.ProductId,
                     Sale_Date = model.Sale_Date,
                     Sales_Value = model.Sales_Value,
                 };
@@ -67,11 +68,15 @@ namespace Proyecto_Licorera_Corchos.web.Services
         {
             try
             {
-                IQueryable<Sales> query = _context.Sales.AsQueryable();
+                //IQueryable<Sales> query = _context.Sales.AsQueryable();
+                IQueryable<Sales> query = _context.Sales
+                        .Include(s => s.Product);
 
                 if (!string.IsNullOrWhiteSpace(request.Filter))
                 {
-                    query = query.Where(s => s.Name.ToLower().Contains(request.Filter.ToLower()));
+                    //query = query.Where(s => s.Product.Name != null && s.Product.Name.ToLower().Contains(request.Filter.ToLower()));
+                    query = query.Where(s => s.Product.Name.Contains(request.Filter));
+
                 }
 
                 // Aquí se corrige el uso de PaginatedList en lugar de PagedList
@@ -99,13 +104,15 @@ namespace Proyecto_Licorera_Corchos.web.Services
         {
             try
             {
-                Sales? sales1 = await _context.Sales.FirstOrDefaultAsync(s => s.Id_Sales == Id_Sales);
+                var sales = await _context.Sales
+                    .Include(s => s.Product) // Carga los datos del producto relacionado
+                    .FirstOrDefaultAsync(s => s.Id_Sales == Id_Sales);
 
-                if (sales1 is null)
+                if (sales == null)
                 {
                     return ResponseHelper<Sales>.MakeResposeFail("La venta con el id indicado no existe");
                 }
-                return ResponseHelper<Sales>.MakeResponseSuccess(sales1);
+                return ResponseHelper<Sales>.MakeResponseSuccess(sales);
             }
             catch (Exception ex)
             {
