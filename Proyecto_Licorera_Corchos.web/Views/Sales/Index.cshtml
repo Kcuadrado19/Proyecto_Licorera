@@ -76,9 +76,10 @@
                         <tr>
                            
                             @* <td>@item.Id_Sales</td> *@
-                            <td>@item.Name</td>
+                                <td>@(item.Product != null ? item.Product.Name : "Sin Producto")</td>
                             <td>@item.Sale_Date</td>
                             <td>@item.Sales_Value</td>
+
                             <td>
                                 <a asp-action="Edit" asp-route-Id_Sales="@item.Id_Sales" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
 
