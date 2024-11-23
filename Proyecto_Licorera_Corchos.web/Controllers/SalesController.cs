@@ -9,6 +9,8 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 using Proyecto_Licorera_Corchos.web.Core.Pagination;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
@@ -19,9 +21,12 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
         private readonly INotyfService _notifyService;
 
-        public SalesController(ISalesService salesService, INotyfService notifyService)
+        private readonly IProductService _productService;
+
+        public SalesController(ISalesService salesService, INotyfService notifyService, IProductService productService)
         {
             _salesService = salesService;
+            _productService = productService;
             _notifyService = notifyService;
         }
 
@@ -42,10 +47,12 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpGet]
-      
-        public IActionResult Create()
+
+        public async Task<IActionResult> Create()
         {
-            return View();
+            ViewBag.Products = new SelectList(await _productService.GetAllAsync(), "Id", "Name");
+            //return View();
+            return View(new Sales());
         }
 
         [HttpPost]
@@ -56,11 +63,13 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         {
             ModelState.Remove("UserId");
             ModelState.Remove("User");
+            ModelState.Remove("Product");
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    _notifyService.Error("Debe ajustar los errores de validacion");
+                    ViewBag.Products = new SelectList(await _productService.GetAllAsync(), "Id", "Name");
+                    _notifyService.Error("Debe ajustar los errores de validación");
                     return View(sales1);
                 }
 
@@ -72,10 +81,13 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
+                ViewBag.Products = new SelectList(await _productService.GetAllAsync(), "Id", "Name");
                 _notifyService.Error(response.Message);
-                return View(response);
+                return View(sales1);
 
             }
+
+
             catch (Exception ex)
             {
                 return View(sales1);
@@ -87,15 +99,39 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit([FromRoute] int Id_Sales)
         {
-            Response<Sales> response = await _salesService.GetOneAsync(Id_Sales);
-
-            if (response.IsSuccess)
+            try
             {
+                var response = await _salesService.GetOneAsync(Id_Sales);
 
-                return View(response.Result);
+                if (response.IsSuccess && response.Result != null)
+                {
+                    var products = await _productService.GetAllAsync();
+                    if (products == null || !products.Any())
+                    {
+                        _notifyService.Error("No hay productos disponibles. Agregue al menos un producto antes de editar una venta.");
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    // Crear una lista explícita de SelectListItem
+                    ViewBag.Products = products
+                        .Select(p => new SelectListItem
+                        {
+                            Value = p.Id.ToString(),
+                            Text = p.Name
+                        })
+                        .ToList();
+
+                    return View(response.Result);
+                }
+
+                _notifyService.Error("La venta no fue encontrada.");
+                return RedirectToAction(nameof(Index));
             }
-            _notifyService.Error(response.Message);
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                _notifyService.Error($"Ocurrió un error al cargar los datos: {ex.Message}");
+                return RedirectToAction(nameof(Index));
+            }
 
         }
 
@@ -104,11 +140,15 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         {
             ModelState.Remove("UserId");
             ModelState.Remove("User");
+            ModelState.Remove("Product");
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    _notifyService.Error("Debe ajustar los errores de validacion");
+                    // Recargar la lista de productos para el dropdown
+                    ViewBag.Products = new SelectList(await _productService.GetAllAsync(), "Id", "Name", sales1.ProductId);
+
+                    _notifyService.Error("Debe ajustar los errores de validación");
                     return View(sales1);
                 }
 
@@ -121,11 +161,15 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 }
 
                 _notifyService.Error(response.Message);
-                return View(response);
+                ViewBag.Products = new SelectList(await _productService.GetAllAsync(), "Id", "Name", sales1.ProductId);
+                //return View(response);
+                    return View(sales1);
             }
             catch (Exception ex)
             {
-                _notifyService.Error(ex.Message);
+                _notifyService.Error($"Error inesperado: {ex.Message}");
+                // Recargar la lista de productos para el dropdown en caso de excepción
+        ViewBag.Products = new SelectList(await _productService.GetAllAsync(), "Id", "Name", sales1.ProductId);
                 return View(sales1);
             }
         }

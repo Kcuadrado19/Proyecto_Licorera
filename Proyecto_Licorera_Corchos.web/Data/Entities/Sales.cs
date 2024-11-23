@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
@@ -7,9 +8,12 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
         [Key] // Indica que es clave primaria
         public int Id_Sales { get; set; }
 
-        [Display(Name = "Venta")]
+        [Display(Name = "Producto")]
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
-        public string? Name { get; set; }
+        public int ProductId { get; set; }
+
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; }
 
         [Display(Name = "Fecha venta")]
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
