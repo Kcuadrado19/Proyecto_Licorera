@@ -18,6 +18,8 @@ namespace Proyecto_Licorera_Corchos.web.Data
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
 
+        public DbSet<Section> Sections { get; set; }
+
    
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
