@@ -1,0 +1,53 @@
+﻿@model Proyecto_Licorera_Corchos.web.Data.Entities.Product
+
+@{
+    ViewData["Title"] = "Editar Producto";
+}
+
+<div class="pagetitle">
+    <h1>Productos</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Productos</a></li>
+            <li class="breadcrumb-item active">Editar Producto</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="product dashboard">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title text-primary">Editar Producto 🖊️</h5>
+
+            @using (Html.BeginForm("Edit", "Products", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.Id)
+
+                <div class="form-group">
+                    <label for="Name">Nombre</label>
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="Price">Precio</label>
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="Description">Descripción</label>
+                    @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-warning">Actualizar Producto 💾</button>
+                    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+                </div>
+            }
+        </div>
+    </div>
+</section>

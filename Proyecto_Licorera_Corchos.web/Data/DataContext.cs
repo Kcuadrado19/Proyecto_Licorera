@@ -1,32 +1,46 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
 
 namespace Proyecto_Licorera_Corchos.web.Data
 {
-    public class DataContext : DbContext
-
+    public class DataContext : IdentityDbContext<ApplicationUser>
     {
-        public DataContext(DbContextOptions<DataContext>options) : base(options)
+        public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
-            
         }
 
-        public DbSet<Clients> Clients { get; set; }
-
-        public DbSet<Products> Products { get; set; }
-
+        // DbSet para tus otras entidades
+        public DbSet<Product> Product { get; set; }
         public DbSet<Sales> Sales { get; set; }
-        
-        public DbSet<Orders> Orders { get; set; }
 
-        public DbSet<UsersAudit>  UsersAudit { get; set; }
+        // DbSet para la nueva entidad RolePermission y Permission
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
 
-        public DbSet<Accounting> Accounting { get; set; }
+        public DbSet<Section> Sections { get; set; }
 
-        public DbSet<Modifications> Modifications { get; set; }
+   
 
-        public DbSet<Permissions> Permisos { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        public DbSet<Users> Usuarios { get; set; }
+            // Configurar la relación muchos a muchos entre IdentityRole y Permission
+            modelBuilder.Entity<RolePermission>()
+                .HasKey(rp => new { rp.RoleId, rp.PermissionId });
+
+            modelBuilder.Entity<RolePermission>()
+                .HasOne(rp => rp.Role)
+                .WithMany()
+                .HasForeignKey(rp => rp.RoleId);
+
+            modelBuilder.Entity<RolePermission>()
+                .HasOne(rp => rp.Permission)
+                .WithMany()
+                .HasForeignKey(rp => rp.PermissionId);
+        }
     }
 }
+
+

@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Data;
+using Proyecto_Licorera_Corchos.web.RoleManagement;
+using Proyecto_Licorera_Corchos.web.Services;
 
 namespace Proyecto_Licorera_Corchos.web
 {
@@ -12,7 +16,7 @@ namespace Proyecto_Licorera_Corchos.web
         public static WebApplicationBuilder AddCustomBuilderConfiguration(this WebApplicationBuilder builder)
         {
             //aca se hacen las modificaciones al builder
-
+ 
             //data context
 
             builder.Services.AddDbContext<DataContext>(configuration =>
@@ -20,8 +24,38 @@ namespace Proyecto_Licorera_Corchos.web
                 configuration.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection"));
             });
 
+            //Services
+
+            AddServices(builder);
+
+            //toast notification
+            builder.Services.AddNotyf(config => 
+             { 
+                config.DurationInSeconds = 10;
+                config.IsDismissable = true;
+                config.Position = NotyfPosition.BottomRight; 
+             });
 
             return builder;
         }
+
+
+        public static void AddServices( WebApplicationBuilder builder)
+
+        {
+            builder.Services.AddScoped<ISalesService, SalesService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ISectionsService, SectionsService>();
+        }
+
+        public static WebApplication AddCustomWebAppConfiguration(this WebApplication app)
+        {
+            app.UseNotyf();
+            return app;
+        }
+
+
     }
 }
