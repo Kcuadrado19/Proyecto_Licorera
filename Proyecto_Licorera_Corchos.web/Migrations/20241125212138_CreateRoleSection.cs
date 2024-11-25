@@ -5,7 +5,7 @@
 namespace Proyecto_Licorera_Corchos.web.Migrations
 {
     /// <inheritdoc />
-    public partial class SyncDatabase : Migration
+    public partial class CreateRoleSection : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

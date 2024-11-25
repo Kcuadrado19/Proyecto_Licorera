@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
+using static Proyecto_Licorera_Corchos.web.Data.Entities.IdentityUserToken;
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
@@ -22,8 +23,18 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
         [EmailAddress(ErrorMessage = "Introduce un correo electrónico válido.")]
         public override string Email { get; set; }
 
+        public int? LicoreraRoleId { get; set; } 
         // Relación con las ventas realizadas por el usuario
         public ICollection<Sales> Sales { get; set; }
+
+        // Claves foráneas para RolePermission
+        public int? RolePermissionRoleId { get; set; }
+        public int? RolePermissionPermissionId { get; set; }
+        public RolePermission? RolePermission { get; set; } // Relación con RolePermission
+        public LicoreraRole? LicoreraRole { get; set; }
+
+        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public virtual ICollection<ApplicationUserToken> UserTokens { get; set; }
     }
 }
 
