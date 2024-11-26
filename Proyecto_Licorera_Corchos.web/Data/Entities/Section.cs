@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
@@ -16,5 +16,8 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
 
         [Display(Name = "¿Está Oculta?")]
         public bool IsHidden { get; set; }
+
+        public ICollection<RoleSection>? RoleSections { get; set; }
     }
 }
+
