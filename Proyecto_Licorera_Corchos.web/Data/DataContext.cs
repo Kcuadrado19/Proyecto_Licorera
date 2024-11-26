@@ -37,6 +37,13 @@ namespace Proyecto_Licorera_Corchos.web.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            ConfigureKeys(modelBuilder);
+            ConfigureIndexes(modelBuilder);
+
+        }
+
+        private void ConfigureKeys(ModelBuilder modelBuilder) 
+        {
             // Configurar la relación muchos a muchos entre IdentityRole y Permission
             modelBuilder.Entity<RolePermission>()
                 .HasKey(rp => new { rp.RoleId, rp.PermissionId });
@@ -52,10 +59,10 @@ namespace Proyecto_Licorera_Corchos.web.Data
                 .HasForeignKey(rp => rp.PermissionId);
 
             modelBuilder.Entity<ApplicationUser>()
-        .HasOne(u => u.RolePermission) // Propiedad de navegación en ApplicationUser
-        .WithMany(rp => rp.Users)      // Propiedad de navegación en RolePermission
-        .HasForeignKey(u => new { u.RolePermissionRoleId, u.RolePermissionPermissionId })
-        .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(u => u.RolePermission) // Propiedad de navegación en ApplicationUser
+                .WithMany(rp => rp.Users)      // Propiedad de navegación en RolePermission
+                .HasForeignKey(u => new { u.RolePermissionRoleId, u.RolePermissionPermissionId })
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ApplicationUserRole>()
                  .HasOne(ur => ur.User)
@@ -88,9 +95,19 @@ namespace Proyecto_Licorera_Corchos.web.Data
 
         }
 
+        private void ConfigureIndexes(ModelBuilder modelBuilder) 
+        {
+            // Índices únicos para nombres
+            modelBuilder.Entity<Section>()
+                .HasIndex(s => s.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<Permission>()
+               .HasIndex(p => p.Name)
+               .IsUnique();
 
 
-
+        }
 
 
 

@@ -18,6 +18,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
         Task<Response<RoleDTO>> CreateAsync(RoleDTO dto);
         Task<Response<RoleDTO>> EditAsync(RoleDTO dto);
         Task<Response<PaginationResponse<IdentityRole>>> GetListAsync(PaginationRequest request);
+
         Task<Response<RoleDTO>> GetOneAsync(string id);
         Task<Response<List<PermissionDTO>>> GetPermissionsAsync();
         Task<Response<List<SectionDTO>>> GetSectionsAsync();

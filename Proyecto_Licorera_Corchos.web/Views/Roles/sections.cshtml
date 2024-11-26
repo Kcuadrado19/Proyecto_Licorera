@@ -1,4 +1,5 @@
-﻿@model Proyecto_Licorera_Corchos.web.DTOs.RoleDTO
+﻿@using Proyecto_Licorera_Corchos.web.Core.Extensions
+@model Proyecto_Licorera_Corchos.web.DTOs.RoleDTO
 
 <div class="card shadow mb-4">
     <div class="card-body">
@@ -13,16 +14,16 @@
                     <div class="col-md-3 mt-3">
                         <h5>@sectionGroup.Key</h5>
 
-                        @foreach (var section in sectionGroup)
+                        @foreach (var item in sectionGroup)
                         {
                             <div class="form-check form-switch">
                                 <input class="form-check-input section"
                                        type="checkbox"
-                                       data-section-id="@section.Id"
-                                       id="section_@section.Id"
-                                @(section.Selected ? "checked" : "") />
+                                       data-section-id="@item.Id"
+                                       id="section_@item.Id"
+                                @item.Selected ? "checked" : "") />
 
-                                <label class="form-check-label" for="section_@section.Id">@section.Name</label>
+                                <label class="form-check-label" for="section_@item.Id">@item.Name</label>
                             </div>
                         }
                     </div>
