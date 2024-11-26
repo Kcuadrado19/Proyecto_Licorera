@@ -1,20 +1,31 @@
-﻿@model List<string>
+﻿@model Proyecto_Licorera_Corchos.web.DTOs.RoleDTO
 
-@{
-    ViewData["Title"] = "Permisos - Licorería";
-}
+<div class="card shadow mb-4">
+    <div class="card-body">
 
-<h2>Administrar Permisos</h2>
+        <h3 class="card-title">Permisos</h3>
 
-<p>Aquí puedes gestionar los permisos asignados a los roles.</p>
+        <div class="row">
+            @foreach (var module in Model.Permissions.GroupBy(p => p.Module))
+            {
+                <div class="col-md-3 mt-3">
+                    <h5>@module.Key</h5>
 
-@foreach (var permission in Model)
-{
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="@permission" />
-        <label class="form-check-label" for="@permission">@permission</label>
+                    @foreach (var permission in module)
+                    {
+                        <div class="form-check form-switch">
+                            <input class="form-check-input permission"
+                                   type="checkbox"
+                                   data-permission-id="@permission.Id"
+                                   id="permission_@permission.Id"
+                            @(permission.Selected ? "checked" : "") />
+
+                            <label class="form-check-label" for="permission_@permission.Id">@permission.Description</label>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
     </div>
-}
-
-<a asp-action="Index" class="btn btn-secondary mt-3">Volver a Roles</a>
-
+</div>

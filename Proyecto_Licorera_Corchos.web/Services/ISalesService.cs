@@ -110,7 +110,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
 
                 if (sales == null)
                 {
-                    return ResponseHelper<Sales>.MakeResposeFail("La venta con el id indicado no existe");
+                    return ResponseHelper<Sales>.MakeResponseFail("La venta con el id indicado no existe");
                 }
                 return ResponseHelper<Sales>.MakeResponseSuccess(sales);
             }
