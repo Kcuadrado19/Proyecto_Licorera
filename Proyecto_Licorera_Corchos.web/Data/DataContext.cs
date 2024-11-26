@@ -25,6 +25,8 @@ namespace Proyecto_Licorera_Corchos.web.Data
 
         public DbSet<Section> Sections { get; set; }
 
+        public DbSet<RoleSection> RoleSections { get; set; }
+
         public DbSet<ApplicationUserRole> UserRoles { get; set; }
         public DbSet<ApplicationUserToken> UserTokens { get; set; }
 
@@ -85,6 +87,13 @@ namespace Proyecto_Licorera_Corchos.web.Data
                 .OnDelete(DeleteBehavior.Cascade);
 
         }
+
+
+
+
+
+
+
     }
 }
 

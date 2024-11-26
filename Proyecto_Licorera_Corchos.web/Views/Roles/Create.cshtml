@@ -1,26 +1,68 @@
-﻿@model string
+﻿@model Proyecto_Licorera_Corchos.web.DTOs.RoleDTO
 
 @{
-    ViewData["Title"] = "Crear Rol - Licorería";
+    ViewData["Title"] = "Nuevo Rol - Licorería";
 }
 
-<h2>Crear Nuevo Rol</h2>
+<div class="pagetitle">
+    <h1>Nuevo Rol</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item active"><a asp-action="Index">Roles</a></li>
+            <li class="breadcrumb-item active">Nuevo Rol</li>
+        </ol>
+    </nav>
+</div>
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label for="roleName">Nombre del Rol</label>
-        <input type="text" class="form-control" id="roleName" name="roleName" required />
+<section class="section dashboard">
+    @* Formulario de creación de Rol *@
+    <div class="card">
+        <div class="card-body">
+            <h3 class="card-title">Nuevo Rol</h3>
+
+            <form class="row g-3" asp-action="Create" method="POST" id="frmCreate">
+                <partial name="_Role" />
+            </form>
+        </div>
     </div>
 
-    <h4>Permisos</h4>
-    <div class="form-check">
-        @foreach (var permission in (List<string>)ViewBag.Permissions)
-        {
-            <input type="checkbox" class="form-check-input" name="permissions" value="@permission" id="@permission" />
-            <label class="form-check-label" for="@permission">@permission</label>
-        }
-    </div>
+    @* Secciones *@
+    <partial name="_Sections" />
 
-    <button type="submit" class="btn btn-success mt-3">Crear</button>
-    <a asp-action="Index" class="btn btn-secondary mt-3">Cancelar</a>
-</form>
+    @* Permisos *@
+    <partial name="_Permissions" />
+
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary" form="frmCreate" id="btnCreate">Guardar</button>
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</section>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        $(document).ready(function () {
+            $('#btnCreate').click(function (event) {
+                // Capturar Permisos
+                const permissions = $('.permission:checked');
+                let permissionIds = [];
+                permissions.each(function () {
+                    const permissionId = $(this).data('permission-id');
+                    permissionIds.push(permissionId);
+                });
+                $('#permissionIds').val(JSON.stringify(permissionIds));
+
+                // Capturar Secciones
+                const sections = $('.section:checked');
+                let sectionIds = [];
+                sections.each(function () {
+                    const sectionId = $(this).data('section-id');
+                    sectionIds.push(sectionId);
+                });
+                $('#sectionIds').val(JSON.stringify(sectionIds));
+            });
+        });
+    </script>
+}

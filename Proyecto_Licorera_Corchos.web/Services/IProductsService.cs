@@ -119,7 +119,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
 
                 if (product is null)
                 {
-                    return ResponseHelper<Product>.MakeResposeFail("El producto con el id indicado no existe");
+                    return ResponseHelper<Product>.MakeResponseFail("El producto con el id indicado no existe");
                 }
                 return ResponseHelper<Product>.MakeResponseSuccess(product);
             }
@@ -136,7 +136,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 var product = await _context.Product.FindAsync(Id);
                 if (product == null)
                 {
-                    return ResponseHelper<Product>.MakeResposeFail("Producto no encontrado.");
+                    return ResponseHelper<Product>.MakeResponseFail("Producto no encontrado.");
                 }
 
                 _context.Product.Remove(product);

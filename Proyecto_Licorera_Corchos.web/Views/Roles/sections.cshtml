@@ -1,0 +1,38 @@
+﻿@model Proyecto_Licorera_Corchos.web.DTOs.RoleDTO
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+
+        <h3 class="card-title">Secciones</h3>
+
+        <div class="row">
+            @if (Model.Sections != null && Model.Sections.Any())
+            {
+                @foreach (var sectionGroup in Model.Sections.GroupBy(s => s.Name != null ? s.Name[0] : '-'))
+                {
+                    <div class="col-md-3 mt-3">
+                        <h5>@sectionGroup.Key</h5>
+
+                        @foreach (var section in sectionGroup)
+                        {
+                            <div class="form-check form-switch">
+                                <input class="form-check-input section"
+                                       type="checkbox"
+                                       data-section-id="@section.Id"
+                                       id="section_@section.Id"
+                                @(section.Selected ? "checked" : "") />
+
+                                <label class="form-check-label" for="section_@section.Id">@section.Name</label>
+                            </div>
+                        }
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted">No hay secciones disponibles.</p>
+            }
+        </div>
+
+    </div>
+</div>
