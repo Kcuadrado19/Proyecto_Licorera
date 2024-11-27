@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
@@ -20,3 +20,4 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
         public ICollection<RoleSection>? RoleSections { get; set; }
     }
 }
+

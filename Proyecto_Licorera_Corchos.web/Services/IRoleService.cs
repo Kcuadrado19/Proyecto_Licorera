@@ -1,45 +1,40 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Proyecto_Licorera_Corchos.web.Data;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
 using Proyecto_Licorera_Corchos.web.DTOs;
-using Proyecto_Licorera_Corchos.web.Helpers;
-using Proyecto_Licorera_Corchos.web.Core.Pagination;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Proyecto_Licorera_Corchos.web.Core;
+using Proyecto_Licorera_Corchos.web.Core.Pagination;
+using Proyecto_Licorera_Corchos.web.Helpers;
+using Proyecto_Licorera_Corchos.web.RoleManagement;
 
 namespace Proyecto_Licorera_Corchos.web.Services
 {
-    public interface IRoleService
+    public interface IRolesService
     {
-        Task<Response<RoleDTO>> CreateAsync(RoleDTO dto);
-        Task<Response<RoleDTO>> EditAsync(RoleDTO dto);
-        Task<Response<PaginationResponse<IdentityRole>>> GetListAsync(PaginationRequest request);
-
-        Task<Response<RoleDTO>> GetOneAsync(string id);
-        Task<Response<List<PermissionDTO>>> GetPermissionsAsync();
-        Task<Response<List<SectionDTO>>> GetSectionsAsync();
+        Task<Response<RoleDto>> CreateAsync(RoleDto dto);
+        Task<Response<RoleDto>> EditAsync(RoleDto dto);
+        Task<Response<PaginationResponse<RoleDto>>> GetListAsync(PaginationRequest request);
+        Task<Response<RoleDto>> GetOneAsync(int id);
+        Task<Response<List<PermissionDto>>> GetPermissionsAsync();
+        Task<Response<List<SectionDto>>> GetSectionsAsync();
     }
-
-    public class RolesService : IRoleService
+    public class RolesService : IRolesService
     {
         private readonly DataContext _context;
 
         public RolesService(DataContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<Response<RoleDTO>> CreateAsync(RoleDTO dto)
+        public async Task<Response<RoleDto>> CreateAsync(RoleDto dto)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                var role = new IdentityRole { Name = dto.Name };
-                _context.Roles.Add(role);
+                var role = new LicoreraRole { Name = dto.Name };
+                _context.LicoreraRoles.Add(role);
                 await _context.SaveChangesAsync();
 
                 if (!string.IsNullOrWhiteSpace(dto.PermissionIds))
@@ -73,19 +68,29 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return ResponseHelper<RoleDTO>.MakeResponseSuccess(dto, "Rol creado con éxito.");
+                return ResponseHelper<RoleDto>.MakeResponseSuccess(dto, "Rol creado con éxito.");
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
-                return ResponseHelper<RoleDTO>.MakeResponseFail(ex.Message);
+                return ResponseHelper<RoleDto>.MakeResponseFail(ex);
             }
         }
 
-        public async Task<Response<RoleDTO>> EditAsync(RoleDTO dto)
+        public async Task<Response<RoleDto>> EditAsync(RoleDto dto)
         {
             try
             {
+                var role = await _context.LicoreraRoles.FindAsync(dto.Id);
+                if (role == null)
+                {
+                    return ResponseHelper<RoleDto>.MakeResponseFail("Rol no encontrado.");
+                }
+
+                role.Name = dto.Name;
+                _context.LicoreraRoles.Update(role);
+
+                // Actualizar permisos
                 var existingPermissions = await _context.RolePermissions
                     .Where(rp => rp.RoleId == dto.Id)
                     .ToListAsync();
@@ -105,6 +110,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
                     }
                 }
 
+                // Actualizar secciones
                 var existingSections = await _context.RoleSections
                     .Where(rs => rs.RoleId == dto.Id)
                     .ToListAsync();
@@ -125,47 +131,62 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 }
 
                 await _context.SaveChangesAsync();
-                return ResponseHelper<RoleDTO>.MakeResponseSuccess(dto, "Rol actualizado con éxito.");
+                return ResponseHelper<RoleDto>.MakeResponseSuccess(dto, "Rol actualizado con éxito.");
             }
             catch (Exception ex)
             {
-                return ResponseHelper<RoleDTO>.MakeResponseFail(ex.Message);
+                return ResponseHelper<RoleDto>.MakeResponseFail(ex);
             }
         }
 
-        public async Task<Response<PaginationResponse<IdentityRole>>> GetListAsync(PaginationRequest request)
+        public async Task<Response<PaginationResponse<RoleDto>>> GetListAsync(PaginationRequest request)
         {
-            var query = _context.Roles.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(request.Filter))
+            try
             {
-                query = query.Where(r => r.Name.Contains(request.Filter));
+                var query = _context.LicoreraRoles.AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(request.Filter))
+                {
+                    query = query.Where(r => r.Name.Contains(request.Filter));
+                }
+
+                var pagedList = await PagedList<LicoreraRole>.ToPagedListAsync(query, request);
+
+                var result = new PaginationResponse<RoleDto>
+                {
+                    List = (PagedList<RoleDto>)pagedList.Select(r => new RoleDto
+                    {
+                        Id = r.Id,
+                        Name = r.Name ?? string.Empty // Aseguramos que no haya valores nulos
+                    }).ToList(),
+                    TotalCount = pagedList.TotalCount,
+                    RecordsPerPage = pagedList.RecordsPerPage,
+                    CurrentPage = pagedList.CurrentPage,
+                    TotalPages = pagedList.TotalPages,
+                    Filter = request.Filter
+                };
+
+                return ResponseHelper<PaginationResponse<RoleDto>>.MakeResponseSuccess(result, "Roles obtenidos con éxito.");
             }
-
-            var pagedList = await PagedList<IdentityRole>.ToPagedListAsync(query, request);
-            return ResponseHelper<PaginationResponse<IdentityRole>>.MakeResponseSuccess(new PaginationResponse<IdentityRole>
+            catch (Exception ex)
             {
-                List = pagedList,
-                TotalCount = pagedList.TotalCount,
-                RecordsPerPage = pagedList.RecordsPerPage,
-                CurrentPage = pagedList.CurrentPage,
-                TotalPages = pagedList.TotalPages,
-                Filter = request.Filter
-            }, "Roles obtenidos con éxito.");
+                return ResponseHelper<PaginationResponse<RoleDto>>.MakeResponseFail(ex);
+            }
         }
 
-        public async Task<Response<RoleDTO>> GetOneAsync(string id)
+
+        public async Task<Response<RoleDto>> GetOneAsync(int id)
         {
-            var role = await _context.Roles.FindAsync(id);
+            var role = await _context.LicoreraRoles.FindAsync(id);
             if (role == null)
             {
-                return ResponseHelper<RoleDTO>.MakeResponseFail("Rol no encontrado.");
+                return ResponseHelper<RoleDto>.MakeResponseFail("Rol no encontrado.");
             }
 
             var permissions = await GetPermissionsAsync();
             var sections = await GetSectionsAsync();
 
-            return ResponseHelper<RoleDTO>.MakeResponseSuccess(new RoleDTO
+            return ResponseHelper<RoleDto>.MakeResponseSuccess(new RoleDto
             {
                 Id = role.Id,
                 Name = role.Name,
@@ -174,9 +195,9 @@ namespace Proyecto_Licorera_Corchos.web.Services
             });
         }
 
-        public async Task<Response<List<PermissionDTO>>> GetPermissionsAsync()
+        public async Task<Response<List<PermissionDto>>> GetPermissionsAsync()
         {
-            var permissions = await _context.Permissions.Select(p => new PermissionDTO
+            var permissions = await _context.Permissions.Select(p => new PermissionDto
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -184,20 +205,19 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 Module = p.Module
             }).ToListAsync();
 
-            return ResponseHelper<List<PermissionDTO>>.MakeResponseSuccess(permissions);
+            return ResponseHelper<List<PermissionDto>>.MakeResponseSuccess(permissions);
         }
 
-        public async Task<Response<List<SectionDTO>>> GetSectionsAsync()
+        public async Task<Response<List<SectionDto>>> GetSectionsAsync()
         {
-            var sections = await _context.Sections.Select(s => new SectionDTO
+            var sections = await _context.Sections.Select(s => new SectionDto
             {
                 Id = s.Id,
                 Name = s.Name,
-                Description = s.Description,
-                IsHidden = s.IsHidden
+                Description = s.Description
             }).ToListAsync();
 
-            return ResponseHelper<List<SectionDTO>>.MakeResponseSuccess(sections);
+            return ResponseHelper<List<SectionDto>>.MakeResponseSuccess(sections);
         }
     }
 }

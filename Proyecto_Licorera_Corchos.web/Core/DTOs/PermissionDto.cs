@@ -1,15 +1,9 @@
-﻿namespace Proyecto_Licorera_Corchos.web.DTOs
+﻿using Proyecto_Licorera_Corchos.web.Data.Entities;
+
+namespace Proyecto_Licorera_Corchos.web.DTOs
 {
-    public class PermissionDTO
+    public class PermissionDto : Permission
     {
-        public int Id { get; set; } // Identificador del permiso
-
-        public string Name { get; set; } // Nombre del permiso
-
-        public string Description { get; set; } // Descripción del permiso
-
-        public string Module { get; set; } // Módulo al que pertenece el permiso
-
-        public bool Selected { get; set; } // Indica si el permiso está seleccionado
+        public bool Selected { get; set; }
     }
 }

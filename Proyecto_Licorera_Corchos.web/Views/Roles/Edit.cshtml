@@ -1,4 +1,4 @@
-﻿@model Proyecto_Licorera_Corchos.web.DTOs.RoleDTO
+﻿@model Proyecto_Licorera_Corchos.web.DTOs.RoleDto
 
 @{
     ViewData["Title"] = "Editar Rol - Licorería";
@@ -17,14 +17,13 @@
 
 <section class="section dashboard">
 
-    @* Formulario de edición de Rol *@
+    @* Formulario de edición *@
     <div class="card">
         <div class="card-body">
             <h3 class="card-title">Editar Rol</h3>
 
             <form class="row g-3" asp-action="Edit" method="POST" id="frmUpdate">
                 <input type="hidden" asp-for="Id" />
-
                 <partial name="_Role" />
             </form>
         </div>

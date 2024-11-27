@@ -56,6 +56,16 @@
             </a>
         </li>
 
+        <!-- Botón para Sectiones -->
+        <li class="nav-item">
+            <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Sections" ? "" : "collapsed")"
+               asp-controller="Sections"
+               asp-action="Index">
+                <i class="bi bi-person"></i>
+                <span>Secciones</span>
+            </a>
+        </li>
+
         <!-- Botón para Roles -->
         <li class="nav-item">
             <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Roles" ? "" : "collapsed")"
@@ -76,6 +86,7 @@
             </a>
         </li>
 
+      
 
     </ul>
 

@@ -1,4 +1,4 @@
-﻿@model Proyecto_Licorera_Corchos.web.DTOs.RoleDTO
+﻿@model Proyecto_Licorera_Corchos.web.DTOs.RoleDto
 
 @{
     ViewData["Title"] = "Nuevo Rol - Licorería";
@@ -16,7 +16,8 @@
 </div>
 
 <section class="section dashboard">
-    @* Formulario de creación de Rol *@
+
+    @* Formulario de creación *@
     <div class="card">
         <div class="card-body">
             <h3 class="card-title">Nuevo Rol</h3>
@@ -37,6 +38,7 @@
         <button type="submit" class="btn btn-primary" form="frmCreate" id="btnCreate">Guardar</button>
         <a asp-action="Index" class="btn btn-secondary">Volver</a>
     </div>
+
 </section>
 
 @section Scripts {
