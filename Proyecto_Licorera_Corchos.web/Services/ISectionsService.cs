@@ -5,6 +5,8 @@ using Proyecto_Licorera_Corchos.web.Core.Pagination;
 using Proyecto_Licorera_Corchos.web.Data;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
 using Proyecto_Licorera_Corchos.web.Helpers;
+using Proyecto_Licorera_Corchos.web.Requests;
+
 //using Proyecto_Licorera_Corchos.web.Requests;
 using System;
 using System.Linq;
@@ -20,6 +22,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
         Task<Response<Section>> EditAsync(Section model);
         Task<Response<PaginationResponse<Section>>> GetListAsync(PaginationRequest request);
         Task<Response<Section>> GetOneAsync(int id);
+        Task ToggleAsync(ToggleSectionStatusRequest request);
         //Task<Response<Section>> ToggleAsync(ToggleSectionStatusRequest request);
 
     }

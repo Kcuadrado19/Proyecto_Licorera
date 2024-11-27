@@ -27,6 +27,7 @@ namespace Proyecto_Licorera_Corchos.web.Helpers
                 },
                 IsSuccess = false,
                 Message = message,
+                Result = default
             };
         }
 
@@ -35,14 +36,10 @@ namespace Proyecto_Licorera_Corchos.web.Helpers
         {
             return new Response<T>
             {
-                Errors = new List<string>
-                {
-                    message
-                },
                 IsSuccess = false,
                 Message = message,
+                Result = default
             };
         }
     }
 }
-

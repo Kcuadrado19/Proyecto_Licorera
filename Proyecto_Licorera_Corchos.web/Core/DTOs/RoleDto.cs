@@ -2,21 +2,20 @@
 
 namespace Proyecto_Licorera_Corchos.web.DTOs
 {
-    public class RoleDTO
+    public class RoleDto
     {
-        public string Id { get; set; } // Identificador del rol (string para compatibilidad con Identity)
+        public int Id { get; set; } // Cambiar el tipo a int si la base de datos usa int como Id
 
-        [Display(Name = "Rol")]
-        [MaxLength(64, ErrorMessage = "El campo {0} debe tener máximo {1} caracteres.")]
-        [Required(ErrorMessage = "El campo {0} es requerido.")]
+        [Required(ErrorMessage = "El nombre del rol es obligatorio.")]
+        [MaxLength(64, ErrorMessage = "El nombre no puede exceder los 64 caracteres.")]
         public string Name { get; set; }
 
-        public List<PermissionDTO>? Permissions { get; set; } // Lista de permisos relacionados
+        public List<PermissionDto> Permissions { get; set; } = new List<PermissionDto>();
+        public string PermissionIds { get; set; } = string.Empty;
 
-        public string? PermissionIds { get; set; } // IDs de los permisos en formato JSON
-
-        public List<SectionDTO>? Sections { get; set; } // Lista de secciones relacionadas
-
-        public string? SectionIds { get; set; } // IDs de las secciones en formato JSON
+        public List<SectionDto> Sections { get; set; } = new List<SectionDto>();
+        public string SectionIds { get; set; } = string.Empty;
     }
 }
+
+

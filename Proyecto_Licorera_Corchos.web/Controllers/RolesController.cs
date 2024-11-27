@@ -1,103 +1,131 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Proyecto_Licorera_Corchos.web.DTOs;
 using Proyecto_Licorera_Corchos.web.Services;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;
+using Proyecto_Licorera_Corchos.web.Core;
+using Proyecto_Licorera_Corchos.web.Core.Pagination;
+using AspNetCoreHero.ToastNotification.Abstractions;
+using Proyecto_Licorera_Corchos.web.Attributes;
+
+
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class RolesController : Controller
     {
-        private readonly IRoleService _roleService;
+        private readonly IRolesService _roleService;
+        private readonly INotyfService _notifyService;
 
-        public RolesController(IRoleService roleService)
+        public RolesController(IRolesService roleService, INotyfService notifyService)
         {
             _roleService = roleService;
+            _notifyService = notifyService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 1)
+        [CustomAuthorize(permission: "showRoles", module: "Roles")]
+        public async Task<IActionResult> Index([FromQuery] int? RecordsPerPage,
+                                               [FromQuery] int? Page,
+                                               [FromQuery] string? Filter)
         {
-            var roles = await _roleService.GetAllRolesAsync();
-            ViewBag.CurrentPage = page;
-            ViewBag.TotalPages = (int)System.Math.Ceiling(roles.Count / 10.0);
-            return View(roles);
+            PaginationRequest paginationRequest = new PaginationRequest
+            {
+                RecordsPerPage = RecordsPerPage ?? 15,
+                Page = Page ?? 1,
+                Filter = Filter,
+            };
+
+            var response = await _roleService.GetListAsync(paginationRequest);
+
+            if (!response.IsSuccess)
+            {
+                _notifyService.Error(response.Message);
+                return RedirectToAction("Error", "Home");
+            }
+
+            return View(response.Result);
         }
 
         [HttpGet]
+        [CustomAuthorize(permission: "createRoles", module: "Roles")]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Permissions = await _roleService.GetPermissionsAsync();
-            return View();
+            var permissionsResponse = await _roleService.GetPermissionsAsync();
+            var sectionsResponse = await _roleService.GetSectionsAsync();
+
+            if (!permissionsResponse.IsSuccess || !sectionsResponse.IsSuccess)
+            {
+                _notifyService.Error("Error al cargar permisos o secciones.");
+                return RedirectToAction(nameof(Index));
+            }
+
+            var dto = new RoleDto
+            {
+                Permissions = permissionsResponse.Result,
+                Sections = sectionsResponse.Result
+            };
+
+            return View(dto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string roleName, List<string> permissions)
+        [CustomAuthorize(permission: "createRoles", module: "Roles")]
+        public async Task<IActionResult> Create(RoleDto dto)
         {
-            if (string.IsNullOrEmpty(roleName))
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "El nombre del rol es requerido.");
-                return View();
+                _notifyService.Error("Debe ajustar los errores de validación.");
+                return View(dto);
             }
 
-            var result = await _roleService.CreateRoleAsync(roleName);
-            if (result)
+            var createResponse = await _roleService.CreateAsync(dto);
+
+            if (createResponse.IsSuccess)
             {
-                TempData["SuccessMessage"] = "Rol creado con éxito.";
-                return RedirectToAction("Index");
+                _notifyService.Success(createResponse.Message);
+                return RedirectToAction(nameof(Index));
             }
 
-            ModelState.AddModelError("", "Error al crear el rol.");
-            return View();
+            _notifyService.Error(createResponse.Message);
+            return View(dto);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(string roleId)
+        [CustomAuthorize(permission: "updateRoles", module: "Roles")]
+        public async Task<IActionResult> Edit(int id)
         {
-            var role = await _roleService.GetRoleByIdAsync(roleId);
-            if (role == null)
+            var response = await _roleService.GetOneAsync(id);
+
+            if (!response.IsSuccess)
             {
-                TempData["ErrorMessage"] = "El ID del rol no es válido.";
-                return RedirectToAction("Index");
+                _notifyService.Error(response.Message);
+                return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Permissions = await _roleService.GetPermissionsAsync();
-            return View(role);
+            return View(response.Result);
         }
 
+      
         [HttpPost]
-        public async Task<IActionResult> Edit(string roleId, string newRoleName, List<string> selectedPermissions)
+        [CustomAuthorize(permission: "updateRoles", module: "Roles")]
+        public async Task<IActionResult> Edit(RoleDto dto)
         {
-            if (string.IsNullOrEmpty(newRoleName))
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("", "El nuevo nombre del rol es requerido.");
-                return View();
+                _notifyService.Error("Debe ajustar los errores de validación.");
+                return View(dto);
             }
 
-            var result = await _roleService.UpdateRoleAsync(roleId, newRoleName);
-            if (result)
+            var editResponse = await _roleService.EditAsync(dto);
+
+            if (editResponse.IsSuccess)
             {
-                TempData["SuccessMessage"] = "Rol actualizado con éxito.";
-                return RedirectToAction("Index");
+                _notifyService.Success(editResponse.Message);
+                return RedirectToAction(nameof(Index));
             }
 
-            TempData["ErrorMessage"] = "Error al actualizar el rol.";
-            return View();
+            _notifyService.Error(editResponse.Message);
+            return View(dto);
         }
 
-        public async Task<IActionResult> Delete(string roleId)
-        {
-            var result = await _roleService.DeleteRoleAsync(roleId);
-            if (result)
-            {
-                TempData["SuccessMessage"] = "Rol eliminado con éxito.";
-                return RedirectToAction("Index");
-            }
-
-            TempData["ErrorMessage"] = "Error al eliminar el rol.";
-            return RedirectToAction("Index");
-        }
     }
 }
