@@ -214,16 +214,30 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
             catch (Exception ex)
             {
-                return ResponseHelper<PaginationResponse<ApplicationUser>>.MakeResposeFail(ex);
+                return ResponseHelper<PaginationResponse<ApplicationUser>>.MakeResponseFail(ex);
             }
 
 
         }
 
-        public Task<bool> CurrentUserIsAuthorizedAsync(string permission, string module)
+        public async Task<bool> CurrentUserIsAuthorizedAsync(string permission, string module)
         {
-            throw new NotImplementedException();
+            // Obtén el usuario actual basado en el contexto
+            var user = await _userManager.GetUserAsync(_signInManager.Context.User);
+            if (user == null)
+            {
+                return false; // Si no hay un usuario autenticado, no está autorizado
+            }
+
+            // Verifica si el usuario tiene los permisos necesarios
+            var userPermissions = await _context.RolePermissions
+                .Where(rp => rp.RoleId == user.RoleId && rp.Permission.Module == module && rp.Permission.Name == permission)
+                .ToListAsync();
+
+            // Si encuentra al menos un permiso válido, el usuario está autorizado
+            return userPermissions.Any();
         }
+
 
 
     }

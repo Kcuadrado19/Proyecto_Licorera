@@ -1,17 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Proyecto_Licorera_Corchos.web.Data.Entities;
 
-namespace Proyecto_Licorera_Corchos.web.Data.Entities
+public class RolePermission
 {
-    public class RolePermission
-    {
-        public int RoleId { get; set; }
-        public LicoreraRole Role { get; set; }
+    public int RoleId { get; set; }
+    public LicoreraRole Role { get; set; }
 
-        public int PermissionId { get; set; }
-        public Permission Permission { get; set; }
+    public int PermissionId { get; set; }
+    public Permission Permission { get; set; }
 
-        public ICollection<ApplicationUser> Users { get; set; }
-
-    }
+    // Agregar la colección de usuarios relacionada
+    public ICollection<ApplicationUser> Users { get; set; }
 }
 

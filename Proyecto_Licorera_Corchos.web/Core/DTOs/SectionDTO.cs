@@ -1,15 +1,9 @@
-﻿namespace Proyecto_Licorera_Corchos.web.DTOs
+﻿using Proyecto_Licorera_Corchos.web.Data.Entities;
+
+namespace Proyecto_Licorera_Corchos.web.DTOs
 {
-    public class SectionDTO
+    public class SectionDto : Section
     {
-        public int Id { get; set; } // Identificador de la sección
-
-        public string Name { get; set; } // Nombre de la sección
-
-        public string? Description { get; set; } // Descripción de la sección
-
-        public bool IsHidden { get; set; } // Indica si la sección está oculta
-
-        public bool Selected { get; set; } // Indica si la sección está seleccionada
+        public bool Selected { get; set; } = false;
     }
 }

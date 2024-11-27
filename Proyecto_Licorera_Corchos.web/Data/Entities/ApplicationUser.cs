@@ -15,15 +15,21 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
 
         [Required(ErrorMessage = "El puesto es obligatorio.")]
         [StringLength(50, ErrorMessage = "El puesto no debe superar los 50 caracteres.")]
-        [Display(Name = "Rol (Admin o Vendedor")]
+        [Display(Name = "Rol (Admin o Vendedor)")]
         public string Position { get; set; }
-
 
         [Required(ErrorMessage = "El correo electrónico es obligatorio.")]
         [EmailAddress(ErrorMessage = "Introduce un correo electrónico válido.")]
         public override string Email { get; set; }
 
-        public int? LicoreraRoleId { get; set; } 
+        // Nueva propiedad RoleId agregada para solucionar el error
+        [Display(Name = "ID del Rol")]
+        public int? RoleId { get; set; }
+
+        // Relación con LicoreraRole
+        public int? LicoreraRoleId { get; set; }
+        public LicoreraRole? LicoreraRole { get; set; }
+
         // Relación con las ventas realizadas por el usuario
         public ICollection<Sales> Sales { get; set; }
 
@@ -31,11 +37,9 @@ namespace Proyecto_Licorera_Corchos.web.Data.Entities
         public int? RolePermissionRoleId { get; set; }
         public int? RolePermissionPermissionId { get; set; }
         public RolePermission? RolePermission { get; set; } // Relación con RolePermission
-        public LicoreraRole? LicoreraRole { get; set; }
 
+        // Relación con ApplicationUserRole y ApplicationUserToken
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
         public virtual ICollection<ApplicationUserToken> UserTokens { get; set; }
     }
 }
-
-

@@ -1,4 +1,4 @@
-﻿@model Proyecto_Licorera_Corchos.web.Core.Pagination.PaginationResponse<Proyecto_Licorera_Corchos.web.DTOs.RoleDTO>
+﻿@model Proyecto_Licorera_Corchos.web.Core.Pagination.PaginationResponse<Proyecto_Licorera_Corchos.web.DTOs.RoleDto>
 
 @{
     ViewData["Title"] = "Roles - Licorería";
@@ -31,7 +31,6 @@
 
         <div class="card-body mt-2">
 
-            <!-- Barra de búsqueda -->
             <form class="navbar-search" asp-action="Index" method="GET">
                 <input type="hidden" name="Page" value="@Model.CurrentPage" />
                 <input type="hidden" name="RecordsPerPage" value="@Model.RecordsPerPage" />
@@ -45,7 +44,6 @@
                 </div>
             </form>
 
-            <!-- Tabla de Roles -->
             <table class="table table-bordered">
                 <thead>
                     <tr>
@@ -75,7 +73,6 @@
                 </tbody>
             </table>
 
-            <!-- Paginación -->
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center">
                     <!-- Primero -->
@@ -95,7 +92,7 @@
                     {
                         <li class="page-item @(Model.CurrentPage == page ? "active" : "")">
                             <a class="page-link" asp-action="Index" asp-route-Page="@(@page)" asp-route-Filter="@Model.Filter" asp-route-RecordsPerPage="@Model.RecordsPerPage">
-
+                               
                             </a>
                         </li>
                     }
@@ -113,7 +110,6 @@
                     </li>
                 </ul>
             </nav>
-
         </div>
     </div>
 </section>
