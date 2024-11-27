@@ -2,8 +2,8 @@
 
 namespace Proyecto_Licorera_Corchos.web.DTOs
 {
-    public class PermissionDto : Permission
+    public class SectionDto : Section
     {
-        public bool Selected { get; set; }
+        public bool Selected { get; set; } = false;
     }
 }

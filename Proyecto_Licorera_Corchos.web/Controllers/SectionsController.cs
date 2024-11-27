@@ -1,6 +1,7 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Proyecto_Licorera_Corchos.web.Core;
+using Proyecto_Licorera_Corchos.web.Attributes;
 using Proyecto_Licorera_Corchos.web.Core.Pagination;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
 using Proyecto_Licorera_Corchos.web.Requests;
@@ -8,6 +9,7 @@ using Proyecto_Licorera_Corchos.web.Services;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
+    [Authorize]
     public class SectionsController : Controller
     {
         private readonly ISectionsService _sectionsService;
@@ -19,8 +21,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             _notifyService = notifyService;
         }
 
-        // GET: /Sections
         [HttpGet]
+        [CustomAuthorize(permission: "showSections", module: "Secciones")]
         public async Task<IActionResult> Index([FromQuery] int? RecordsPerPage,
                                                [FromQuery] int? Page,
                                                [FromQuery] string? Filter)
@@ -36,15 +38,15 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             return View(response.Result);
         }
 
-        // GET: /Sections/Create
         [HttpGet]
+        [CustomAuthorize(permission: "createSections", module: "Secciones")]
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /Sections/Create
         [HttpPost]
+        [CustomAuthorize(permission: "createSections", module: "Secciones")]
         public async Task<IActionResult> Create(Section section)
         {
             try
@@ -64,7 +66,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 }
 
                 _notifyService.Error(response.Message);
-                return View(section); // Regresa el modelo en caso de error
+                return View(section);
             }
             catch (Exception ex)
             {
@@ -73,8 +75,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             }
         }
 
-        // GET: /Sections/Edit/{id}
         [HttpGet]
+        [CustomAuthorize(permission: "updateSections", module: "Secciones")]
         public async Task<IActionResult> Edit([FromRoute] int id)
         {
             var response = await _sectionsService.GetOneAsync(id);
@@ -88,8 +90,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: /Sections/Edit
         [HttpPost]
+        [CustomAuthorize(permission: "updateSections", module: "Secciones")]
         public async Task<IActionResult> Edit(Section section)
         {
             try
@@ -109,7 +111,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 }
 
                 _notifyService.Error(response.Message);
-                return View(section); // Regresa el modelo en caso de error
+                return View(section);
             }
             catch (Exception ex)
             {
@@ -118,8 +120,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             }
         }
 
-        // POST: /Sections/Delete/{id}
         [HttpPost]
+        [CustomAuthorize(permission: "deleteSections", module: "Secciones")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var response = await _sectionsService.DeleteteAsync(id);
@@ -136,8 +138,8 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: /Sections/Toggle
         [HttpPost]
+        [CustomAuthorize(permission: "updateSections", module: "Secciones")]
         public async Task<IActionResult> Toggle(int SectionId, bool Hide)
         {
             var request = new ToggleSectionStatusRequest

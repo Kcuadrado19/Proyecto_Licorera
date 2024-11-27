@@ -45,7 +45,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
             catch (Exception ex)
             {
-                return ResponseHelper<Sales>.MakeResposeFail(ex);
+                return ResponseHelper<Sales>.MakeResponseFail(ex);
             }
         }
 
@@ -60,7 +60,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
             catch (Exception ex)
             {
-                return ResponseHelper<Sales>.MakeResposeFail(ex);
+                return ResponseHelper<Sales>.MakeResponseFail(ex);
             }
         }
 
@@ -96,7 +96,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
             catch (Exception ex)
             {
-                return ResponseHelper<PaginationResponse<Sales>>.MakeResposeFail(ex);
+                return ResponseHelper<PaginationResponse<Sales>>.MakeResponseFail(ex);
             }
         }
 
@@ -110,13 +110,13 @@ namespace Proyecto_Licorera_Corchos.web.Services
 
                 if (sales == null)
                 {
-                    return ResponseHelper<Sales>.MakeResposeFail("La venta con el id indicado no existe");
+                    return ResponseHelper<Sales>.MakeResponseFail("La venta con el id indicado no existe");
                 }
                 return ResponseHelper<Sales>.MakeResponseSuccess(sales);
             }
             catch (Exception ex)
             {
-                return ResponseHelper<Sales>.MakeResposeFail(ex);
+                return ResponseHelper<Sales>.MakeResponseFail(ex);
             }
         }
 
@@ -137,7 +137,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
             catch (Exception ex)
             {
-                return ResponseHelper<Sales>.MakeResposeFail(ex);
+                return ResponseHelper<Sales>.MakeResponseFail(ex);
             }
         }
     }

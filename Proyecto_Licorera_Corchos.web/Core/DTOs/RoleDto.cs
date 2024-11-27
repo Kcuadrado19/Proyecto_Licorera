@@ -1,9 +1,21 @@
-﻿namespace Proyecto_Licorera_Corchos.web.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Proyecto_Licorera_Corchos.web.DTOs
 {
     public class RoleDto
     {
-        public string Id { get; set; } // El ID del rol
-        public string Name { get; set; } // El nombre del rol
-        public List<string> AssignedPermissions { get; set; } = new List<string>(); // Lista de permisos asignados
+        public int Id { get; set; } // Cambiar el tipo a int si la base de datos usa int como Id
+
+        [Required(ErrorMessage = "El nombre del rol es obligatorio.")]
+        [MaxLength(64, ErrorMessage = "El nombre no puede exceder los 64 caracteres.")]
+        public string Name { get; set; }
+
+        public List<PermissionDto> Permissions { get; set; } = new List<PermissionDto>();
+        public string PermissionIds { get; set; } = string.Empty;
+
+        public List<SectionDto> Sections { get; set; } = new List<SectionDto>();
+        public string SectionIds { get; set; } = string.Empty;
     }
 }
+
+

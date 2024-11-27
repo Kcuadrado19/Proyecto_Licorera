@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Proyecto_Licorera_Corchos.web.Data;
 
@@ -11,9 +12,11 @@ using Proyecto_Licorera_Corchos.web.Data;
 namespace Proyecto_Licorera_Corchos.web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241125192510_AddLicoreraRoles")]
+    partial class AddLicoreraRoles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -277,7 +280,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LicoreraRoles", (string)null);
+                    b.ToTable("LicoreraRoles");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Permission", b =>
@@ -303,7 +306,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions", (string)null);
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Product", b =>
@@ -329,7 +332,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.RolePermission", b =>
@@ -344,7 +347,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     b.HasIndex("PermissionId");
 
-                    b.ToTable("RolePermissions", (string)null);
+                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.RoleSection", b =>
@@ -359,7 +362,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     b.HasIndex("SectionId");
 
-                    b.ToTable("RoleSection", (string)null);
+                    b.ToTable("RoleSection");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Sales", b =>
@@ -391,7 +394,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Sales", (string)null);
+                    b.ToTable("Sales");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.Section", b =>
@@ -414,7 +417,7 @@ namespace Proyecto_Licorera_Corchos.web.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sections", (string)null);
+                    b.ToTable("Section");
                 });
 
             modelBuilder.Entity("Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUserRole", b =>

@@ -3,37 +3,42 @@ using Proyecto_Licorera_Corchos.web.Data.Entities;
 
 namespace Proyecto_Licorera_Corchos.web.Helpers
 {
-    public static class ResponseHelper<T> where T : class, new()
+    public static class ResponseHelper<T>
     {
-        public static Response<T> MakeResponseSuccess(T model, string message = "Tarea realizada con éxito")
+        // Método para generar una respuesta exitosa con el modelo y un mensaje opcional
+        public static Response<T> MakeResponseSuccess(T model, string message = "Operación realizada con éxito")
         {
             return new Response<T>
             {
                 IsSuccess = true,
                 Message = message,
-                Result = model ?? new T(), // Asegura que Result no sea null
+                Result = model,
             };
         }
 
-        public static Response<T> MakeResposeFail(Exception ex, string message = "Error al generar la solicitud")
+        // Método para generar una respuesta fallida con una excepción y un mensaje opcional
+        public static Response<T> MakeResponseFail(Exception ex, string message = "Error al procesar la solicitud")
         {
             return new Response<T>
             {
-                Errors = new List<string> { ex.Message },
+                Errors = new List<string>
+                {
+                    ex.Message
+                },
                 IsSuccess = false,
                 Message = message,
-                Result = new T(), // Inicializa Result para evitar null
+                Result = default
             };
         }
 
-        public static Response<T> MakeResposeFail(string message)
+        // Método para generar una respuesta fallida solo con un mensaje
+        public static Response<T> MakeResponseFail(string message)
         {
             return new Response<T>
             {
-                Errors = new List<string> { message },
                 IsSuccess = false,
                 Message = message,
-                Result = new T(), // Inicializa Result para evitar null
+                Result = default
             };
         }
     }
