@@ -17,8 +17,11 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
         public RolesController(IRolesService roleService, INotyfService notifyService)
         {
+
             _roleService = roleService;
             _notifyService = notifyService;
+
+         
         }
 
         [HttpGet]
