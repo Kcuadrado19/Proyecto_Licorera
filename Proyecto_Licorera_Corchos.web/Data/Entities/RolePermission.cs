@@ -2,10 +2,10 @@
 
 public class RolePermission
 {
-    public string RoleId { get; set; }
+    public int RoleId { get; set; }
     public LicoreraRole Role { get; set; }
 
-    public string PermissionId { get; set; }
+    public int PermissionId { get; set; }
     public Permission Permission { get; set; }
 
     // Agregar la colección de usuarios relacionada

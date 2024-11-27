@@ -13,17 +13,7 @@
             </a>
         </li>
 
-        @* @if (await _userService.CurrentUserIsAuthorizedAsync("showSections", "Secciones"))
-        { *@
-            <li class="nav-item">
-                <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Sections" ? "" : "collapsed")"
-                   asp-controller="Sections"
-                   asp-action="Index">
-                    <i class="bi bi-card-checklist"></i>
-                    <span>Secciones</span>
-                </a>
-            </li>
-      @*   } *@
+
 
         <li class="nav-item">
             <a class="nav-link @(ViewContext.RouteData.Values["Controller"].ToString() == "Sales" ? "" : "collapsed")"
