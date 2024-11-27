@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using Proyecto_Licorera_Corchos.web.Core;
 using Proyecto_Licorera_Corchos.web.Core.Pagination;
@@ -6,12 +5,6 @@ using Proyecto_Licorera_Corchos.web.Data;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
 using Proyecto_Licorera_Corchos.web.Helpers;
 using Proyecto_Licorera_Corchos.web.Requests;
-
-//using Proyecto_Licorera_Corchos.web.Requests;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-
 
 namespace Proyecto_Licorera_Corchos.web.Services
 {
@@ -22,15 +15,12 @@ namespace Proyecto_Licorera_Corchos.web.Services
         Task<Response<Section>> EditAsync(Section model);
         Task<Response<PaginationResponse<Section>>> GetListAsync(PaginationRequest request);
         Task<Response<Section>> GetOneAsync(int id);
-        Task ToggleAsync(ToggleSectionStatusRequest request);
-        //Task<Response<Section>> ToggleAsync(ToggleSectionStatusRequest request);
-
+        Task<Response<Section>> ToggleAsync(ToggleSectionStatusRequest request);
     }
 
     public class SectionsService : ISectionsService
     {
         private readonly DataContext _context;
-       
 
         public SectionsService(DataContext context)
         {
@@ -146,29 +136,29 @@ namespace Proyecto_Licorera_Corchos.web.Services
             }
         }
 
-        //public async Task<Response<Section>> ToggleAsync(ToggleSectionStatusRequest request)
-        //{
-        //    try
-        //    {
-        //        var response = await GetOneAsync(request.SectionId);
+        public async Task<Response<Section>> ToggleAsync(ToggleSectionStatusRequest request)
+        {
+            try
+            {
+                var response = await GetOneAsync(request.SectionId);
 
-        //        if (!response.IsSuccess)
-        //        {
-        //            return response;
-        //        }
+                if (!response.IsSuccess)
+                {
+                    return response;
+                }
 
-        //        var section = response.Result;
+                var section = response.Result;
 
-        //        section.IsHidden = request.Hide;
-        //        _context.Sections.Update(section);
-        //        await _context.SaveChangesAsync();
+                section.IsHidden = request.Hide;
+                _context.Sections.Update(section);
+                await _context.SaveChangesAsync();
 
-        //        return ResponseHelper<Section>.MakeResponseSuccess(null, "Sección actualizada con éxito.");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return ResponseHelper<Section>.MakeResponseFail(ex);
-        //    }
-        //}
+                return ResponseHelper<Section>.MakeResponseSuccess(null, "Sección actualizada con éxito.");
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper<Section>.MakeResponseFail(ex);
+            }
+        }
     }
 }

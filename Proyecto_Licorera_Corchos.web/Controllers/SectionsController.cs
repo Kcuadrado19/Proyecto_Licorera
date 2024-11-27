@@ -1,21 +1,19 @@
 using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Proyecto_Licorera_Corchos.web.Attributes;
 using Proyecto_Licorera_Corchos.web.Core.Pagination;
 using Proyecto_Licorera_Corchos.web.Data.Entities;
 using Proyecto_Licorera_Corchos.web.Requests;
 using Proyecto_Licorera_Corchos.web.Services;
-
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
     [Authorize]
     public class SectionsController : Controller
     {
-
         private readonly ISectionsService _sectionsService;
         private readonly INotyfService _notifyService;
-
 
         public SectionsController(ISectionsService sectionsService, INotyfService notifyService)
         {
@@ -24,10 +22,10 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")] // Autorización básica para la acción Index
+        [CustomAuthorize(permission: "showSections", module: "Secciones")]
         public async Task<IActionResult> Index([FromQuery] int? RecordsPerPage,
-                                                       [FromQuery] int? Page,
-                                                       [FromQuery] string? Filter)
+                                               [FromQuery] int? Page,
+                                               [FromQuery] string? Filter)
         {
             var request = new PaginationRequest
             {
@@ -41,21 +39,21 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")] // Autorización básica para la acción Create
+        [CustomAuthorize(permission: "createSections", module: "Secciones")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [CustomAuthorize(permission: "createSections", module: "Secciones")]
         public async Task<IActionResult> Create(Section section)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    _notifyService.Error("Debe ajustar los errores de validación.");
+                    _notifyService.Error("Debe ajustar los errores de validación");
                     return View(section);
                 }
 
@@ -78,7 +76,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [CustomAuthorize(permission: "updateSections", module: "Secciones")]
         public async Task<IActionResult> Edit([FromRoute] int id)
         {
             var response = await _sectionsService.GetOneAsync(id);
@@ -93,14 +91,14 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [CustomAuthorize(permission: "updateSections", module: "Secciones")]
         public async Task<IActionResult> Edit(Section section)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    _notifyService.Error("Debe ajustar los errores de validación.");
+                    _notifyService.Error("Debe ajustar los errores de validación");
                     return View(section);
                 }
 
@@ -123,7 +121,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [CustomAuthorize(permission: "deleteSections", module: "Secciones")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var response = await _sectionsService.DeleteteAsync(id);
@@ -141,7 +139,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [CustomAuthorize(permission: "updateSections", module: "Secciones")]
         public async Task<IActionResult> Toggle(int SectionId, bool Hide)
         {
             var request = new ToggleSectionStatusRequest
