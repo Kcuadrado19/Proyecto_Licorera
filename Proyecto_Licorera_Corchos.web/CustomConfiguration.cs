@@ -45,7 +45,7 @@ namespace Proyecto_Licorera_Corchos.web
         {
             builder.Services.AddScoped<ISalesService, SalesService>();
             builder.Services.AddScoped<IProductService, ProductService>();
-            builder.Services.AddScoped<IRoleService, RoleService>();
+            builder.Services.AddScoped<IRolesService, RolesService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ISectionsService, SectionsService>();
         }
