@@ -33,14 +33,10 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         public IActionResult Login()
         {
             // Crear un LoginViewModel (si lo estás usando)
-            LoginViewModel loginViewModel = new LoginViewModel();
+
 
             // Convertir LoginViewModel a LoginDTO
-            LoginDTO loginDto = new LoginDTO
-            {
-                Email = loginViewModel.Username,
-                Password = loginViewModel.Password,
-                RememberMe = loginViewModel.RememberMe
+    
             };
 
             return View(loginDto);  // Pasar el LoginDTO a la vista
