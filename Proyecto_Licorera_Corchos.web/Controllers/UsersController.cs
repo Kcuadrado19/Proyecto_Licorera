@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
-    [Authorize(Roles = "Admin")] // Solo los administradores pueden gestionar usuarios
+     
     public class UsersController : Controller
     {
 

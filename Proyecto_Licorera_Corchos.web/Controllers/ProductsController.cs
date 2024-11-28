@@ -14,7 +14,7 @@ using Proyecto_Licorera_Corchos.web.Helpers;
 
 namespace Proyecto_Licorera_Corchos.web.Controllers
 {
-    [Authorize(Roles = "Admin")]
+   
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
