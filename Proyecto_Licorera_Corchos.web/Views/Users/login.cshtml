@@ -1,21 +1,120 @@
-﻿@model LoginViewModel
+﻿@model Proyecto_Licorera_Corchos.web.Data.Entities.LoginViewModel
 
-<h2>Iniciar Sesión</h2>
 
-<form asp-action="Login" method="post">
-    <div class="form-group">
-        <label asp-for="Username">Nombre de Usuario</label>
-        <input asp-for="Username" class="form-control" />
-        <span asp-validation-for="Username" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Password">Contraseña</label>
-        <input asp-for="Password" class="form-control" type="password" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <div class="form-group form-check">
-        <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
-        <label asp-for="RememberMe" class="form-check-label">Recordarme</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-</form>
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Pages / Login - Licorera Corchos S.A</title>
+
+    <!-- Favicons -->
+    <link href="~/assets/img/favicon.png" rel="icon">
+    <link href="~/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="~/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="~/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="~/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="~/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="~/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="~/assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <main>
+        <div class="container">
+            <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+                            <div class="d-flex justify-content-center py-4">
+                                <a href="index.html" class="logo d-flex align-items-center w-auto">
+                                    <img src="~/assets/img/logo.png" alt="">
+                                    <span class="d-none d-lg-block">Licorera Corchos S.A</span>
+                                </a>
+                            </div><!-- End Logo -->
+
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <div class="pt-4 pb-2">
+                                        <h5 class="card-title text-center pb-0 fs-4">Iniciar sesión</h5>
+                                        <p class="text-center small">Ingrese su usuario y contraseña para acceder al sistema</p>
+                                    </div>
+
+                                    <form class="row g-3" asp-action="Login" method="POST" novalidate>
+
+                                        <!-- Campo de Email -->
+                                        <div class="col-12">
+                                            <label for="Email" class="form-label">@Html.DisplayNameFor(model => model.Username)</label>
+                                            <div class="input-group has-validation">
+                                                <span class="input-group-text" id="inputGroupPrepend">@@</span>
+                                                <input asp-for="Username" class="form-control" type="email" id="Email" />
+                                            </div>
+                                            <span asp-validation-for="Username" class="text-danger"></span>
+                                        </div>
+
+                                        <!-- Campo de Contraseña -->
+                                        <div class="col-12">
+                                            <label for="Password" class="form-label">@Html.DisplayNameFor(model => model.Password)</label>
+                                            <input asp-for="Password" class="form-control" type="password" id="Password" />
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+
+                                        <!-- Campo de RememberMe -->
+                                        <div class="col-12">
+                                            <div class="form-check">
+                                                <input asp-for="RememberMe" class="form-check-input" type="checkbox" id="RememberMe" />
+                                                <label class="form-check-label" for="RememberMe">Recuérdame</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Botón de inicio de sesión -->
+                                        <div class="col-12">
+                                            <button class="btn btn-primary w-100" type="submit">Iniciar sesión</button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main><!-- End #main -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="~/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    @await Component.InvokeAsync("Notyf")
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+</body>
+
+</html>

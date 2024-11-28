@@ -1,7 +1,7 @@
 ﻿@inject Proyecto_Licorera_Corchos.web.Services.IUserService _userService
 
 @{
-    ApplicationUser user;
+    User user;
     try
     {
         user = await _userService.GetUserAsync(User.Identity.Name);

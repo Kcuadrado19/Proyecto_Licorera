@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Proyecto_Licorera_Corchos.web.Data.Entities
 {
-    public class Sales
+    public class Sale
     {
         [Key] // Indica que es clave primaria
         public int Id_Sales { get; set; }

@@ -42,7 +42,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                 Page = Page ?? 1,
                 Filter = Filter
             };
-            Response<PaginationResponse<Sales>> response = await _salesService.GetlistAsync(request);
+            Response<PaginationResponse<Sale>> response = await _salesService.GetlistAsync(request);
             return View(response.Result);
         }
 
@@ -52,14 +52,14 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         {
             ViewBag.Products = new SelectList(await _productService.GetAllAsync(), "Id", "Name");
             //return View();
-            return View(new Sales());
+            return View(new Sale());
         }
 
         [HttpPost]
 
 
         [HttpPost]
-        public async Task<IActionResult> Create(Sales sales1)
+        public async Task<IActionResult> Create(Sale sales1)
         {
             ModelState.Remove("UserId");
             ModelState.Remove("User");
@@ -73,7 +73,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                     return View(sales1);
                 }
 
-                Response<Sales> response = await _salesService.CreateAsync(sales1);
+                Response<Sale> response = await _salesService.CreateAsync(sales1);
 
                 if (response.IsSuccess)
                 {
@@ -136,7 +136,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(Sales sales1)
+        public async Task<IActionResult> Edit(Sale sales1)
         {
             ModelState.Remove("UserId");
             ModelState.Remove("User");
@@ -152,7 +152,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
                     return View(sales1);
                 }
 
-                Response<Sales> response = await _salesService.EditAsync(sales1);
+                Response<Sale> response = await _salesService.EditAsync(sales1);
 
                 if (response.IsSuccess)
                 {
@@ -182,7 +182,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             ModelState.Remove("UserId");
             ModelState.Remove("User");
 
-            Response<Sales> response = await _salesService.DeleteAsync(Id_Sales);
+            Response<Sale> response = await _salesService.DeleteAsync(Id_Sales);
 
             if (response.IsSuccess)
             {

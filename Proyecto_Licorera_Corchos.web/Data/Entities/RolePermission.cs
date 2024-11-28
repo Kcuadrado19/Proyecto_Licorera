@@ -7,8 +7,5 @@ public class RolePermission
 
     public int PermissionId { get; set; }
     public Permission Permission { get; set; }
-
-    // Agregar la colección de usuarios relacionada
-    public ICollection<ApplicationUser> Users { get; set; }
 }
 

@@ -14,5 +14,7 @@ namespace Proyecto_Licorera_Corchos.web.Core.DTOs
         [Required(ErrorMessage = "El campo '{0}' es requerido.")]
         public string Password { get; set; } = null!;
 
+        public bool RememberMe { get; set; }
+
     }
 }

@@ -1,150 +1,195 @@
 ﻿
 
-@model Proyecto_Licorera_Corchos.web.Core.Pagination.PaginationResponse<Proyecto_Licorera_Corchos.web.Data.Entities.ApplicationUser>
+@model Proyecto_Licorera_Corchos.web.Core.Pagination.PaginationResponse<Proyecto_Licorera_Corchos.web.Data.Entities.User>
 
-<h2>Gestión de Usuarios</h2>
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
-@if (TempData["ErrorMessage"] != null)
-{
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+@{
+    ViewData["Title"] = "Usuarios";
 }
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Agregar Nuevo Usuario</a>
-</p>
+<div class="pagetitle">
+    <h1>Usuarios</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Dashboard</a></li>
+            <li class="breadcrumb-item active">Usuarios</li>
+        </ol>
+    </nav>
+</div>
 
 
-<div class="card-body mt-2">
+<section class="section dashboard">
 
-    <form class="navbar-search" asp-action="Index" method="GET">
+    <div class="card">
 
-        <input type="hidden" name="Page" value="@Model.CurrentPage" />
-        <input type="hidden" name="RecordsPerPage" value="@Model.RecordsPerPage" />
+        <div class="card-header py-3">
 
-        <div class="input-group mb-3">
+            <div class="row">
 
-            <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar por nombre..." aria-label="Search..." asp-form="@Model.Filter" name="Filter" />
+                <h3 class="m-0 font-weight-bold text-primary col-md-11">Usuarios</h3>
 
-            <div class="input-group-append">
-
-                <button class="btn btn-primary" type="submit">
-                    <i class="bi bi-search"></i>
-                </button>
+                <div class="col-md-1">
+                    <a asp-action="Create" class="btn btn-primary"><i class="bi bi-plus-circle"></i></a>
+                </div>
 
             </div>
 
 
-
         </div>
 
-    </form>
+        <div class="card-body mt-2">
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nombre Completo</th>
-            <th>Correo Electrónico</th>
-            <th>Rol</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model.List)
-        {
-            <tr>
-                <td>@user.FullName</td>
-                <td>@user.Email</td>
-                <td>@user.Position</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@user.Id" class="btn btn-info">Detalles</a>
-                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-warning">Editar</a>
-                    <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger">Eliminar</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <form class="navbar-search" asp-action="Index" method="GET">
 
-<ul class="pagination justify-content-center">
+                <input type="hidden" name="Page" value="@Model.CurrentPage" />
+                <input type="hidden" name="RecordsPerPage" value="@Model.RecordsPerPage" />
 
-    @* Primero *@
-    <li class="page-item">
-        <a class="page-link  @(Model.CurrentPage == 1 ? "disabled" : "")"
-           asp-action="Index"
-           asp-route-Page="1"
-           asp-route-Filter="@Model.Filter"
-           asp-route-RecordsPerPage="@Model.RecordsPerPage">
-            &laquo;
-        </a>
-    </li>
+                <div class="input-group mb-3">
 
-    @* Anterior *@
-    <li class="page-item">
-        <a class="page-link @(!Model.HasPrevious ? "disabled" : "")"
-           asp-action="Index"
-           asp-route-Page="@(Model.CurrentPage - 1 )"
-           asp-route-Filter="@Model.Filter"
-           asp-route-RecordsPerPage="@Model.RecordsPerPage">
-            &lsaquo;
-        </a>
-    </li>
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar..." aria-label="Serch" asp-form="@Model.Filter" name="Filter" />
 
-    @* Páginas *@
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
 
-    @foreach (int page in Model.Pages)
-    {
-        <li class="page-item">
-            <a class="page-link @(Model.CurrentPage == page ? "disabled" : "")"
-               asp-action="Index"
-               asp-route-Page="@(page)"
-               asp-route-Filter="@Model.Filter"
-               asp-route-RecordsPerPage="@Model.RecordsPerPage">
-                @(page)
-            </a>
-        </li>
-    }
+                </div>
 
+            </form>
 
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre Completo</th>
+                    
+                        <th scope="col">Email</th>
+                   
+                        <th scope="col">Rol</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
 
-    @* Siguiente *@
-    <li class="page-item">
-        <a class="page-link @(!Model.HasNext ? "disabled" : "")"
-           asp-action="Index"
-           asp-route-Page="@(Model.CurrentPage + 1)"
-           asp-route-Filter="@Model.Filter"
-           asp-route-RecordsPerPage="@Model.RecordsPerPage">
-            &rsaquo;
-        </a>
-    </li>
+                    @foreach (User item in Model.List)
+                    {
+                        <tr>
+                            <td>@item.FullName</td>
+                            <td>@item.Email</td>
+                       
+                            <td>@item.LicoreraRole.Name</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil-fill"></i></a>
 
-    @* Último *@
-    <li class="page-item">
-        <a class="page-link @(Model.TotalPages == Model.CurrentPage ? "disabled" : "")"
-           asp-action="Index"
-           asp-route-Page="@(Model.TotalPages)"
-           asp-route-Filter="@Model.Filter"
-           asp-route-RecordsPerPage="@Model.RecordsPerPage">
-            &raquo;
-        </a>
-    </li>
+                                <form asp-action="Delete" asp-route-id="@item.Id" style="display:contents">
+                                    <button class="btn btn-danger btn-sm btnDelete"><i class="bi bi-trash-fill"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
 
+                </tbody>
+            </table>
 
-</ul>
+            <nav aria-label="">
 
+                <ul class="pagination justify-content-center">
 
+                    @* Primero *@
+                    <li class="page-item">
+                        <a class="page-link  @(Model.CurrentPage == 1 ? "disabled" : "")"
+                           asp-action="Index"
+                           asp-route-Page="1"
+                           asp-route-Filter="@Model.Filter"
+                           asp-route-RecordsPerPage="@Model.RecordsPerPage">
+                            &laquo;
+                        </a>
+                    </li>
 
+                    @* Anterior *@
+                    <li class="page-item">
+                        <a class="page-link  @(!Model.HasPrevious ? "disabled" : "")"
+                           asp-action="Index"
+                           asp-route-Page="@(Model.CurrentPage - 1)"
+                           asp-route-Filter="@Model.Filter"
+                           asp-route-RecordsPerPage="@Model.RecordsPerPage">
+                            &lsaquo;
+                        </a>
+                    </li>
 
-        @if (Model.CurrentPage > 1)
-        {
-            <a asp-action="Index" asp-route-Page="@(Model.CurrentPage - 1)" asp-route-RecordsPerPage="@Model.RecordsPerPage" class="btn btn-secondary">Anterior</a>
-        }
+                    @* Páginas *@
+                    @foreach (int page in Model.Pages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link  @(Model.CurrentPage == page ? "disabled" : "")"
+                               asp-action="Index"
+                               asp-route-Page="@(page)"
+                               asp-route-Filter="@Model.Filter"
+                               asp-route-RecordsPerPage="@Model.RecordsPerPage">
+                                @(page)
+                            </a>
+                        </li>
+                    }
 
-        @if (Model.CurrentPage < Model.TotalPages)
-        {
-            <a asp-action="Index" asp-route-Page="@(Model.CurrentPage + 1)" asp-route-RecordsPerPage="@Model.RecordsPerPage" class="btn btn-secondary">Siguiente</a>
-        }
- 
+                    @* Siguiente *@
+                    <li class="page-item">
+                        <a class="page-link  @(!Model.HasNext ? "disabled" : "")"
+                           asp-action="Index"
+                           asp-route-Page="@(Model.CurrentPage + 1)"
+                           asp-route-Filter="@Model.Filter"
+                           asp-route-RecordsPerPage="@Model.RecordsPerPage">
+                            &rsaquo;
+                        </a>
+                    </li>
+
+                    @* Último *@
+                    <li class="page-item">
+                        <a class="page-link  @(Model.TotalPages == Model.CurrentPage ? "disabled" : "")"
+                           asp-action="Index"
+                           asp-route-Page="@(Model.TotalPages)"
+                           asp-route-Filter="@Model.Filter"
+                           asp-route-RecordsPerPage="@Model.RecordsPerPage">
+                            &raquo;
+                        </a>
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+
+            $('.btnDelete').click(function (event) {
+
+                event.preventDefault();
+
+                Swal.fire({
+
+                    title: "¿Desea eliminar el usuario?",
+                    text: "No podrá revertirlo",
+                    icon: "question",
+                    showCancelButton: true,
+
+                }).then((result) => {
+
+                    if (result.isConfirmed) {
+
+                        const form = $(this).closest('form');
+
+                        form.submit();
+                    }
+                });
+
+            });
+        });
+
+    </script>
+
+}

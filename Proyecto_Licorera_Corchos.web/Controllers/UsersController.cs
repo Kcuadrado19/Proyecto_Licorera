@@ -42,7 +42,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
             if (!response.IsSuccess)
             {
                 TempData["ErrorMessage"] = response.Message;
-                return View(new List<ApplicationUser>()); // Si hay un error, devolver una lista vacía
+                return View(new List<User>()); // Si hay un error, devolver una lista vacía
             }
 
             return View(response.Result);
@@ -77,7 +77,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ApplicationUser user, string password)
+        public async Task<IActionResult> Create(User user, string password)
         {
             ModelState.Remove("Sales"); // Eliminar la validación de la propiedad "Sales"
 
@@ -137,7 +137,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, ApplicationUser user)
+        public async Task<IActionResult> Edit(string id, User user)
         {
             ModelState.Remove("Sales");
             if (id != user.Id)
@@ -271,7 +271,7 @@ namespace Proyecto_Licorera_Corchos.web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser
+                var user = new User
                 {
                     UserName = model.Username,
                     FullName = model.Username,

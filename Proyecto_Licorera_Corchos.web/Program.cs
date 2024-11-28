@@ -9,7 +9,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 
 // Configurar Identity
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<DataContext>()
     .AddDefaultTokenProviders();
 
@@ -68,7 +68,7 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-        var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+        var userManager = services.GetRequiredService<UserManager<User>>();
         var context = services.GetRequiredService<DataContext>();
 
         SeedRolesAndUsersAsync(roleManager, userManager, context).Wait();
@@ -91,7 +91,7 @@ app.AddCustomWebAppConfiguration();
 app.Run();
 
 // Método para crear roles, permisos y usuarios iniciales
-async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, DataContext context)
+async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserManager<User> userManager, DataContext context)
 {
     // Crear roles si no existen
     if (!await roleManager.RoleExistsAsync("Admin"))
@@ -107,9 +107,9 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
     var admin1 = await userManager.FindByNameAsync("lucia.admin");
     if (admin1 == null)
     {
-        admin1 = new ApplicationUser
+        admin1 = new User
         {
-            UserName = "lucia.admin",
+            UserName = "kellyndo.19@hotmail.com",
             FullName = "Lucía Fernández",
             Position = "Admin"
         };
@@ -123,7 +123,7 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
     var admin2 = await userManager.FindByNameAsync("carlos.admin");
     if (admin2 == null)
     {
-        admin2 = new ApplicationUser
+        admin2 = new User
         {
             UserName = "carlos.admin",
             FullName = "Carlos Ramírez",
@@ -140,7 +140,7 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
     var vendedor1 = await userManager.FindByNameAsync("maria.vendedor");
     if (vendedor1 == null)
     {
-        vendedor1 = new ApplicationUser
+        vendedor1 = new User
         {
             UserName = "maria.vendedor",
             FullName = "María López",
@@ -156,7 +156,7 @@ async Task SeedRolesAndUsersAsync(RoleManager<IdentityRole> roleManager, UserMan
     var vendedor2 = await userManager.FindByNameAsync("pedro.vendedor");
     if (vendedor2 == null)
     {
-        vendedor2 = new ApplicationUser
+        vendedor2 = new User
         {
             UserName = "pedro.vendedor",
             FullName = "Pedro Martínez",

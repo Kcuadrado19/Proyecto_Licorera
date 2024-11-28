@@ -14,20 +14,20 @@ namespace Proyecto_Licorera_Corchos.web.Services
     public interface IUserService
     {
 
-        Task<List<ApplicationUser>> GetAllUsersAsync();
+        Task<List<User>> GetAllUsersAsync();
 
 
-        Task<bool> CreateUserAsync(ApplicationUser user, string password);
+        Task<bool> CreateUserAsync(User user, string password);
 
 
-        Task<ApplicationUser> GetUserByIdAsync(string userId);
+        Task<User> GetUserByIdAsync(string userId);
 
-        public Task<ApplicationUser> GetUserAsync(string email);
+        public Task<User> GetUserAsync(string email);
 
-        Task<Response<PaginationResponse<ApplicationUser>>> GetlistAsync(PaginationRequest request);
+        Task<Response<PaginationResponse<User>>> GetlistAsync(PaginationRequest request);
 
 
-        Task<bool> UpdateUserAsync(ApplicationUser user);
+        Task<bool> UpdateUserAsync(User user);
 
 
         Task<bool> DeleteUserAsync(string userId);
@@ -37,42 +37,42 @@ namespace Proyecto_Licorera_Corchos.web.Services
 
         Task<bool> SignInUserAsync(string username, string password, bool rememberMe);
 
-        public Task<SignInResult> LoginAsync(LoginDTO dto);
+        public Task<SignInResult> LoginAsync(LoginDTO loginDTO);
         public Task LogoutAsync();
 
         Task SignOutUserAsync();
 
-        Task<bool> RegisterUserAsync(ApplicationUser user, string password);
+        Task<bool> RegisterUserAsync(User user, string password);
     }
 
     public class UserService : IUserService
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly DataContext _context;
 
-        public UserService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, DataContext context)
+        public UserService(UserManager<User> userManager, SignInManager<User> signInManager, DataContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _context = context;
         }
 
-        public async Task<List<ApplicationUser>> GetAllUsersAsync()
+        public async Task<List<User>> GetAllUsersAsync()
         {
             return _userManager.Users.ToList();
         }
 
 
-        public async Task<ApplicationUser> GetUserAsync(string email)
+        public async Task<User> GetUserAsync(string email)
         {
-            ApplicationUser? user = await _context.Users.Include(u => u.RolePermission)
+            User? user = await _context.Users.Include(u => u.RolePermission)
                                              .FirstOrDefaultAsync(u => u.Email == email);
 
             return user;
         }
 
-        public async Task<bool> CreateUserAsync(ApplicationUser user, string password)
+        public async Task<bool> CreateUserAsync(User user, string password)
         {
             if (user == null || string.IsNullOrWhiteSpace(password))
             {
@@ -102,12 +102,12 @@ namespace Proyecto_Licorera_Corchos.web.Services
         }
 
 
-        public async Task<ApplicationUser> GetUserByIdAsync(string userId)
+        public async Task<User> GetUserByIdAsync(string userId)
         {
             return await _userManager.FindByIdAsync(userId);
         }
 
-        public async Task<bool> UpdateUserAsync(ApplicationUser user)
+        public async Task<bool> UpdateUserAsync(User user)
         {
             var existingUser = await _userManager.FindByIdAsync(user.Id);
             if (existingUser == null)
@@ -139,9 +139,13 @@ namespace Proyecto_Licorera_Corchos.web.Services
 
 
 
-        public async Task<SignInResult> LoginAsync(LoginDTO dto)
+        public async Task<SignInResult> LoginAsync(LoginDTO loginDTO)
         {
-            return await _signInManager.PasswordSignInAsync(dto.Email, dto.Password, false, false);
+            return await _signInManager.PasswordSignInAsync(
+                loginDTO.Email,
+                loginDTO.Password,
+                loginDTO.RememberMe,
+                lockoutOnFailure: false);
         }
 
         public async Task LogoutAsync()
@@ -174,7 +178,7 @@ namespace Proyecto_Licorera_Corchos.web.Services
         }
 
 
-        public async Task<bool> RegisterUserAsync(ApplicationUser user, string password)
+        public async Task<bool> RegisterUserAsync(User user, string password)
         {
             user.UserName = user.Email; //  Asegura que UserName se asigna correctamente
             var result = await _userManager.CreateAsync(user, password);
@@ -185,12 +189,12 @@ namespace Proyecto_Licorera_Corchos.web.Services
             return result.Succeeded;
         }
 
-        public async Task<Response<PaginationResponse<ApplicationUser>>> GetlistAsync(PaginationRequest request)
+        public async Task<Response<PaginationResponse<User>>> GetlistAsync(PaginationRequest request)
         {
 
             try
             {
-                IQueryable<ApplicationUser> query = _userManager.Users.AsQueryable();
+                IQueryable<User> query = _userManager.Users.AsQueryable();
 
                 if (!string.IsNullOrWhiteSpace(request.Filter))
                 {
@@ -198,9 +202,9 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 }
 
 
-                PagedList<ApplicationUser> List = await PagedList<ApplicationUser>.ToPagedListAsync(query, request);
+                PagedList<User> List = await PagedList<User>.ToPagedListAsync(query, request);
 
-                PaginationResponse<ApplicationUser> result = new PaginationResponse<ApplicationUser>
+                PaginationResponse<User> result = new PaginationResponse<User>
                 {
                     List = List,
                     TotalCount = List.TotalCount,
@@ -210,11 +214,11 @@ namespace Proyecto_Licorera_Corchos.web.Services
                     Filter = request.Filter,
                 };
 
-                return ResponseHelper<PaginationResponse<ApplicationUser>>.MakeResponseSuccess(result, "Producto obtenido con éxito");
+                return ResponseHelper<PaginationResponse<User>>.MakeResponseSuccess(result, "Producto obtenido con éxito");
             }
             catch (Exception ex)
             {
-                return ResponseHelper<PaginationResponse<ApplicationUser>>.MakeResponseFail(ex);
+                return ResponseHelper<PaginationResponse<User>>.MakeResponseFail(ex);
             }
 
 

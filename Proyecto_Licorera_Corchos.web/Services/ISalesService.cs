@@ -11,11 +11,11 @@ namespace Proyecto_Licorera_Corchos.web.Services
 {
     public interface ISalesService
     {
-        Task<Response<Sales>> CreateAsync(Sales model);
-        Task<Response<Sales>> DeleteAsync(int Id_Sales);
-        Task<Response<Sales>> EditAsync(Sales model);
-        Task<Response<PaginationResponse<Sales>>> GetlistAsync(PaginationRequest request);
-        Task<Response<Sales>> GetOneAsync(int Id_Sales);
+        Task<Response<Sale>> CreateAsync(Sale model);
+        Task<Response<Sale>> DeleteAsync(int Id_Sales);
+        Task<Response<Sale>> EditAsync(Sale model);
+        Task<Response<PaginationResponse<Sale>>> GetlistAsync(PaginationRequest request);
+        Task<Response<Sale>> GetOneAsync(int Id_Sales);
     }
 
     public class SalesService : ISalesService
@@ -27,11 +27,11 @@ namespace Proyecto_Licorera_Corchos.web.Services
             _context = context;
         }
 
-        public async Task<Response<Sales>> CreateAsync(Sales model)
+        public async Task<Response<Sale>> CreateAsync(Sale model)
         {
             try
             {
-                Sales sales1 = new Sales
+                Sale sales1 = new Sale
                 {
                     ProductId = model.ProductId,
                     Sale_Date = model.Sale_Date,
@@ -41,35 +41,35 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 await _context.Sales.AddAsync(sales1);
                 await _context.SaveChangesAsync();
 
-                return ResponseHelper<Sales>.MakeResponseSuccess(sales1, "Nueva venta registrada con éxito");
+                return ResponseHelper<Sale>.MakeResponseSuccess(sales1, "Nueva venta registrada con éxito");
             }
             catch (Exception ex)
             {
-                return ResponseHelper<Sales>.MakeResponseFail(ex);
+                return ResponseHelper<Sale>.MakeResponseFail(ex);
             }
         }
 
-        public async Task<Response<Sales>> EditAsync(Sales model)
+        public async Task<Response<Sale>> EditAsync(Sale model)
         {
             try
             {
                 _context.Sales.Update(model);
                 await _context.SaveChangesAsync();
 
-                return ResponseHelper<Sales>.MakeResponseSuccess(model, "Venta actualizada con éxito");
+                return ResponseHelper<Sale>.MakeResponseSuccess(model, "Venta actualizada con éxito");
             }
             catch (Exception ex)
             {
-                return ResponseHelper<Sales>.MakeResponseFail(ex);
+                return ResponseHelper<Sale>.MakeResponseFail(ex);
             }
         }
 
-        public async Task<Response<PaginationResponse<Sales>>> GetlistAsync(PaginationRequest request)
+        public async Task<Response<PaginationResponse<Sale>>> GetlistAsync(PaginationRequest request)
         {
             try
             {
                 //IQueryable<Sales> query = _context.Sales.AsQueryable();
-                IQueryable<Sales> query = _context.Sales
+                IQueryable<Sale> query = _context.Sales
                         .Include(s => s.Product);
 
                 if (!string.IsNullOrWhiteSpace(request.Filter))
@@ -80,9 +80,9 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 }
 
                 // Aquí se corrige el uso de PaginatedList en lugar de PagedList
-                PagedList<Sales> List = await PagedList<Sales>.ToPagedListAsync(query, request);
+                PagedList<Sale> List = await PagedList<Sale>.ToPagedListAsync(query, request);
 
-                PaginationResponse<Sales> result = new PaginationResponse<Sales>
+                PaginationResponse<Sale> result = new PaginationResponse<Sale>
                 {
                     List = List,
                     TotalCount = List.TotalCount,
@@ -92,15 +92,15 @@ namespace Proyecto_Licorera_Corchos.web.Services
                     Filter = request.Filter,
                 };
 
-                return ResponseHelper<PaginationResponse<Sales>>.MakeResponseSuccess(result, "Ventas obtenidas con éxito");
+                return ResponseHelper<PaginationResponse<Sale>>.MakeResponseSuccess(result, "Ventas obtenidas con éxito");
             }
             catch (Exception ex)
             {
-                return ResponseHelper<PaginationResponse<Sales>>.MakeResponseFail(ex);
+                return ResponseHelper<PaginationResponse<Sale>>.MakeResponseFail(ex);
             }
         }
 
-        public async Task<Response<Sales>> GetOneAsync(int Id_Sales)
+        public async Task<Response<Sale>> GetOneAsync(int Id_Sales)
         {
             try
             {
@@ -110,21 +110,21 @@ namespace Proyecto_Licorera_Corchos.web.Services
 
                 if (sales == null)
                 {
-                    return ResponseHelper<Sales>.MakeResponseFail("La venta con el id indicado no existe");
+                    return ResponseHelper<Sale>.MakeResponseFail("La venta con el id indicado no existe");
                 }
-                return ResponseHelper<Sales>.MakeResponseSuccess(sales);
+                return ResponseHelper<Sale>.MakeResponseSuccess(sales);
             }
             catch (Exception ex)
             {
-                return ResponseHelper<Sales>.MakeResponseFail(ex);
+                return ResponseHelper<Sale>.MakeResponseFail(ex);
             }
         }
 
-        public async Task<Response<Sales>> DeleteAsync(int Id_Sales)
+        public async Task<Response<Sale>> DeleteAsync(int Id_Sales)
         {
             try
             {
-                Response<Sales> response = await GetOneAsync(Id_Sales);
+                Response<Sale> response = await GetOneAsync(Id_Sales);
 
                 if (!response.IsSuccess)
                 {
@@ -133,11 +133,11 @@ namespace Proyecto_Licorera_Corchos.web.Services
                 _context.Sales.Remove(response.Result);
                 await _context.SaveChangesAsync();
 
-                return ResponseHelper<Sales>.MakeResponseSuccess(null, "Venta eliminada con éxito");
+                return ResponseHelper<Sale>.MakeResponseSuccess(null, "Venta eliminada con éxito");
             }
             catch (Exception ex)
             {
-                return ResponseHelper<Sales>.MakeResponseFail(ex);
+                return ResponseHelper<Sale>.MakeResponseFail(ex);
             }
         }
     }
